@@ -27,7 +27,9 @@
 		</table-list>
 		
 		<!--岗位配置树-->
-		<post-config></post-config>
+		<Card style="margin-top: 16px;">
+			<post-config></post-config>
+		</Card>
 		
 		
 	</div>

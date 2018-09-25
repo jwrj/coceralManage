@@ -1,9 +1,7 @@
 <template>
 	
 	<div>
-		
 		<Tree :data="data" :render="renderContent"></Tree>
-		
 	</div>
 	
 </template>
@@ -33,12 +31,9 @@ export default {
                     render: (h, { root, node, data }) => {
                         return h('span', {
                             style: {
-                                display: 'inline-block',
-                                width: '100%',
-                                border: '1px solid red',
-                                cursor: 'pointer',
+                                
                             },
-                            class: 'ivu-tree-title'
+                            class: 'ivu-tree-title my-tree-node'
                         }, [
                             h('span', [
                                 h('Icon', {
@@ -53,9 +48,7 @@ export default {
                             ]),
                             h('span', {
                                 style: {
-                                    display: 'inline-block',
-                                    float: 'right',
-                                    marginRight: '32px',
+                                	marginLeft: 'auto',
                                 }
                             }, [
                                 h('Button', {
@@ -87,11 +80,18 @@ export default {
     methods: {//方法
     	
     	renderContent (h, { root, node, data }) {
-            return h('span', {
+            return h('div',{
+            	style: {
+            		display: 'inline-block',
+            		width: '100%'
+                },
+            },
+            [
+            	h('span', {
                 style: {
-                    display: 'inline-block',
-                    width: '100%'
-                }
+                    
+                },
+                class: 'ivu-tree-title my-tree-node'
             }, [
                 h('span', [
                     h('Icon', {
@@ -106,9 +106,7 @@ export default {
                 ]),
                 h('span', {
                     style: {
-                        display: 'inline-block',
-                        float: 'right',
-                        marginRight: '32px'
+                        marginLeft: 'auto',
                     }
                 }, [
                 	h('Button', {
@@ -147,7 +145,8 @@ export default {
                         }
                     })
                 ])
-            ]);
+            ])
+            	]);
         },
         edit(){
         	
@@ -155,7 +154,7 @@ export default {
         append (data) {
             const children = data.children || [];
             children.push({
-                title: 'appended node',
+                title: '未命名',
                 expand: true
             });
             this.$set(data, 'children', children);
@@ -221,7 +220,14 @@ export default {
 </script>
 
 <style scoped lang="less">
-	.abc{
-		
+
+</style>
+
+<style lang="less">
+	.my-tree-node{
+		width: 100%;
+		display: flex;
+		align-items: center;
+		cursor: pointer;
 	}
 </style>
