@@ -40,6 +40,7 @@ export default [
 		meta: {
 			title: '会员管理',
 			icon: 'md-alarm',
+			showAlways: true
 		},
 		component: Main,
 		children: [
@@ -51,6 +52,36 @@ export default [
 					icon: 'md-alarm',
 				},
 				component: () => import('@/views/user/joinChamber.vue')
+			},
+			{
+				path: 'userList',
+				name: 'userList',
+				meta: {
+					title: '会员列表',
+					icon: 'md-alarm',
+				},
+				component: () => import('@/views/user/userList.vue')
+			}
+		]
+	},
+	{
+		path: '/chamber',
+		name: 'chamber',
+		meta: {
+			title: '商会管理',
+			icon: 'md-alarm',
+			showAlways: true
+		},
+		component: Main,
+		children: [
+			{
+				path: 'createChamber',
+				name: 'createChamber',
+				meta: {
+					title: '创建商会',
+					icon: 'md-alarm',
+				},
+				component: () => import('@/views/chamber/createChamber.vue')
 			},
 		]
 	},
