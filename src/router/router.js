@@ -86,6 +86,25 @@ export default [
 		]
 	},
 	{
+		path: '/testPages',
+		name: 'testPages',
+		meta: {
+			icon: 'md-alarm',
+		},
+		component: Main,
+		children: [
+			{
+				path: 'comPage',
+				name: 'comPage',
+				meta: {
+					title: '组件测试',
+					icon: 'md-alarm',
+				},
+				component: () => import('@/views/testPages/comPage.vue')
+			},
+		]
+	},
+	{
 	    path: '/401',
 	    name: 'error-401',
 	    meta: {
