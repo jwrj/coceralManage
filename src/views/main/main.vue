@@ -12,7 +12,7 @@
 		background: #fff;
 		box-shadow: 0 1px 1px rgba(0, 0, 0, .1);
 	}
-	.content-box{
+	.main-content-box{
 		width: 100%;
 		height: 100%;
 		padding: 30px 16px 300px;
@@ -49,7 +49,7 @@
 				
 				<!--内容-->
 				<Content style="position: relative;">
-					<div class="content-box">
+					<div class="main-content-box">
 						<router-view/>
 					</div>
 				</Content>

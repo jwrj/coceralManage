@@ -1,7 +1,19 @@
 <template>
 	
 	<div>
-		<Tree :data="data" :render="renderContent"></Tree>
+		
+		<Tree :data="treeData" :render="renderContent"></Tree>
+		
+		<Modal v-model="modalShow" width="360">
+	        <p slot="header">{{type === 'add'?'添加岗位':'编辑岗位'}}</p>
+	        <div>
+	        	<Input v-model="name" clearable placeholder="请输入岗位名称" />
+	        </div>
+	        <div slot="footer">
+	            <Button type="primary" size="large" long @click="submit">确定</Button>
+	        </div>
+	    </Modal>
+		
 	</div>
 	
 </template>
@@ -9,7 +21,7 @@
 <script>
 
 export default {
-	name: '',
+	name: 'postConfig',
 	components:{//组件模板
 	},
 	props:{//组件道具（参数）
@@ -24,48 +36,85 @@ export default {
     data () {//数据
         return {
         	
-        	data: [
+        	modalShow: false,
+        	
+        	currentData: {},
+        	
+        	name: '',
+        	
+        	type: 'add',
+        	
+        	treeData: [
         		{
-        			title: 'parent 1',
+        			title: '未命名',
                     expand: true,
                     render: (h, { root, node, data }) => {
-                        return h('span', {
-                            style: {
-                                
-                            },
-                            class: 'ivu-tree-title my-tree-node'
-                        }, [
-                            h('span', [
-                                h('Icon', {
-                                    props: {
-                                        type: 'ios-folder-outline'
-                                    },
-                                    style: {
-                                        marginRight: '8px'
-                                    }
-                                }),
-                                h('span', data.title)
-                            ]),
-                            h('span', {
-                                style: {
-                                	marginLeft: 'auto',
-                                }
-                            }, [
-                                h('Button', {
-                                    props: Object.assign({}, this.buttonProps, {
-                                        icon: 'ios-add',
-                                        type: 'primary'
-                                    }),
-                                    style: {
-                                        width: '64px'
-                                    },
-                                    on: {
-                                        click: () => {
-                                        	this.append(data);
-                                        }
-                                    }
-                                })
-                            ])
+                        return h('div',{
+                        	style: {
+	                    		display: 'inline-block',
+            					width: '100%',
+            					paddingRight: '16px',
+	                        },
+                        },[
+	                        h('span', {
+	                            style: {
+	                                
+	                            },
+	                            class: 'ivu-tree-title my-tree-node'
+	                        }, [
+	                            h('span', {
+	                            	class: 'my-tree-title'
+	                            }, [
+	                                h('Icon', {
+	                                    props: {
+	                                        type: 'md-cube'
+	                                    },
+	                                    style: {
+	                                        marginRight: '8px'
+	                                    }
+	                                }),
+	                                h('span', data.title)
+	                            ]),
+	                            h('span', {
+	                                style: {
+	                                	marginLeft: 'auto',
+	                                }
+	                            }, [
+		                            h('Button', {
+				                        props: Object.assign({}, this.buttonProps, {
+				                            icon: 'md-create',
+				                            type: 'success',
+				                        }),
+				                        style: {
+				                            marginRight: '8px'
+				                        },
+				                        on: {
+				                            click: () => {
+				                            	this.type = 'edit';
+				                            	this.name = data.title;
+				                            	this.modalShow = true;
+				                                this.currentData = data;
+				                            }
+				                        }
+				                    }),
+	                                h('Button', {
+	                                    props: Object.assign({}, this.buttonProps, {
+	                                        icon: 'md-add',
+	                                        type: 'primary',
+	                                    }),
+	                                    style: {
+	                                    	
+	                                    },
+	                                    on: {
+	                                        click: () => {
+	                                        	this.type = 'add';
+	                                        	this.modalShow = true;
+	                                        	this.currentData = data;
+	                                        }
+	                                    }
+	                                })
+	                            ])
+	                        ])
                         ]);
         			}
                 }
@@ -83,78 +132,87 @@ export default {
             return h('div',{
             	style: {
             		display: 'inline-block',
-            		width: '100%'
+            		width: '100%',
+            		paddingRight: '16px',
                 },
-            },
-            [
+            },[
             	h('span', {
-                style: {
-                    
-                },
-                class: 'ivu-tree-title my-tree-node'
-            }, [
-                h('span', [
-                    h('Icon', {
-                        props: {
-                            type: 'ios-paper-outline'
-                        },
-                        style: {
-                            marginRight: '8px'
-                        }
-                    }),
-                    h('span', data.title)
-                ]),
-                h('span', {
-                    style: {
-                        marginLeft: 'auto',
-                    }
-                }, [
-                	h('Button', {
-                        props: Object.assign({}, this.buttonProps, {
-                            icon: 'md-create'
-                        }),
-                        style: {
-                            marginRight: '8px'
-                        },
-                        on: {
-                            click: () => {
-                            	this.edit();
-                            	console.log(root);
-                            	console.log(node);
-                            	console.log(data);
-                            }
-                        }
-                    }),
-                    h('Button', {
-                        props: Object.assign({}, this.buttonProps, {
-                            icon: 'ios-add'
-                        }),
-                        style: {
-                            marginRight: '8px'
-                        },
-                        on: {
-                            click: () => { this.append(data) }
-                        }
-                    }),
-                    h('Button', {
-                        props: Object.assign({}, this.buttonProps, {
-                            icon: 'ios-remove'
-                        }),
-                        on: {
-                            click: () => { this.remove(root, node, data) }
-                        }
-                    })
-                ])
-            ])
-            	]);
+	                style: {
+	                    
+	                },
+                	class: 'ivu-tree-title my-tree-node'
+	            }, [
+	                h('span', {
+	                	class: 'my-tree-title'
+	                }, [
+	                    h('Icon', {
+	                        props: {
+	                            type: 'md-people',
+	                        },
+	                        style: {
+	                            marginRight: '8px'
+	                        }
+	                    }),
+	                    h('span', data.title)
+	                ]),
+	                h('span', {
+	                    style: {
+	                        marginLeft: 'auto',
+	                    }
+	                }, [
+	                	h('Button', {
+	                        props: Object.assign({}, this.buttonProps, {
+	                            icon: 'md-create',
+	                            type: 'success',
+	                        }),
+	                        style: {
+	                            marginRight: '8px'
+	                        },
+	                        on: {
+	                            click: () => {
+	                            	this.type = 'edit';
+	                            	this.name = data.title;
+	                            	this.modalShow = true;
+	                                this.currentData = data;
+	                            }
+	                        }
+	                    }),
+	                    h('Button', {
+	                        props: Object.assign({}, this.buttonProps, {
+	                            icon: 'md-add',
+	                            type: 'primary',
+	                        }),
+	                        style: {
+	                            marginRight: '8px'
+	                        },
+	                        on: {
+	                            click: () => {
+	                            	this.type = 'add';
+	                            	this.modalShow = true;
+	                                this.currentData = data;
+	                            }
+	                        }
+	                    }),
+	                    h('Button', {
+	                        props: Object.assign({}, this.buttonProps, {
+	                            icon: 'md-remove',
+	                            type: 'error',
+	                        }),
+	                        on: {
+	                            click: () => { this.remove(root, node, data) }
+	                        }
+	                    })
+	                ])
+	            ])
+            ]);
         },
-        edit(){
-        	
+        edit(data, title){
+        	data.title = title;
         },
-        append (data) {
+        append (data,title) {
             const children = data.children || [];
             children.push({
-                title: '未命名',
+                title: title,
                 expand: true
             });
             this.$set(data, 'children', children);
@@ -164,7 +222,16 @@ export default {
             const parent = root.find(el => el.nodeKey === parentKey).node;
             const index = parent.children.indexOf(data);
             parent.children.splice(index, 1);
-        }
+        },
+        submit(){
+        	if(this.type === 'add'){
+        		this.append(this.currentData, this.name);
+        	}else if(this.type === 'edit'){
+        		this.edit(this.currentData, this.name);
+        	}
+        	this.name = '';
+        	this.modalShow = false;
+        },
     	
     },
     computed: {//计算属性
@@ -229,5 +296,9 @@ export default {
 		display: flex;
 		align-items: center;
 		cursor: pointer;
+	}
+	.my-tree-title{
+		display: flex;
+		align-items: center;
 	}
 </style>

@@ -3,34 +3,44 @@
 	<div>
 		
 		<!--表格列表-->
-		<table-list
-		:tableColumns="tableColumns"
-		:tableData="tableData"
-		>
-		
-			<div class="header-content" slot="header" slot-scope="{ selectChange }">
+		<Card style="position: initial;">
 			
-				<Select @on-change="selectChange" style="max-width: 200px;">
-			        <Option :value="0">1232</Option>
-			    </Select>
-		    
-				<Select @on-change="selectChange" style="max-width: 200px;margin-left: 10px;">
-			        <Option :value="666">5555</Option>
-			    </Select>
-		    
-			    <Input :search="true" enter-button clearable placeholder="搜索..." @on-search="abc" class="seek" />
-		    
-			</div>
+			<h1 slot="title">表格列表</h1>
+			
+			<table-list
+			:tableColumns="tableColumns"
+			:tableData="tableData"
+			>
 		
-			<div slot="footer">页脚</div>
+				<div class="header-content" slot="header" slot-scope="{ selectChange }">
+			
+					<Select @on-change="selectChange" style="max-width: 200px;margin-right: 10px;">
+				        <Option :value="0">1232</Option>
+				    </Select>
+		    
+					<Select @on-change="selectChange" style="max-width: 200px;margin-right: 10px;">
+				        <Option :value="666">5555</Option>
+				    </Select>
+		    
+				    <Input :search="true" enter-button clearable placeholder="搜索..." class="seek" />
+		    
+				</div>
 		
-		</table-list>
+				<div slot="footer">页脚</div>
+		
+			</table-list>
+			
+		</Card>
+		
 		
 		<!--岗位配置树-->
 		<Card style="margin-top: 16px;">
+			
+			<h1 slot="title">岗位配置</h1>
+			
 			<post-config></post-config>
+			
 		</Card>
-		
 		
 	</div>
 	
@@ -111,9 +121,7 @@ export default {
         }
     },
     methods: {//方法
-    	abc(val){
-    		console.log(val);
-    	}
+    	
     },
     computed: {//计算属性
         	

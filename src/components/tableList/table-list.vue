@@ -111,7 +111,13 @@ export default {
         	
     },
     watch: {//监测数据变化
-    	
+    	modalShow(newBoolean){
+    		if(newBoolean){
+	    		this.$parent.$parent.$parent.$el.lastChild.style.overflow = 'hidden';
+	    	}else{
+	    		this.$parent.$parent.$parent.$el.lastChild.style = '';
+	    	}
+    	}
 	},
     
     //===================组件钩子===========================
