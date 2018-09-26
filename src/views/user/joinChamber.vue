@@ -3,39 +3,21 @@
 	<div class="joinCb">
 		<!--商会header开始-->
 		<div class="header">
-			<p class="title">选择商会</p>
-			<hr>
-			<!--商会选择器开始-->
-			<p class="choice">
-				<Select size="small" style="width:100px">
-					<Option>占位</Option>
-				</Select>
-				<Select size="small" style="width:100px">
-					<Option>占位</Option>
-				</Select>
-				<Select size="small" style="width:100px">
-					<Option>占位</Option>
-				</Select>
-			</p>
-			<!--商会选择器结束-->
-			<!--商会搜索框组开始-->
-			<p class="inputG">
-				<Input v-model="chamber" placeholder="请输入关键词" style="width: 300px" />
-				<Button type="info" class="btn">搜索</Button>
-			</p>
-			<!--商会搜索框组结束-->
-			<!--商会表格显示-->
-			<p class="jcTab">
-				<Table highlight-row border :columns="columns1" :data="rowData" @on-current-change="choiceRow"></Table>
-			</p>
+			 <Card>
+                <h1 slot="title">选择商会</h1>
+				<table-list>
+					<div slot="header" slot-scope="selectChange">12321</div>
+				</table-list>
+			</Card>
 		</div>
 		<!--商会header结束-->
 		<!--商会center开始-->
 		<div class="center">
-			<div class="center-header">
-				<div class="title">个人资料</div> <Button class="btnSmall" type="info" @click="changeData">修改资料</Button>
-			</div>
-			<hr>
+			<Card>			 
+			<div slot="title" class="title">
+				<h1>个人资料</h1>
+				<Button class="btnSmall" size="small" type="info" @click="changeData">修改资料</Button>
+      </div>
 			<p class="personal">
 				<Row>
 					<Col span="5">姓名：</Col>
@@ -49,30 +31,35 @@
 				</Row>
 
 			</p>
+			</Card>
 		</div>
 		<!--商会center结束-->
 		<div class="footer">
-			<div class="center-header">
-				<div class="title">选择公司(非必填)</div> <Button class="btnSmall" type="info" @click="manageCompany">管理公司</Button>
-			</div>
-			<hr>
+			 <Card>
+						<div slot="title" class="title">
+							<h1>选择公司(非必填)</h1>
+							<Button class="btnSmall" size="small" type="info" @click="manageCompany">管理公司</Button>
+						</div>
 			<p class="comList">
 				<RadioGroup v-model="company">
 					<Radio v-for="(com,index) in companyList" :key="index" :label="com"></Radio>
 				</RadioGroup>
 			</p>
 			<p class="comList">
-				<Button class="btnSmall" type="info" @click="submitApp">提交申请</Button>
+				<Button  type="primary" @click="submitApp">提交申请</Button>
 			</p>
+			</Card>
 		</div>
 	</div>
 
 </template>
 
 <script>
+	import tableList from '@/components/tableList/table-list.vue'
 	export default {
 		name: 'joinChamber',
-		components: { //组件模板
+		components: { //组件模板,
+			tableList
 		},
 		props: { //组件道具（参数）
 			/* ****属性用法*****
@@ -137,7 +124,7 @@
 			return {
 				chamber: '',
 				company: '',
-				companyList: ['公司1', '公司2', '公司3']
+				companyList: ['公司1', '公司2', '公司3'],
 			}
 		},
 		methods: { //方法
@@ -209,10 +196,7 @@
 		}
 
 		.btnSmall {
-
-			height: 25px;
-			line-height: 15px;
-
+     margin-left: auto;
 		}
 
 		.center-header {
@@ -222,6 +206,10 @@
 
 		.footer {
 			margin: 30px 0;
+		}
+		.title{
+			display: flex;
+			align-items: center;
 		}
 	}
 </style>

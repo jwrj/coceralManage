@@ -83,6 +83,24 @@ export default [
 				},
 				component: () => import('@/views/chamber/createChamber.vue')
 			},
+			{
+				path: 'postSet',
+				name: 'postSet',
+				meta: {
+					title: '岗位配置',
+					icon: 'md-alarm',
+				},
+				component: () => import('@/views/chamber/postSet.vue')
+			},
+			{
+				path: 'staffSet',
+				name: 'staffSet',
+				meta: {
+					title: '人员配置',
+					icon: 'md-alarm',
+				},
+				component: () => import('@/views/chamber/staffSet.vue')
+			}
 		]
 	},
 	{

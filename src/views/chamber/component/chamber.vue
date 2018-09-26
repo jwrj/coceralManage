@@ -1,51 +1,29 @@
 <template>
 	
-	<div>
-		<p  class="space">商会名称：
-					<Input v-model="chamberName" placeholder="请输入商会名称" style="width: 400px" />
-				</p>
-				<p class="space">上级商会：{{highCham}}</p>
-				<p class="selector space">
-					注册地：
-					<Select size="small" class="select">
-						<Option v-model="itema">国家</Option>
-					</Select>
-					<Select size="small" class="select">
-						<Option v-model="itemb">省/自治区/直辖市</Option>
-					</Select>
-					<Select size="small" class="select">
-						<Option v-model="itemc">市</Option>
-					</Select>
-					<Select size="small" class="select">
-						<Option v-model="itemd">县</Option>
-					</Select>
-				</p>
-				<p class="selector space">
-					归属地：
-					<Select size="small" class="select">
-						<Option v-model="itema">国家</Option>
-					</Select>
-					<Select size="small" class="select">
-						<Option v-model="itemb">省/自治区/直辖市</Option>
-					</Select>
-					<Select size="small" class="select">
-						<Option v-model="itemc">市</Option>
-					</Select>
-					<Select size="small" class="select">
-						<Option v-model="itemd">县</Option>
-					</Select>
-				</p>
-		<p class="space signImg"><div style="float: left;" >协会标志：</div>	
-			<img :src="img" alt="sign" @click="openCoc">
-			<p style="clear: both;"></p>
-		</p>
-		
+	<div class="chamber">
+<Form :model="chamData" :label-width="80">
+        <FormItem label="商会名称:">
+            <Input v-model="chamData.name" placeholder="请输入商会名称" class="linkIn"></Input>
+        </FormItem>
+		<FormItem label="上级商会:">
+			<Input v-model="chamData.highcham" type="text" class="linkIn"></Input>
+		</FormItem>
+		<FormItem label="注册地:">
+			<Select v-model="chamData.register" style="width: 200px;">
+                <Option value="beijing">New York</Option>
+            </Select>
+		</FormItem>
+		<FormItem label="归属地:">
+			<Select v-model="chamData.core" style="width: 200px;">
+				<Option value="nanjing">南京</Option>
+			</Select>
+		</FormItem>
+</Form>
 	</div>
 	
 </template>
 
 <script>
-import defaultImg from '@/assets/img/default-img/u710.png'
 export default {
 	name: 'chamber',
 	components:{//组件模板
@@ -62,12 +40,12 @@ export default {
     data () {//数据
         return {
         	chamberName: '',
-        	highCham: '上级商会1',
-        	itema: '国家',
-        	itemb: '省/自治区/直辖市',
-        	itemc: '市',
-        	itemd: '县',
-			img:defaultImg
+            chamData: {
+                   highcham:'',
+				   register:'',
+				   name:'',
+				   core:''
+                }
         }
     },
     methods: {//方法
@@ -95,19 +73,31 @@ export default {
 </script>
 
 <style scoped lang="less">
-		span {
-			margin: 0 5px;
-		}
-        
-		.selector {
-			padding-top: 5px;
+.chamber{
 
-			.select {
-				margin: 0 0 0 13px;
-				width: 100px;
+			span {
+				margin: 0 5px;
 			}
-		}
-		.space{
-			margin-top: 5px;
-		}
+	        
+			.selector {
+				padding-top: 5px;
+	
+				.select {
+					width: 100px;
+				}
+			}
+			.space{
+				margin-top: 5px;
+				display: flex;
+				align-items: center;
+			}
+			.tt {
+				text-align: left;
+				width: 100px;
+				display: inline-block;
+			}
+			.linkIn{
+				width: 300px;
+			}
+}
 </style>

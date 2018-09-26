@@ -1,43 +1,30 @@
 <template>
 	
 	<div>
-					<p class="space">协会名称：
-						<Input v-model="societyName" placeholder="请输入商会名称" style="width: 400px" />
-					</p>
-					<p class="space">上级协会：{{highSoc}}</p>
-					<p class="selector space">
-						注册地：
-						<Select size="small" class="select">
-							<Option v-model="itema">国家</Option>
-						</Select>
-						<Select size="small" class="select">
-							<Option v-model="itemb">省/自治区/直辖市</Option>
-						</Select>
-						<Select size="small" class="select">
-							<Option v-model="itemc">市</Option>
-						</Select>
-						<Select size="small" class="select">
-							<Option v-model="itemd">县</Option>
-						</Select>
-					</p>
-					<p class="selector space">
-						行业：
-						<Select size="small" class="job_select">
-							<Option v-model="joba">行业一级选择</Option>
-						</Select>
-						<Select size="small" class="select">
-							<Option v-model="jobb">行业二级选择</Option>
-						</Select>
-		
-				</p>
-				<p class="space">成立时间：
-				<DatePicker type="date" placeholder="Select date" style="width: 200px"></DatePicker>
-				</p>
-		<p class="space signImg"><div style="float: left;" >协会标志：</div>	
-			<img :src="img" alt="sign" @click="openCoc">
-			<p style="clear: both;"></p>
-		</p>
-		
+<Form :model="socieData" :label-width="80">
+        <FormItem label="协会名称:">
+            <Input v-model="socieData.name" placeholder="请输入协会名称" class="linkIn"></Input>
+        </FormItem>
+		<FormItem label="上级协会:">
+			<Input v-model="socieData.highcham" type="text" class="linkIn"></Input>
+		</FormItem>
+		<FormItem label="注册地:">
+			<Select v-model="socieData.register" style="width: 200px;">
+                <Option value="beijing">New York</Option>
+            </Select>
+		</FormItem>
+		<FormItem label="行业:">
+			<Select v-model="socieData.trade" style="width: 200px;">
+				<Option value="jiu">酿酒</Option>
+			</Select>
+		</FormItem>
+		<FormItem label="成立时间:">
+       <DatePicker type="date" placeholder="Select date" style="width: 200px" v-model="socieData.time"></DatePicker>
+		</FormItem>
+		<FormItem label="协会标志:">
+			<Img :src="img" @click="openCoc"></Img>
+		</FormItem>
+</Form>
 	</div>
 	
 </template>
@@ -60,13 +47,13 @@ export default {
     data () {//数据
         return {
 			societyName:'',
-			highSoc: '上级协会',
-			itema: '国家',
-			itemb: '省/自治区/直辖市',
-			itemc: '市',
-			itemd: '县',
-        	joba: '行业一级选择器',
-        	jobb: '行业二级选择器',
+            socieData:{
+				trade:'',
+				name:'',
+				register:'',
+				time:'',
+				highcham:''
+			},
 			img:defaultImg
         }
     },
@@ -103,18 +90,23 @@ export default {
 			padding-top: 5px;
 
 			.select {
-				margin: 0 0 0 15px;
-				width: 100px;
-			}
-			.job_select{
-				margin: 0 0 0 28px;
 				width: 100px;
 			}
 		}
 		.space{
 			margin-top: 5px;
+			display: flex;
+			align-items: center;
+		}
+		.tt {
+			text-align: left;
+			width: 100px;
+			display: inline-block;
 		}
 		.signImg {
 			vertical-align:top;
+		}
+		.linkIn{
+			width: 300px;
 		}
 </style>
