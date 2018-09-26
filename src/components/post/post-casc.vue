@@ -2,35 +2,7 @@
 	
 	<div>
 		
-		<!--表格列表-->
-		<Card style="position: initial;">
-			
-			<h1 slot="title">表格列表</h1>
-			
-			<table-list>
-		
-				<div slot="header" style="width: 100%;display: flex;align-items: center;">
-			
-				    <industry-casc style="margin-right: 10px;"></industry-casc>
-				    
-				    <post-casc style="margin-right: 10px;"></post-casc>
-				    
-				    <al-cascader v-model="res_c"/>
-		    
-				</div>
-		
-			</table-list>
-			
-		</Card>
-		
-		<!--岗位配置-->
-		<Card style="margin-top: 16px;">
-			
-			<h1 slot="title">岗位配置</h1>
-			
-			<post-config></post-config>
-			
-		</Card>
+		<Cascader placeholder="选择岗位" :data="data" style="max-width: 200px;"></Cascader>
 		
 	</div>
 	
@@ -38,21 +10,9 @@
 
 <script>
 
-import tableList from '@/components/tableList/table-list.vue';//表格列表组件
-
-import industryCasc from '@/components/industry/industry-casc.vue';//行业级联
-
-import postCasc from '@/components/post/post-casc.vue';//岗位级联
-
-import postConfig from '@/components/postConfig/post-config.vue';//岗位配置
-
 export default {
-	name: 'comPage',
+	name: 'postCasc',
 	components:{//组件模板
-		tableList,
-		industryCasc,
-		postCasc,
-		postConfig,
 	},
 	props:{//组件道具（参数）
 		/* ****属性用法*****
@@ -66,7 +26,12 @@ export default {
     data () {//数据
         return {
         	
-        	res_c: [],
+        	data: [
+        		{
+        			label: '项目经理',
+        			value: '0',
+        		}
+        	]
         	
         }
     },
@@ -126,5 +91,5 @@ export default {
 </script>
 
 <style scoped lang="less">
-	
+
 </style>

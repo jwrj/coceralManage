@@ -46,7 +46,7 @@ export default {
         	
         	treeData: [
         		{
-        			title: '未命名',
+        			title: '未配置',
                     expand: true,
                     render: (h, { root, node, data }) => {
                         return h('div',{

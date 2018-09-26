@@ -2,22 +2,17 @@
 	
 	<div>
 		
-		<div style="background: #fff;">
-			
-			<header class="header">
-				<slot name="header" :selectChange="selectChange"></slot>
-			</header>
-			
-			<Table stripe :columns="tableColumns" :data="tableData"></Table>
-			
-			<footer class="footer">
-				<slot name="footer"></slot>
-				<div style="margin-left: auto;">
-					<Page :total="100" show-sizer show-elevator />
-				</div>
-			</footer>
-			
-		</div>
+		<header class="header">
+			<slot name="header" :binEvent="selectChange"></slot>
+			<Input v-if="seekShow" :search="true" enter-button clearable placeholder="搜索..." class="seek" />
+		</header>
+		
+		<Table stripe :columns="tableColumns" :data="tableData"></Table>
+		
+		<footer class="footer">
+			<slot name="footer"></slot>
+			<Page v-if="pageShow" :total="100" show-sizer show-elevator style="margin-left: auto;" />
+		</footer>
 			
 		<!--弹窗-->
 		<Modal class-name="my-ivu-modal-wrap" v-model="modalShow" :mask="false" :transfer="false" fullscreen>
@@ -37,7 +32,13 @@
 
 <script>
 
+/**
+ * slot-scope
+ */
+
 import { edit, details } from './handleButton.js'
+
+import { tableColumns, tableData } from './data.js'
 
 export default {
 	name: 'tableList',
@@ -52,21 +53,37 @@ export default {
 		 * 
 		 */
 		
-		tableColumns: {//表头数据
-			type: Array,
-			required: true
+//		tableColumns: {//表头数据
+//			type: Array,
+//			required: true
+//		},
+//		
+//		tableData: {//表格数据
+//			type: Array,
+//			default: () => []
+//		}
+		filterShow: {
+			type: Boolean,
+			default: true
 		},
-		
-		tableData: {//表格数据
-			type: Array,
-			default: () => []
-		}
+		seekShow: {//搜索框控件
+			type: Boolean,
+			default: true
+		},
+		pageShow: {//分页控件
+			type: Boolean,
+			default: true
+		},
 		
 	},
     data () {//数据
         return {
         	
         	modalShow: false,
+        	
+        	tableColumns: tableColumns,
+        	
+        	tableData: tableData,
         	
         }
     },
@@ -173,10 +190,8 @@ export default {
 		align-items: center;
 	}
 	.header{
+		.public();
 		margin-bottom: 14px;
-		.header-content{
-			.public();
-		}
 	}
 	.footer{
 		.public();
