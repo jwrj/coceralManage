@@ -1,4 +1,9 @@
 
+let defaultBtnProps = {
+    type: 'primary',
+    size: 'small',
+}
+
 export const edit = (vm, h, params) => {
     return h('Button',{
     	props: {
@@ -31,4 +36,18 @@ export const details = (vm, h, params) => {
     		}
     	},
     },'详情');
+}
+
+export const buttonItem = (vm, h, params, btnParams={}, btnProps={}) => {
+    return h('Button',{
+    	props: Object.assign({}, defaultBtnProps, btnProps),
+    	style: {
+    		margin: '0 2px',
+    	},
+    	on: {
+    		click: () => {
+    			vm.$emit('on-btn-click', Object.assign({}, btnParams, {index: params.index}));
+    		}
+    	},
+    },btnParams.name || '按钮');
 }

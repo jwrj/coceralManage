@@ -7,7 +7,7 @@
 			
 			<h1 slot="title">表格列表</h1>
 			
-			<table-list>
+			<table-list :tableColumns="tableColumns">
 		
 				<div slot="header" style="width: 100%;display: flex;align-items: center;">
 			
@@ -67,6 +67,35 @@ export default {
         return {
         	
         	res_c: [],
+        	
+        	tableColumns: [
+				{
+			        title: 'ID',
+			        key: 'id'
+			    },
+			    {
+			        title: '名称',
+			        key: 'name'
+			    },
+			    {
+			        title: '日期',
+			        key: 'date'
+			    },
+			    {
+			    	align: 'center',
+			    	width: 130,
+			        title: '操作',
+			        handle: [
+			        	{
+			        		name: '申请加入',
+			        		key: 0,
+			        		props: {
+			        			loading: false
+			        		}
+			        	}
+			        ],
+			    }
+			],
         	
         }
     },

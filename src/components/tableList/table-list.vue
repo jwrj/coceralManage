@@ -11,6 +11,7 @@
 		stripe
 		:columns="tableColumns"
 		:data="tableData"
+		:highlight-row="true"
 		@on-select-all="tabSelectAll"
 		@on-select="tabSelect"
 		@on-selection-change="tabSelectionChange"
@@ -34,7 +35,7 @@
 	        	<Button type="primary" @click="modalShow = false">确定</Button>
 	        </div>
 	    </Modal>
-		{{tableData}}
+	    
 	</div>
 	
 </template>
@@ -45,9 +46,9 @@
  * slot-scope
  */
 
-import { edit, details } from './handleButton.js'
+import { edit, details, buttonItem } from './handleButton.js'
 
-import { tableColumns, tableData } from './data.js'
+import { tableData } from './data.js'
 
 export default {
 	name: 'tableList',
@@ -62,23 +63,26 @@ export default {
 		 * 
 		 */
 		
-//		tableColumns: {//表头数据
-//			type: Array,
-//			required: true
-//		},
-//		
+		tableColumns: {//表头数据
+			type: Array,
+			required: true
+		},
+		
 //		tableData: {//表格数据
 //			type: Array,
 //			default: () => []
-//		}
+//		},
+
 		filterShow: {
 			type: Boolean,
 			default: true
 		},
+		
 		seekShow: {//搜索框控件
 			type: Boolean,
 			default: true
 		},
+		
 		pageShow: {//分页控件
 			type: Boolean,
 			default: true
@@ -90,9 +94,7 @@ export default {
         	
         	modalShow: false,
         	
-        	tableColumns: tableColumns,
-        	
-        	tableData: tableData,
+        	tableData: tableData,//表格数据
         	
         	checkedData: [],
         	
@@ -108,6 +110,29 @@ export default {
     		
     		this.tableColumns.forEach(item => {
     		
+//	    		if(item.handle){
+//	    			
+//	    			item.render = (h,params) => {
+//	    				
+//	    				let children = [];
+//	    				
+//	    				item.handle.forEach(btnItem => {
+//	    					
+//	    					if(btnItem === 'edit'){
+//	    						children.push(edit(this, h, params));
+//	    					}else if(btnItem === 'details'){
+//	    						children.push(details(this, h, params));
+//	    					}
+//	    					
+//	    				})
+//	    				
+//	    				return h('div',children);
+//	    				
+//	    			}
+//	    			
+//	    		}
+	    		
+	    		
 	    		if(item.handle){
 	    			
 	    			item.render = (h,params) => {
@@ -116,19 +141,16 @@ export default {
 	    				
 	    				item.handle.forEach(btnItem => {
 	    					
-	    					if(btnItem === 'edit'){
-	    						children.push(edit(this, h, params));
-	    					}else if(btnItem === 'details'){
-	    						children.push(details(this, h, params));
-	    					}
+	    					children.push(buttonItem(this, h, params, btnItem, btnItem.props || {}));
 	    					
-	    				})
+	    				});
 	    				
 	    				return h('div',children);
 	    				
 	    			}
 	    			
 	    		}
+	    		
 	    		
 	    	});
     		

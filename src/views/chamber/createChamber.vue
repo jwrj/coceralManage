@@ -21,7 +21,7 @@
 </Card>
 <Card>
 <Form :model="link" :label-width="80">
-        <FormItem label="联系人:">
+        <FormItem label="联系人">
             <Input v-model="link.linkman" placeholder="请输入联系人" class="linkIn"></Input>
         </FormItem>
         <FormItem label="联系人电话:">
