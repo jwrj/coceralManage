@@ -7,11 +7,20 @@
 			<Input v-if="seekShow" :search="true" enter-button clearable placeholder="搜索..." class="seek" />
 		</header>
 		
-		<Table stripe :columns="tableColumns" :data="tableData"></Table>
+		<Table
+		stripe
+		:columns="tableColumns"
+		:data="tableData"
+		@on-select-all="tabSelectAll"
+		@on-select="tabSelect"
+		@on-selection-change="tabSelectionChange"
+		@on-select-cancel="tabSelectCancel"
+		>
+		</Table>
 		
 		<footer class="footer">
 			<slot name="footer"></slot>
-			<Page v-if="pageShow" :total="100" show-sizer show-elevator style="margin-left: auto;" />
+			<Page v-if="pageShow" :total="100" show-total show-sizer show-elevator style="margin-left: auto;" />
 		</footer>
 			
 		<!--弹窗-->
@@ -25,7 +34,7 @@
 	        	<Button type="primary" @click="modalShow = false">确定</Button>
 	        </div>
 	    </Modal>
-		
+		{{tableData}}
 	</div>
 	
 </template>
@@ -85,6 +94,8 @@ export default {
         	
         	tableData: tableData,
         	
+        	checkedData: [],
+        	
         }
     },
     methods: {//方法
@@ -93,7 +104,7 @@ export default {
     		console.log(val);
     	},
     	
-    	initColumns(){
+    	initColumns(){//初始化表头数据
     		
     		this.tableColumns.forEach(item => {
     		
@@ -122,6 +133,51 @@ export default {
 	    	});
     		
     	},
+    	tabSelectAll(selection){//全选
+    		console.log('全选');
+    		this.checkedData = selection;
+    		this.tableData.forEach(item => {
+    			selection.forEach(item2 => {
+    				if(item.id === item2.id){
+    					console.log(item.id);
+    					this.$set(item, '_checked', true);
+    				}
+    			});
+    		});
+    	},
+    	tabSelect(selection, row){//单选
+    		console.log('单选');
+    		this.tableData.forEach(item => {
+    			if(item.id === row.id){
+      				this.$set(item, '_checked', true);
+    			}
+    		});
+    	},
+    	tabSelectionChange(selection){//勾选改变时
+    		
+    		if(selection.length === 0){
+    			console.log('取消全选');
+    			this.tableData.forEach(item => {
+    				this.$set(item, '_checked', false);
+    			});
+    		}else{
+    			
+    			
+    			
+    		}
+    		
+//  		console.log('选择改变时');
+//  		this.checkedData = selection;
+//  		this.$emit('selectChange', this.checkedData);
+    	},
+    	tabSelectCancel(selection, row){//单个取消选择
+    		console.log('单个取消选择');
+    		this.tableData.forEach(item => {
+    			if(item.id === row.id){
+      				this.$set(item, '_checked', false);
+    			}
+    		});
+    	},
     	
     },
     computed: {//计算属性
@@ -129,12 +185,13 @@ export default {
     },
     watch: {//监测数据变化
     	modalShow(newBoolean){
-    		if(newBoolean){
-	    		this.$parent.$parent.$parent.$el.lastChild.style.overflow = 'hidden';
-	    	}else{
-	    		this.$parent.$parent.$parent.$el.lastChild.style = '';
-	    	}
-    	}
+//  		console.log(this.$parent.$parent.$parent);
+//  		if(newBoolean){
+//	    		this.$parent.$parent.$parent.$el.lastChild.style.overflow = 'hidden';
+//	    	}else{
+//	    		this.$parent.$parent.$parent.$el.lastChild.style = '';
+//	    	}
+    	},
 	},
     
     //===================组件钩子===========================
@@ -205,7 +262,13 @@ export default {
 
 <style lang="less">
 	.my-ivu-modal-wrap{
-		position: absolute !important;
+		/*width: 1251px;
+		height: 845px;*/
+		/*position: absolute !important;*/
+		top: 91px !important;
+		left: 200px !important;
+		/*right: initial !important;*/
+		/*bottom: initial !important;*/
 	}
 	.seek{
 		.ivu-input-icon-clear{

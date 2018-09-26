@@ -55,7 +55,10 @@ export default {
 		breadCrumbList: {
 			type: Array,
 			default: () => []
-		}
+		},
+//		isCollapsed:{
+//		 	type: Boolean,
+//		},
 		
 	},
 	data() { //数据
