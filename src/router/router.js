@@ -100,6 +100,57 @@ export default [
 					icon: 'md-alarm',
 				},
 				component: () => import('@/views/chamber/staffSet.vue')
+		  },
+			{
+				path: 'sessionSet',
+				name: 'sessionSet',
+				meta: {
+					title: '届次配置',
+					icon: 'md-alarm',
+				},
+				component: () => import('@/views/chamber/sessionSet.vue')
+			}
+		]
+	},
+	{
+		path: '/activity',
+		name: 'activity',
+		meta: {
+			title: '活动/会议管理',
+			icon: 'md-alarm',
+			showAlways: true
+		},
+		component: Main,
+		children: [
+			{
+				path: 'createActivity',
+				name: 'createActivity',
+				meta: {
+					title: '创建活动/会议',
+					icon: 'md-alarm',
+				},
+				component: () => import('@/views/activity/createActivity.vue')
+			}
+		]
+	},
+	{
+		path: '/price',
+		name: 'price',
+		meta: {
+			title: '会费管理',
+			icon: 'md-alarm',
+			showAlways: true
+		},
+		component: Main,
+		children: [
+			{
+				path: 'dues',
+				name: 'dues',
+				meta: {
+					title: '会费情况',
+					icon: 'md-alarm',
+				},
+				component: () => import('@/views/price/dues.vue')
 			}
 		]
 	},
