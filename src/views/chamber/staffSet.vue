@@ -1,14 +1,20 @@
 <template>
 	
 	<div>
-		<Card style="margin-top: 16px;position: initial;">
+		<Card style="position: initial;">
 			
 	<div slot="title" class="title">
 							<h1>给{{chamber}}的岗位配置人员</h1>
-							<Button class="btnSmall" size="small" type="info" @click="addStaff">添加/追加人员</Button>
+							<Button class="btnSmall" size="small" type="primary" @click="addStaff">添加/追加人员</Button>
 						</div>
-			<table-list></table-list>
-				<staff-modal :modalShow="modalShow" @closeModal="closeModal"  @okModal="okModal"></staff-modal>
+			<table-list :tableColumns="tableColumns">
+				<div slot="header" style="width: 100%;display: flex;align-items: center;">
+					
+					<post-casc style="margin-right: 10px;"></post-casc>
+			
+				</div>
+			</table-list>
+				<staff-modal></staff-modal>
 		</Card>
 		
 	</div>
@@ -18,11 +24,13 @@
 <script>
 	import tableList from '@/components/tableList/table-list.vue'
 	import staffModal from '@/views/chamber/component/staffModal'
+	import postCasc from '@/components/post/post-casc.vue';
 export default {
 	name: 'staffSet',
 	components:{//组件模板,
 		tableList,
-		staffModal
+		staffModal,
+		postCasc
 	},
 	props:{//组件道具（参数）
 		/* ****属性用法*****
@@ -43,21 +51,42 @@ export default {
 	},
     data () {//数据
         return {
-        	modalShow:false
+        	modalShow:false,
+					tableColumns: [
+						{
+							title: 'ID',
+							key: 'id'
+						},
+						{
+							title: '名称',
+							key: 'name'
+						},
+						{
+							title: '日期',
+							key: 'date'
+						},
+						{
+							align: 'center',
+							width: 130,
+							title: '操作',
+							handle: [
+								{
+									name: '查看',
+									key: 0,
+									props: {
+										loading: false
+									}
+								}
+							],
+						}
+					],
         }
     },
     methods: {//方法
     	addStaff(){
 			this.modalShow=true;
-      console.log(this.modalShow);
-		},
-		closeModal(){
-			this.modalShow=false;
-			console.log('xianzai')
-		},
-		okModal(){
-			this.modalShow=!this.modalShow;
-			console.log('okkk')
+			this.$store.commit('showstaffModal',this.modalShow)
+			//console.log(this.$store.state.cham.showstaff)
 		}
     },
     computed: {//计算属性

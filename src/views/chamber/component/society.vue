@@ -1,24 +1,22 @@
 <template>
 	
-	<div>
-<Form :model="socieData" :label-width="80">
-        <FormItem label="协会名称:">
+	<div ref="cha">
+<Form :model="socieData" :label-width="100" ref="children" :rules="ruleValidate">
+        <FormItem label="协会名称:" prop="name">
             <Input v-model="socieData.name" placeholder="请输入协会名称" class="linkIn"></Input>
         </FormItem>
 		<FormItem label="上级协会:">
 			<Input v-model="socieData.highcham" type="text" class="linkIn"></Input>
 		</FormItem>
-		<FormItem label="注册地:">
+		<FormItem label="注册地:" prop="register">
 			<Select v-model="socieData.register" style="width: 200px;">
                 <Option value="beijing">New York</Option>
             </Select>
 		</FormItem>
-		<FormItem label="行业:">
-			<Select v-model="socieData.trade" style="width: 200px;">
-				<Option value="jiu">酿酒</Option>
-			</Select>
+		<FormItem label="行业:" prop="trade">
+<industry-casc v-model="socieData.trade" style="margin-right: 10px;"></industry-casc>
 		</FormItem>
-		<FormItem label="成立时间:">
+		<FormItem label="成立时间:" prop="time">
        <DatePicker type="date" placeholder="Select date" style="width: 200px" v-model="socieData.time"></DatePicker>
 		</FormItem>
 		<FormItem label="协会标志:">
@@ -31,9 +29,11 @@
 
 <script>
 import defaultImg from '@/assets/img/default-img/u710.png'
+import industryCasc from '@/components/industry/industry-casc.vue';
 export default {
 	name: 'society',
-	components:{//组件模板
+	components:{//组件模板,
+	industryCasc
 	},
 	props:{//组件道具（参数）
 		/* ****属性用法*****
@@ -47,14 +47,31 @@ export default {
     data () {//数据
         return {
 			societyName:'',
-            socieData:{
+        socieData:{
 				trade:'',
 				name:'',
 				register:'',
 				time:'',
 				highcham:''
 			},
-			img:defaultImg
+			img:defaultImg,
+			ruleValidate: {
+				trade: [{
+					required: true,
+					message: '请选择行业',
+					trigger: 'blur'
+				}],
+				register: [{
+					required: true,
+					message: '请选择注册地',
+					trigger: 'blur'
+				}],
+				name: [{
+					required: true,
+					message: '请填写协会名称',
+					trigger: 'blur'
+				}]
+				}
         }
     },
     methods: {//方法

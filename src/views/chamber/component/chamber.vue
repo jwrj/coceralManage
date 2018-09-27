@@ -1,19 +1,19 @@
 <template>
 	
-	<div class="chamber">
-<Form :model="chamData" :label-width="80">
-        <FormItem label="商会名称:">
+	<div class="chamber" ref="cha">
+<Form :model="chamData" :label-width="100" ref="children" :rules="ruleValidate">
+        <FormItem label="商会名称:" prop="name">
             <Input v-model="chamData.name" placeholder="请输入商会名称" class="linkIn"></Input>
         </FormItem>
 		<FormItem label="上级商会:">
 			<Input v-model="chamData.highcham" type="text" class="linkIn"></Input>
 		</FormItem>
-		<FormItem label="注册地:">
+		<FormItem label="注册地:" prop="register">
 			<Select v-model="chamData.register" style="width: 200px;">
                 <Option value="beijing">New York</Option>
             </Select>
 		</FormItem>
-		<FormItem label="归属地:">
+		<FormItem prop="core" label="归属地:">
 			<Select v-model="chamData.core" style="width: 200px;">
 				<Option value="nanjing">南京</Option>
 			</Select>
@@ -45,7 +45,24 @@ export default {
 				   register:'',
 				   name:'',
 				   core:''
-                }
+                },
+								ruleValidate: {
+									core: [{
+										required: true,
+										message: '请选择归属地',
+										trigger: 'blur'
+									}],
+									register: [{
+										required: true,
+										message: '请选择注册地',
+										trigger: 'blur'
+									}],
+									name: [{
+										required: true,
+										message: '请填写商会名称',
+										trigger: 'blur'
+									}]
+									}
         }
     },
     methods: {//方法
