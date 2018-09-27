@@ -2,17 +2,29 @@
 	
 	<div>
 		
-		
+		<Card>
+			
+			<table-list :tableColumns="tableColumns">
+				<!-- <div slot="header" style="width: 100%;display: flex;align-items: center;">
+				    
+				    <post-casc style="margin-right: 10px;"></post-casc>
+		    
+				</div> -->
+			</table-list>
+		</Card>
 		
 	</div>
 	
 </template>
 
 <script>
-
+import postCasc from '@/components/post/post-casc.vue';
+import tableList from '@/components/tableList/table-list.vue'
 export default {
 	name: 'userList',
-	components:{//组件模板
+	components:{//组件模板,
+		postCasc,
+		tableList
 	},
 	props:{//组件道具（参数）
 		/* ****属性用法*****
@@ -24,12 +36,42 @@ export default {
 		 */
 	},
     data () {//数据
-        return {
-        	
-        }
+    	return {
+    		
+    		// res_c: [],
+    		
+    		tableColumns: [
+    			{
+    				title: 'ID',
+    				key: 'id'
+    			},
+    			{
+    				title: '名称',
+    				key: 'name'
+    			},
+    			{
+    				title: '日期',
+    				key: 'date'
+    			},
+    			{
+    				align: 'center',
+    				width: 130,
+    				title: '操作',
+    				handle: [
+    					{
+    						name: '申请加入',
+    						key: 0,
+    						props: {
+    							loading: false
+    						}
+    					}
+    				],
+    			}
+    		],
+    		
+    	}
     },
     methods: {//方法
-    	
     },
     computed: {//计算属性
         	

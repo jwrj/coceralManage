@@ -35,7 +35,7 @@ export default {
 	},
     data () {//数据
         return {
-			show:'false'
+			show:false
         }
     },
     methods: {//方法
