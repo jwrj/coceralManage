@@ -10,7 +10,7 @@
 				
 				<Breadcrumb>
 					<template v-for="(item,index) in breadcrumb">
-				        <BreadcrumbItem :to="index != breadcrumb.length-1 ? '?path='+item : ''">{{item}}</BreadcrumbItem>
+				        <BreadcrumbItem :to="index != breadcrumb.length-1 ? '?path='+item.path : ''">{{item.name}}</BreadcrumbItem>
 					</template>
 				</Breadcrumb>
 				
@@ -24,10 +24,10 @@
 			
 			<Row
 			v-for="item in newFileData"
-			@click.native="clickFolder(item.id,$event)"
+			@click.native="clickFolder(item,$event)"
 			@dblclick.native="dblclickFolder(item)"
 			class="fileList"
-			:class="{active: item.id === activeId}"
+			:class="{active: item.name === activeName}"
 			>
 				<Col span="10" class="fileList-name">
 					<Icon style="margin-right: 8px;" :type="iconType(item.type).icon || ''" size="28" :color="iconType(item.type).color || ''" />
@@ -69,79 +69,92 @@ export default {
     data () {//数据
         return {
         	
+        	fileData: {
+        		children: [
+        			{
+	        			name: '文件夹1',
+	        			type: 'folder',
+	        			children: [
+	        				{
+		        				name: '子文件夹1',
+		        				type: 'folder',
+			        			children: [],
+			        			files: []
+	        				},
+	        				{
+		        				name: '子文件夹2',
+		        				type: 'folder',
+			        			children: [
+			        				{
+				        				name: '子文件夹2-1',
+				        				type: 'folder',
+					        			children: [],
+					        			files: []
+			        				}
+			        			],
+			        			files: []
+	        				}
+	        			],
+	        			files: [
+			        		{
+								id: 1,
+								name: '图片123.jpg',
+								type: 'jpg',
+							},
+			        		{
+								id: 2,
+								name: '文本666.txt',
+								type: 'txt',
+							},
+	        			],
+	        		},
+	        		{
+						name: '文件夹2',
+						type: 'folder',
+		    			children: [],
+		    			files: [
+		    				{
+								id: 2,
+								name: '文本888.txt',
+								type: 'txt',
+							}
+		    			]
+					},
+        		],
+        		files: [
+    				{
+						id: 1,
+						name: '图片1.png',
+						type: 'png',
+					},
+	        		{
+						id: 2,
+						name: '图片2.jpg',
+						type: 'jpg',
+					},
+	        		{
+						id: 3,
+						name: '文本.txt',
+						type: 'txt',
+					},
+    			],
+        	},
+        	
         	modal: false,
         	
         	count: 1,
         	
         	folderName: '',
         	
-        	currentPid: 0,
+        	currentName: 0,
         	
         	pathHistory: [''],//路径记录
         	
-        	breadcrumb: [''],//面包屑导航
-        	
-        	fileData: [
-        		{
-        			id: 1,
-        			pid: 0,
-        			name: '文件夹1',
-        			type: 'folder',
-        			children: [
-        				{
-        					id: 2,
-        					pid: 1,
-	        				name: '子文件夹1',
-	        				type: 'folder',
-		        			children: []
-        				},
-        				{
-        					id: 3,
-        					pid: 1,
-	        				name: '子文件夹2',
-	        				type: 'folder',
-		        			children: [
-		        				{
-		        					id: 8,
-		        					pid: 3,
-			        				name: '子文件夹2-1',
-			        				type: 'folder',
-				        			children: []
-		        				}
-		        			]
-        				}
-        			]
-        		},
-        		{
-					id: 4,
-					pid: 0,
-					name: '文件夹2',
-					type: 'folder',
-	    			children: []
-				},
-        		{
-					id: 5,
-					pid: 0,
-					name: '图片1.png',
-					type: 'png',
-				},
-        		{
-					id: 6,
-					pid: 0,
-					name: '图片2.jpg',
-					type: 'jpg',
-				},
-        		{
-					id: 7,
-					pid: 0,
-					name: '文本.txt',
-					type: 'txt',
-				},
-        	],
+        	breadcrumb: [{name: '全部文件', path: '/'}],//面包屑导航
         	
         	newFileData: [],
         	
-        	activeId: null,
+        	activeName: '',
         	
         }
     },
@@ -154,25 +167,23 @@ export default {
     	},
     	
     	addFolder(){//新建文件夹
-    		
-    		//this.count++;
-    		//this.modal = false;
     		console.log(this.folderName);
     	},
     	
-    	clickFolder(id,e){//单击文件
-//  		console.log('单击');
-//  		console.log(e);
-			this.currentPid = id;
-    		this.activeId = id;
+    	clickFolder(current,e){//单击文件
+			this.currentName = current.name;
+    		this.activeName = current.name;
     	},
     	
     	dblclickFolder(current){//双击文件
     		
-    		this.pathHistory.push(current.name);
-    		
-    		this.breadcrumb.push(current.name);
-    		
+    		this.pathHistory.push(current.name);//记录路径
+//  		
+//  		this.breadcrumb.push({
+//  			name: current.name,
+//  			path: this.pathHistory.join('/')
+//  		});
+//  		
     		this.$router.push({
 	    		name: 'home',
 	    		query: {
@@ -180,30 +191,24 @@ export default {
 	    		}
 	    	});
 
-			console.log(this.$route);
-    		
-    		let arr = [];
-    		
-    		let recursion = (fileData) => {
+			console.log(this.pathHistory);
+
+    		if(current.children && current.files){
     			
-    			fileData.forEach(item => {
-	    		
-    				if(item.pid === current.id){
-    					arr.push(item);
-    				}
-	    		
-    				if(item.children && item.children.length > 0){
-	    				recursion(item.children);
-    				}
-	    		
-    			});
+    			//console.log('双击了文件夹');
+    			
+//  			let newArr = [];
+//  			
+//  			newArr.push(...current.children,...current.files);
+//  			
+//  			this.newFileData = newArr;
+    			
+    		}else{
+    			
+    			//console.log('双击了文件');
     			
     		}
-    		
-    		recursion(this.fileData);
 	    	
-	    	this.newFileData = arr;
-    		
     	},
     	
     	iconType(type){
@@ -236,56 +241,107 @@ export default {
         
     },
     watch: {//监测数据变化
+    	
     	'$route'(to){
     		
       		let query = to.query.path.split('/');
       		
-      		console.log(query);
+      		let currentOpenFolder = query[query.length-1];
       		
-      		let newBreadcrumb = [''];
+      		let newArr = [];
       		
-      		this.breadcrumb.forEach(item => {
-      			query.forEach(itemName => {
-      				if(item === itemName){
-      					newBreadcrumb.push(item);
-      				}
-      			});
-      		});
-      		this.breadcrumb = newBreadcrumb;
+      		let recursion = (obj) => {
+      			
+      			if(obj.children && obj.children.length > 0){
+      				
+      				obj.children.forEach(item => {
+      					
+      					if(item.name === currentOpenFolder){
+      						
+        					newArr.push(...item.children,...item.files);
+        					
+      					}
+      					
+      					recursion(item);
+      				
+      				});
+      				
+      			}
+      			
+      		}
       		
-      		console.log(to);
+      		recursion(this.fileData);
+      		
+      		this.newFileData = newArr;
+      		
+//    		query.forEach((item,index,arr) => {
+//    			
+//				abc.push({
+//					name: item,
+//					path: ''
+//				});
+//    			
+//    			
+//    		});
       		
       		
-      		//console.log(query[query.length-1]);
+//    		let newBreadcrumb = [{name: '全部文件', path: '/'}];
+//    		
+//    		this.breadcrumb.forEach(item => {
+//    			query.forEach(itemName => {
+//    				if(item.name === itemName){
+//    					newBreadcrumb.push(item);
+//    				}
+//    			});
+//    		});
+//    		this.breadcrumb = newBreadcrumb;
+//    		
+//    		console.log(this.breadcrumb);
       		
       		
     	},
+    	
 	},
     
     //===================组件钩子===========================
     
     created () {//实例被创建完毕之后执行
     	
-    	let arr = [];
+    	let newArr = [];
     	
-    	this.fileData.forEach(item => {
+    	if(this.$route.query.path){
     		
-    		if(item.pid === 0){
-    			
-    			arr.push(item);
-    			
-    		}
+    		let query = this.$route.query.path.split('/');
     		
-    	});
+    		let currentOpenFolder = query[query.length-1];
+    		
+    		let recursion = (obj) => {
+      			
+      			if(obj.children && obj.children.length > 0){
+      				
+      				obj.children.forEach(item => {
+      					
+      					if(item.name === currentOpenFolder){
+      						
+        					newArr.push(...item.children,...item.files);
+        					
+      					}
+      					
+      					recursion(item);
+      				
+      				});
+      				
+      			}
+      			
+      		}
+      		
+      		recursion(this.fileData);
+    		
+    	}else{
+    		newArr.push(...this.fileData.children,...this.fileData.files);
+    	}
     	
-    	this.newFileData = arr;
-    	
-//  	this.$router.push({
-//  		name: 'home',
-//  		query: {
-//  			path: 'all'
-//  		}
-//  	});
+    	this.newFileData = newArr;
     	
 	},
     mounted () {//模板被渲染完毕之后执行
