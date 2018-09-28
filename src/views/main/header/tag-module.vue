@@ -60,7 +60,7 @@
 	<div class="tag-box">
 		
 		<div class="tag-left-btn">
-			<Button type="text" style="padding: 0;width: 100%;height: 28px;float: left;">
+			<Button @click="leftBtn" type="text" style="padding: 0;width: 100%;height: 28px;float: left;">
 				<Icon size="20" type="ios-arrow-back" />
 			</Button>
 		</div>
@@ -88,7 +88,7 @@
 		</div>
 		
 		<div class="tag-right-btn">
-			<Button type="text" style="padding: 0;width: 100%;height: 28px;float: right;">
+			<Button @click="rightBtn" type="text" style="padding: 0;width: 100%;height: 28px;float: right;">
 				<Icon size="20" type="ios-arrow-forward" />
 			</Button>
 		</div>
@@ -131,7 +131,7 @@ export default {
 	data() { //数据
 		return {
 			
-			offsetNum: 0,
+			offsetNum: 0,//偏移量
 			
 		}
 	},
@@ -172,6 +172,8 @@ export default {
 			});
 			
 			this.$store.commit('setTagNavList',tagList);
+			
+			this.setTagOffset();//设置标签偏移量
 			
 	    },
 	    
@@ -219,8 +221,11 @@ export default {
 	    	
 	    	this.$store.commit('setTagNavList',newTag());
 	    	
+	    	this.setTagOffset();//设置标签偏移量
+	    	
 	    },
-	    setTagSlideDist(){//设置标签滑动距离
+	    
+	    setTagOffset(){//设置标签偏移量
 	    	
 	    	setTimeout(() => {
 				
@@ -247,6 +252,40 @@ export default {
 			},10);
 	    	
 		},
+		
+		leftBtn(){//向左滑动
+			
+			this.offsetNum += 200;
+			
+			if(this.offsetNum >= 0){
+				this.offsetNum = 0;
+			}
+			
+		},
+		
+		rightBtn(){//向右滑动
+			
+			setTimeout(() => {
+				
+				let tagContentBox = this.$refs.tagContentBox.offsetWidth;
+				
+				let tagContentTagBtnBox = this.$refs.tagContentTagBtnBox.offsetWidth;
+				
+				if(tagContentTagBtnBox > tagContentBox){
+					
+					let maxOffset = -(tagContentTagBtnBox - tagContentBox);
+					
+					this.offsetNum -= 200;
+			
+					if(this.offsetNum <= maxOffset){
+						this.offsetNum = maxOffset;
+					}
+					
+				}
+				
+			},10);
+			
+		},
 	    
 	},
 	computed: { //计算属性
@@ -254,13 +293,19 @@ export default {
 	},
 	watch: { //监测数据变化
 		
+		'$route'(to){
+			
+			this.setTagOffset();//设置标签偏移量
+			
+		},
+		
 	},
 
 	//===================组件钩子===========================
 
 	created() { //实例被创建完毕之后执行
 		
-		this.setTagSlideDist();
+		this.setTagOffset();//设置标签偏移量
 		
 	},
 	mounted() { //模板被渲染完毕之后执行
