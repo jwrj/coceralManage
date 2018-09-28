@@ -32,6 +32,15 @@
 			
 		</Card>
 		
+		<!--文件管理-->
+		<Card style="margin-top: 16px;height: 600px;">
+			
+			<h1 slot="title">文件管理</h1>
+			
+			<file-manage currentRouteName="comPage"></file-manage>
+			
+		</Card>
+		
 	</div>
 	
 </template>
@@ -46,6 +55,8 @@ import postCasc from '@/components/post/post-casc.vue';//岗位级联
 
 import postConfig from '@/components/postConfig/post-config.vue';//岗位配置
 
+import fileManage from '@/components/fileManage/file-manage.vue';//文件管理
+
 export default {
 	name: 'comPage',
 	components:{//组件模板
@@ -53,6 +64,7 @@ export default {
 		industryCasc,
 		postCasc,
 		postConfig,
+		fileManage,
 	},
 	props:{//组件道具（参数）
 		/* ****属性用法*****
