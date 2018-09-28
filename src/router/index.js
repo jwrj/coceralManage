@@ -11,31 +11,42 @@ export const router = new Router({
 
 router.beforeEach((to, from, next) => {//路由跳转前
 	
-	
-	
-	
-	//权限
-	if(canTurnTo(routers, window.USE_RACCESS, to.name)){
+	//检测系统内部登录
+	if(!sessionStorage.chamberId && to.name !== 'login'){
 		
-		if(pathImperfect(routers, to.name)){
-			next({
-				replace: true,
-				name: 'error-401'
-			});
-		}else{
-			next()
-		}
+		next({
+			name: 'login'
+		});
+		
+	}else if(sessionStorage.chamberId && to.name === 'login'){
+		
+		next({
+			name: 'home'
+		});
 		
 	}else{
 		
-		next({
-			replace: true,
-			name: 'error-403'
-		});
+		//检测页面权限
+		if(canTurnTo(routers, window.USE_RACCESS, to.name)){
+			
+			if(pathImperfect(routers, to.name)){
+				next({
+					replace: true,
+					name: 'error-401'
+				});
+			}else{
+				next()
+			}
+			
+		}else{
+			
+			next({
+				replace: true,
+				name: 'error-403'
+			});
+			
+		}
 		
 	}
-	
-	
-	
 	
 });
