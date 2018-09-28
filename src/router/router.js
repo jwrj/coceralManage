@@ -131,6 +131,15 @@ export default [
 		component: Main,
 		children: [
 			{
+				path: 'activityList',
+				name: 'activityList',
+				meta: {
+					title: '活动/会议列表',
+					icon: 'md-alarm',
+				},
+				component: () => import('@/views/activity/activityList.vue')
+			},
+			{
 				path: 'createActivity',
 				name: 'createActivity',
 				meta: {
@@ -138,7 +147,17 @@ export default [
 					icon: 'md-alarm',
 				},
 				component: () => import('@/views/activity/createActivity.vue')
+			},
+			{
+				path: 'activityDetails',
+				name: 'activityDetails',
+				meta: {
+					title: '活动/会议详情',
+					icon: 'md-alarm',
+				},
+				component: () => import('@/views/activity/activityDetails.vue')
 			}
+
 		]
 	},
 	{

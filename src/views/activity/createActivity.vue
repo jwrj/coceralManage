@@ -27,50 +27,50 @@
 				<FormItem label="住宿地址:" v-if="activity.live=='是'">
 					<Input v-model="activity.address" style="width: 400px;"></Input>
 				</FormItem>
-				
+
 			</Form>
 		</Card>
 
-<Card style="margin-top: 16px;height: 600px;">
-			
+		<Card style="margin-top: 16px;height: 600px;">
+
 			<h1 slot="title">文件管理</h1>
-			
+
 			<file-manage currentRouteName="createActivity"></file-manage>
-			
+
 		</Card>
-		
-<Card style="margin-top: 16px;height: 600px;">
+
+		<Card style="margin-top: 16px;height: 600px;">
 			<div slot="title" class="title">
 				<h1>邀请人员</h1>
 				<Button class="btnSmall" size="small" type="primary" @click="importPerson">导入更多会员</Button>
 			</div>
-		<table-list :tableColumns="tableColumns">
-						<div slot="header" style="width: 100%;display: flex;align-items: center;">
-		
-							<post-casc style="margin-right: 10px;"></post-casc>
-		
-						</div>
-					</table-list>
+			<table-list :tableColumns="tableColumns">
+				<div slot="header" style="width: 100%;display: flex;align-items: center;">
+
+					<post-casc style="margin-right: 10px;"></post-casc>
+
+				</div>
+			</table-list>
 			<br>
-			 <Button type="primary" long  @click="handleSubmit('activity')">创建会议</Button>
+			<Button type="primary" long @click="handleSubmit('activity')">创建会议</Button>
 		</Card>
 		<Modal v-model="showImport" :mask-closable="false" title="会员库" :width="700">
-					<table-list :tableColumns="tableColumns">
-						<div slot="header" style="width: 100%;display: flex;align-items: center;">
-		
-							<post-casc style="margin-right: 10px;"></post-casc>
-		
-						</div>
-					</table-list>
-				</Modal>
+			<table-list :tableColumns="tableColumns">
+				<div slot="header" style="width: 100%;display: flex;align-items: center;">
+
+					<post-casc style="margin-right: 10px;"></post-casc>
+
+				</div>
+			</table-list>
+		</Modal>
 	</div>
 
 </template>
 
 <script>
-	import fileManage from '@/components/fileManage/file-manage.vue';//文件管理
+	import fileManage from '@/components/fileManage/file-manage.vue'; //文件管理
 	import tableList from '@/components/tableList/table-list.vue'
-	import postCasc from '@/components/post/post-casc.vue';//岗位级联
+	import postCasc from '@/components/post/post-casc.vue'; //岗位级联
 	export default {
 		name: '',
 		components: { //组件模板,
@@ -89,7 +89,7 @@
 		},
 		data() { //数据
 			return {
-				showImport:false,
+				showImport: false,
 				activity: {
 					name: '',
 					starting: '',
@@ -153,17 +153,17 @@
 			}
 		},
 		methods: { //方法
- handleSubmit(name) {
- this.$refs[name].validate((valid) => {
- 	if (valid) {
- 	this.$Message.success('添加成功!');
- 	} else {
- 	this.$Message.error('添加失败!');
- 	}
- })			
+			handleSubmit(name) {
+				this.$refs[name].validate((valid) => {
+					if (valid) {
+						this.$Message.success('添加成功!');
+					} else {
+						this.$Message.error('添加失败!');
+					}
+				})
 			},
 			importPerson() {
-				this.showImport=true;
+				this.showImport = true;
 			}
 		},
 		computed: { //计算属性
