@@ -167,6 +167,7 @@ export default [
 		name: 'testPages',
 		meta: {
 			icon: 'md-alarm',
+			hideBreadcrumb: true
 		},
 		component: Main,
 		children: [
@@ -174,7 +175,7 @@ export default [
 				path: 'comPage',
 				name: 'comPage',
 				meta: {
-					title: '组件测试',
+					title: '组件',
 					icon: 'md-alarm',
 				},
 				component: () => import('@/views/testPages/comPage.vue')

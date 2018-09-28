@@ -1,17 +1,8 @@
-<style scoped lang="less">
-	.menu-icon {
-		transition: all .3s;
-	}
-	.rotate-icon {
-		transform: rotate(-90deg);
-	}
-</style>
-
 <template>
 
 	<div style="height: 53px;display: flex;align-items: center;overflow: hidden;">
 			
-		<Icon @click.native="collapsedSider" :class="rotateIcon" style="margin: 0 20px;cursor: pointer;flex-shrink: 0;" type="md-menu" size="28"></Icon>
+		<Icon @click.native="collapsedSider" :class="{'rotate-icon': isCollapsed}" class="menu-collapsed-icon" type="md-menu" size="28"></Icon>
 		
 		<div style="white-space:nowrap;overflow: hidden;margin-right: 16px;">
 	
@@ -56,9 +47,10 @@ export default {
 			type: Array,
 			default: () => []
 		},
-//		isCollapsed:{
-//		 	type: Boolean,
-//		},
+		
+		isCollapsed:{
+		 	type: Boolean,
+		},
 		
 	},
 	data() { //数据
@@ -74,10 +66,6 @@ export default {
 		
 	},
 	computed: { //计算属性
-		
-		rotateIcon() {
-			return [ 'menu-icon', this.isCollapsed ? 'rotate-icon' : '' ];
-		},
 		
 	},
 	watch: { //监测数据变化
@@ -95,3 +83,14 @@ export default {
 
 }
 </script>
+
+<style scoped lang="less">
+	.menu-collapsed-icon {
+		margin: 0 20px;
+		cursor: pointer;
+		flex-shrink: 0;
+	}
+	.rotate-icon {
+		transform: rotate(-90deg);
+	}
+</style>
