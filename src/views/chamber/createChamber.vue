@@ -118,6 +118,7 @@
 			},
 			handleReset(name) {
 				this.$refs[name].resetFields();
+				this.$refs.children.$refs.children.resetFields();
 
 			},
 			radiochange(){

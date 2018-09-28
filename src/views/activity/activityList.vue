@@ -2,26 +2,11 @@
 
 	<div>
 		<Card>
-			<div slot="title">
-				<h1>会费情况-查看岗位的缴费情况</h1>
+			<div slot="title" class="title">
+				<h1>活动/会议列表</h1>
+				<Button class="btnSmall" size="small" type="primary" @click="createactivity">创建会议</Button>
 			</div>
-			
-			<table-list :tableColumns="tableColumns" :seekShow="false">
-				<div slot="header"style="display: flex;">
-					<div><post-casc style="margin-right: 10px;"></post-casc></div>
-            <Select v-model="statescreen" placeholder="会费情况" style="width: 150px;margin-right: 10px;">
-							<Option value="全部">全部</Option>
-							<Option value="欠费">欠费</Option>
-							<Option value="缴清">缴清</Option>
-            </Select>
-						<Select v-model="modescreen" placeholder="缴纳方式" style="width: 150px;">
-							<Option value="全部">全部</Option>
-							<Option value="现金缴纳">现金缴纳</Option>
-							<Option value="对公转账">对公转账</Option>
-							<Option value="基金冲减">基金冲减</Option>
-						</Select>
-				</div>
-
+			<table-list :tableColumns="tableColumns">
 			</table-list>
 		</Card>
 
@@ -31,13 +16,10 @@
 </template>
 
 <script>
-	import postCasc from '@/components/post/post-casc.vue'; //岗位级联
-	import tableList from '@/components/tableList/table-list.vue'; //表格列表组件
-
+	import tableList from '@/components/tableList/table-list.vue'
 	export default {
 		name: '',
 		components: { //组件模板,
-			postCasc,
 			tableList
 		},
 		props: { //组件道具（参数）
@@ -51,8 +33,6 @@
 		},
 		data() { //数据
 			return {
-				modescreen: '',
-				statescreen: '',
 				tableColumns: [{
 						title: 'ID',
 						key: 'id'
@@ -70,7 +50,7 @@
 						width: 130,
 						title: '操作',
 						handle: [{
-							name: '申请加入',
+							name: '查看',
 							key: 0,
 							props: {
 								loading: false
@@ -81,7 +61,9 @@
 			}
 		},
 		methods: { //方法
-
+			createactivity() {
+				this.$router.push('/activity/createActivity');
+			}
 		},
 		computed: { //计算属性
 
@@ -136,7 +118,12 @@
 </script>
 
 <style scoped lang="less">
- .radio{
-	margin-right: 6px;
-}
+	.btnSmall {
+		margin-left: auto;
+	}
+
+	.title {
+		display: flex;
+		align-items: center;
+	}
 </style>
