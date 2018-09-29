@@ -4,7 +4,6 @@
 		<Card>
 			
 			<h1 slot="title">给商会/协会配置岗位</h1>
-			<h1 slot="extra">正在配置岗位：{{chamber}}</h1>
 			<post-config></post-config>
 			
 		</Card>

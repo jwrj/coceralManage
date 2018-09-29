@@ -9,9 +9,7 @@
 			<Input v-model="socieData.highcham" type="text" class="linkIn"></Input>
 		</FormItem>
 		<FormItem label="注册地:" prop="register">
-			<Select v-model="socieData.register" style="width: 200px;">
-                <Option value="beijing">New York</Option>
-            </Select>
+	<al-cascader v-model="socieData.register" style="width: 300px;" />
 		</FormItem>
 		<FormItem label="行业:" prop="trade">
 <industry-casc v-model="socieData.trade" style="margin-right: 10px;"></industry-casc>
@@ -48,24 +46,28 @@ export default {
         return {
 			societyName:'',
         socieData:{
-				trade:'',
+				trade:[],
 				name:'',
-				register:'',
+				register:[],
 				time:'',
 				highcham:''
 			},
 			img:defaultImg,
 			ruleValidate: {
-				trade: [{
-					required: true,
-					message: '请选择行业',
-					trigger: 'blur'
-				}],
-				register: [{
-					required: true,
-					message: '请选择注册地',
-					trigger: 'blur'
-				}],
+					trade: [{
+						type: 'array',
+						min:1,
+						required: true,
+						message: '请选择行业',
+						trigger: 'change'
+					}],
+					register: [{
+						type: 'array',
+						min: 2,
+						required: true,
+						message: '请选择城市',
+						trigger: 'change'
+					}],
 				name: [{
 					required: true,
 					message: '请填写协会名称',

@@ -36,7 +36,6 @@
 				</FormItem>
 				<p style="text-align: center;margin-top: 15px;">
 					<Button type="primary" @click="handleSubmit('link')">立即创建</Button>
-					<Button @click="handleReset('link')" style="margin-left: 15px">清空</Button>
 				</p>
 			</Form>
 		</Card>
@@ -108,10 +107,10 @@
 				this.$refs.children.$refs.children.validate((ft) => {
 							console.log(ft);
 					this.$refs[name].validate((valid) => {
-						if (valid) {
-						this.$Message.success('添加成功!');
+						if (valid&&ft) {
+						this.$Message.success('添加成功!');						
 						} else {
-						this.$Message.error('添加失败!');
+						//this.$Message.error('添加失败!');
 						}
 					})			
 				})

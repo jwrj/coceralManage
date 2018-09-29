@@ -52,7 +52,7 @@
 				</div>
 			</table-list>
 			<br>
-			<Button type="primary" long @click="handleSubmit('activity')">创建会议</Button>
+			<div style="margin: 0 45%;"><Button type="primary"  @click="handleSubmit('activity')">创建会议</Button></div>
 		</Card>
 		<Modal v-model="showImport" :mask-closable="false" title="会员库" :width="700">
 			<table-list :tableColumns="tableColumns">
