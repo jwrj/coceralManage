@@ -31,7 +31,7 @@
 		<Layout>
 			
 			<!--左侧菜单-->
-			<Sider ref="siderInstance" hide-trigger collapsible :collapsed-width="64" v-model="isCollapsed" style="height: 100vh;z-index: 9999;">
+			<Sider ref="siderInstance" hide-trigger collapsible :collapsed-width="64" v-model="isCollapsed" style="height: 100vh;z-index: 1000;">
 				<div style="height:50px;line-height:50px;color: #fff;padding: 0 5px;text-align: center;font-size: 24px;overflow: hidden;background: #19be6b;margin: 10px;">商会管理</div>
 				<menu-sider ref='sideMenu' :menuList="menuList" :isCollapsed="isCollapsed"></menu-sider>
 			</Sider>

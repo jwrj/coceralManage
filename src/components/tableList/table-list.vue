@@ -25,7 +25,7 @@
 		</footer>
 			
 		<!--弹窗-->
-		<Modal v-model="modalShow" :closable="false" :mask="false" :transfer="false" fullscreen :footer-hide="true" :class-name="$store.state.app.isCollapsed ? 'my-ivu-modal-wrap leftmin' : 'my-ivu-modal-wrap leftmax'">
+		<Modal v-model="modalShow" :z-index="900" :closable="false" :mask="false" :transfer="false" fullscreen :footer-hide="true" class="my-modal-box" :class-name="$store.state.app.isCollapsed ? 'my-ivu-modal-wrap leftmin' : 'my-ivu-modal-wrap leftmax'">
 	    	<div slot="header" style="position: relative;">
 	    		<h1>标题</h1>
 		    	<div style="position: absolute;top: -8px;right: 0;">
@@ -295,6 +295,12 @@ export default {
 	.seek{
 		.ivu-input-icon-clear{
 			right: 50px !important;
+		}
+	}
+	@media (max-width: 768px){
+		.my-modal-box .ivu-modal {
+		     width: 100% !important;
+		     margin: 0 !important; 
 		}
 	}
 </style>
