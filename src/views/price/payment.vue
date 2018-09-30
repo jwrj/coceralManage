@@ -86,7 +86,7 @@
 <script>
 	import tableList from '@/components/tableList/table-list.vue'; //表格列表组件
 	export default {
-		name: '',
+		name: 'payMent',
 		components: { //组件模板,
 			tableList
 		},

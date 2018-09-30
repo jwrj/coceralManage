@@ -18,7 +18,7 @@
        <DatePicker type="date" placeholder="Select date" style="width: 200px" v-model="socieData.time"></DatePicker>
 		</FormItem>
 		<FormItem label="协会标志:">
-			<Img :src="img" @click="openCoc"></Img>
+			<Icon type="md-image" @click="openCoc" size="60"/>
 		</FormItem>
 </Form>
 	</div>

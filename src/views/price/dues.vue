@@ -5,9 +5,8 @@
 			<div slot="title">
 				<h1>会费情况-查看岗位的缴费情况</h1>
 			</div>
-			
 			<table-list :tableColumns="tableColumns" :seekShow="false">
-				<div slot="header"style="display: flex;">
+				<div slot="header" style="display: flex;">
 					<div><post-casc style="margin-right: 10px;"></post-casc></div>
             <Select v-model="statescreen" placeholder="会费情况" style="width: 150px;margin-right: 10px;">
 							<Option value="全部">全部</Option>
@@ -21,7 +20,7 @@
 							<Option value="基金冲减">基金冲减</Option>
 						</Select>
 				</div>
-
+  <pay-ment slot="modalContent"></pay-ment>
 			</table-list>
 		</Card>
 
@@ -33,12 +32,13 @@
 <script>
 	import postCasc from '@/components/post/post-casc.vue'; //岗位级联
 	import tableList from '@/components/tableList/table-list.vue'; //表格列表组件
-
+    import payMent from '@/views/price/payment.vue'
 	export default {
 		name: '',
 		components: { //组件模板,
 			postCasc,
-			tableList
+			tableList,
+			payMent
 		},
 		props: { //组件道具（参数）
 			/* ****属性用法*****
@@ -70,7 +70,7 @@
 						width: 130,
 						title: '操作',
 						handle: [{
-							name: '申请加入',
+							name: '查看详情',
 							key: 0,
 							props: {
 								loading: false
