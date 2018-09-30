@@ -30,7 +30,9 @@
 
 			</Form>
 		</Card>
-
+        <Card style="margin-top: 16px;height: 600px;">
+		111
+			</Card>
 		<Card style="margin-top: 16px;height: 600px;">
 
 			<h1 slot="title">文件管理</h1>
@@ -52,8 +54,11 @@
 				</div>
 			</table-list>
 			<br>
-			<div style="margin: 0 45%;"><Button type="primary"  @click="handleSubmit('activity')">创建会议</Button></div>
+			    <div style="margin: 0 45%;">
+      <Button type="primary"  @click="handleSubmit('activity')">创建会议</Button>
+    </div>
 		</Card>
+
 		<Modal v-model="showImport" :mask-closable="false" title="会员库" :width="700">
 			<table-list :tableColumns="tableColumns">
 				<div slot="header" style="width: 100%;display: flex;align-items: center;">
@@ -164,6 +169,9 @@
 			},
 			importPerson() {
 				this.showImport = true;
+			},
+			get_editor_content(v) {
+				this.editor_content = v;
 			}
 		},
 		computed: { //计算属性
