@@ -18,6 +18,10 @@
 				    <al-cascader v-model="res_c"/>
 		    
 				</div>
+				
+				<div slot="modalContent">
+					弹窗内容
+				</div>
 		
 			</table-list>
 			
@@ -45,7 +49,9 @@
 	    	
 	    	<h1 slot="title">富文本编辑器</h1>
 	    	
-	    	<UEditor :configs='editor_config'></UEditor>
+	    	{{editor_content}}
+	    	
+	    	<UEditor :configs='editor_config' @up_editor_content="upEditorContent"></UEditor>
 	    	
 	    </Card>
 	    
@@ -125,10 +131,16 @@ export default {
 		    	width:'100%',
 		    	height:'500px'
 		   },
+		   
+		   editor_content: '',
         	
         }
     },
     methods: {//方法
+    	
+    	upEditorContent(value){
+    		this.editor_content = value;
+    	},
     	
     },
     computed: {//计算属性

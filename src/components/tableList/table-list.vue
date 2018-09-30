@@ -25,7 +25,17 @@
 		</footer>
 			
 		<!--弹窗-->
-		<Modal v-model="modalShow" :z-index="900" :closable="false" :mask="false" :transfer="false" fullscreen :footer-hide="true" class="my-modal-box" :class-name="$store.state.app.isCollapsed ? 'my-ivu-modal-wrap leftmin' : 'my-ivu-modal-wrap leftmax'">
+		<Modal
+		v-model="modalShow"
+		:z-index="900"
+		:closable="false"
+		:mask="false"
+		:transfer="false"
+		fullscreen
+		:footer-hide="true"
+		class="my-modal-box"
+		:class-name="$store.state.app.isCollapsed ? 'my-ivu-modal-wrap leftmin' : 'my-ivu-modal-wrap leftmax'"
+		>
 	    	<div slot="header" style="position: relative;">
 	    		<h1>标题</h1>
 		    	<div style="position: absolute;top: -8px;right: 0;">
@@ -33,9 +43,7 @@
 		    		<Button type="primary" icon="md-refresh" style="margin-left: 6px;">刷新</Button>
 		    	</div>
 	    	</div>
-	        <div>
-	        	内容
-	        </div>
+	        <slot name="modalContent"></slot>
 	        <div slot="footer">
 	        	<Button @click="modalShow = false">取消</Button>
 	        	<Button type="primary" @click="modalShow = false">确定</Button>
