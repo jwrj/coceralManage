@@ -47,7 +47,7 @@ export const buttonItem = (vm, h, params, btnParams={}, btnProps={}) => {
     	on: {
     		click: () => {
     			vm.$emit('on-btn-click', Object.assign({}, btnParams, {index: params.index}));
-			//	vm.modalShow = true;
+				vm.modalShow = true;
     		}
     	},
     },btnParams.name || '按钮');

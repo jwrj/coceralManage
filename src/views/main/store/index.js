@@ -5,6 +5,8 @@ const mainFrame = {
 	
 	state: {//数据
 		
+		isCollapsed: false,
+		
 		tagNavList: [],//tag标签列表
 		
 		homeRoute: getHomeRoute(routers),//name属性等于home路由数据

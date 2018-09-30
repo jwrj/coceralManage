@@ -1,7 +1,7 @@
 <template>
 	
 	<div>
-		
+		{{$store.state.app.isCollapsed}}
 		<header class="header">
 			<slot name="header" :binEvent="selectChange"></slot>
 			<Input v-if="seekShow" :search="true" enter-button clearable placeholder="搜索..." class="seek" />
@@ -25,8 +25,14 @@
 		</footer>
 			
 		<!--弹窗-->
-		<Modal class-name="my-ivu-modal-wrap" v-model="modalShow" :mask="false" :transfer="false" fullscreen>
-	    	<p slot="header">标题</p>
+		<Modal v-model="modalShow" :closable="false" :mask="false" :transfer="false" fullscreen :footer-hide="true" :class-name="$store.state.app.isCollapsed ? 'my-ivu-modal-wrap leftmin' : 'my-ivu-modal-wrap leftmax'">
+	    	<div slot="header" style="position: relative;">
+	    		<h1>标题</h1>
+		    	<div style="position: absolute;top: -8px;right: 0;">
+		    		<Button icon="md-close" type="success" @click="modalShow = false">关闭</Button>
+		    		<Button type="primary" icon="md-refresh" style="margin-left: 6px;">刷新</Button>
+		    	</div>
+	    	</div>
 	        <div>
 	        	内容
 	        </div>
@@ -206,14 +212,7 @@ export default {
         	
     },
     watch: {//监测数据变化
-    	modalShow(newBoolean){
-//  		console.log(this.$parent.$parent.$parent);
-//  		if(newBoolean){
-//	    		this.$parent.$parent.$parent.$el.lastChild.style.overflow = 'hidden';
-//	    	}else{
-//	    		this.$parent.$parent.$parent.$el.lastChild.style = '';
-//	    	}
-    	},
+    	
 	},
     
     //===================组件钩子===========================
@@ -224,7 +223,6 @@ export default {
     	
 	},
     mounted () {//模板被渲染完毕之后执行
-    	
 	},
 	
 	//=================组件路由勾子==============================
@@ -284,13 +282,15 @@ export default {
 
 <style lang="less">
 	.my-ivu-modal-wrap{
-		/*width: 1251px;
-		height: 845px;*/
-		/*position: absolute !important;*/
+		position: flex !important;
 		top: 91px !important;
+		transition: left 0.2s ease-in-out;
+	}
+	.leftmax{
 		left: 200px !important;
-		/*right: initial !important;*/
-		/*bottom: initial !important;*/
+	}
+	.leftmin{
+		left: 64px !important;
 	}
 	.seek{
 		.ivu-input-icon-clear{
