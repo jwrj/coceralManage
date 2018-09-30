@@ -2,7 +2,7 @@
 	
 	<div>
 		
-		<Cascader placeholder="选择行业" :data="data" style="max-width: 200px;"></Cascader>
+		<Cascader placeholder="选择行业" :data="industryData" style="max-width: 200px;"></Cascader>
 		
 	</div>
 	
@@ -26,18 +26,7 @@ export default {
     data () {//数据
         return {
         	
-        	data: [
-        		{
-        			label: '计算机行业',
-        			value: '0',
-        			children: [
-        				{
-        					label: '前端工程师',
-        					value: '0-1',
-        				}
-        			]
-        		}
-        	],
+        	industryData: [],
         	
         }
     },
@@ -54,6 +43,37 @@ export default {
     //===================组件钩子===========================
     
     created () {//实例被创建完毕之后执行
+    	
+    	$ax.getAjaxData('http://192.168.2.200:802/cdn/hangye.js',{
+    		
+    	},(response) => {
+    		
+    		let newArr = [];
+    		
+    		response.forEach(item => {
+    			
+    			let newChildren = [];
+    			
+				item.children.forEach(item => {
+					newChildren.push({
+						label: item.name,
+    					value: item.code,
+					})
+				})
+				
+				newArr.push({
+    				label: item.name,
+        			value: item.code,
+        			children: newChildren
+    			});
+    			
+    		});
+    		
+    		this.industryData = newArr;
+    		
+    	},{
+    		baseURL: ''
+    	});
     	
 	},
     mounted () {//模板被渲染完毕之后执行

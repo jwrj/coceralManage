@@ -41,6 +41,10 @@
 			
 		</Card>
 		
+		<Affix :offset-bottom="20" style="botton">
+	        <span class="demo-affix">Fix at the bottom 20px</span>
+	    </Affix>
+		
 	</div>
 	
 </template>

@@ -6,21 +6,6 @@ import Vue from 'vue'
 import axios from 'axios';
 const vm = new Vue();
 
-/*
-	---------------------vue内使用方式---------------------
-	
-	this.$axios.post('接口路径', {
-		要发送的数据
-	})
-	.then(response => {//返回请求数据
-		console.log(response)
-	})
-	.catch(function (error) {//返回错误
-		console.log(error);
-	});
-	
-*/
-
 //--------------------------------------------全局设置-------------------------------
 
 axios.defaults.baseURL = window._HOST.BASE_URL; //配置接口基础地址,在globalVariable.js
@@ -134,8 +119,8 @@ export const getAsyncAjaxData = (url = '',data = {}) => {
  * @param {JSON} data 需要发送的数据
  * @param {Function} fn 数据响应后的回调函数
  */
-export const getAjaxData = (url = '', data = {}, fn) => {
-	axios.post(url, data).then(response => {
+export const getAjaxData = (url = '', data = {}, fn, config = {}) => {
+	axios.post(url, data, config).then(response => {
 		fn && fn(response);
 	}).catch(error => console.log('发生了错误：'+error));
 }
