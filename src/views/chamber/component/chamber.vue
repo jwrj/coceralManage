@@ -14,6 +14,9 @@
 			<FormItem prop="core" label="归属地:">
 				<al-cascader v-model="chamData.core" style="width: 300px;" />
 			</FormItem>
+			<FormItem label="商会标志:">
+				<Img :src="img" @click="openCoc"></Img>
+			</FormItem>
 		</Form>
 	</div>
 
@@ -21,6 +24,7 @@
 
 <script>
 	import postCasc from '@/components/post/post-casc.vue'; //岗位级联
+	import defaultImg from '@/assets/img/default-img/u710.png'
 	export default {
 		name: 'chamber',
 		components: { //组件模板,
@@ -38,6 +42,7 @@
 		data() { //数据
 			return {
 				chamberName: '',
+				img:defaultImg,
 				chamData: {
 					highcham: '',
 					register: [],

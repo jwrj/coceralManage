@@ -58,7 +58,6 @@ export default {
                         },[
 	                        h('span', {
 	                            style: {
-	                                
 	                            },
 	                            class: 'ivu-tree-title my-tree-node'
 	                        }, [
@@ -71,13 +70,14 @@ export default {
 	                                    },
 	                                    style: {
 	                                        marginRight: '8px'
+										
 	                                    }
 	                                }),
 	                                h('span', data.title)
 	                            ]),
 	                            h('span', {
 	                                style: {
-	                                	marginLeft: 'auto',
+	                                	marginLeft: 'auto'
 	                                }
 	                            }, [
 		                            h('Button', {
@@ -135,13 +135,15 @@ export default {
             		width: '100%',
             		paddingRight: '16px',
                 },
-            },[
+            },
+			[ 			
             	h('span', {
 	                style: {
 	                    
 	                },
                 	class: 'ivu-tree-title my-tree-node'
-	            }, [
+	            }, 
+				[ 
 	                h('span', {
 	                	class: 'my-tree-title'
 	                }, [
