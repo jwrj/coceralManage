@@ -12,7 +12,7 @@
 			<Form :label-width="100" :model="link" ref="link" :rules="ruleValidate">
 
 				<FormItem label="性质:">
-					<RadioGroup v-model="link.nature" @on-change="radiochange">
+					<RadioGroup style="margin-top: -3px;" v-model="link.nature" @on-change="radiochange">
 						<Radio label="商会" @click.native="view='chamber'"></Radio>
 						<Radio label="协会" @click.native="view='society'"></Radio>
 					</RadioGroup>

@@ -30,8 +30,9 @@
 
 			</Form>
 		</Card>
-        <Card style="margin-top: 16px;height: 600px;">
-		111
+        <Card style="margin-top: 16px;">
+					<h1 slot="title">会议说明</h1>
+		<UEditor :configs='editor_config'></UEditor>
 			</Card>
 		<Card style="margin-top: 16px;height: 600px;">
 
@@ -76,12 +77,14 @@
 	import fileManage from '@/components/fileManage/file-manage.vue'; //文件管理
 	import tableList from '@/components/tableList/table-list.vue'
 	import postCasc from '@/components/post/post-casc.vue'; //岗位级联
+	import UEditor from '@/components/richTextEditor/UEditor.vue';//富文本编辑器
 	export default {
 		name: '',
 		components: { //组件模板,
 			fileManage,
 			tableList,
-			postCasc
+			postCasc,
+			UEditor
 		},
 		props: { //组件道具（参数）
 			/* ****属性用法*****
@@ -94,6 +97,10 @@
 		},
 		data() { //数据
 			return {
+				editor_config:{
+						width:'100%',
+						height:'500px'
+				},
 				showImport: false,
 				activity: {
 					name: '',

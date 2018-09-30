@@ -15,7 +15,7 @@
 				<al-cascader v-model="chamData.core" style="width: 300px;" />
 			</FormItem>
 			<FormItem label="商会标志:">
-				<Img :src="img" @click="openCoc"></Img>
+				<Icon type="md-image" @click="openCoc" size="60"/>
 			</FormItem>
 		</Form>
 	</div>

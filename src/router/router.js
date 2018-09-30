@@ -178,15 +178,6 @@ export default [
 					icon: 'md-alarm',
 				},
 				component: () => import('@/views/price/dues.vue')
-			},
-			{
-				path: 'payment',
-				name: 'payment',
-				meta: {
-					title: '缴费情况',
-					icon: 'md-alarm',
-				},
-				component: () => import('@/views/price/payment.vue')
 			}
 		]
 	},
