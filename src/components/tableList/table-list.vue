@@ -1,7 +1,7 @@
 <template>
 	
 	<div>
-		{{$store.state.app.isCollapsed}}
+		
 		<header class="header">
 			<slot name="header" :binEvent="selectChange"></slot>
 			<Input v-if="seekShow" :search="true" enter-button clearable placeholder="搜索..." class="seek" />

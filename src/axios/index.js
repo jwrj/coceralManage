@@ -118,6 +118,7 @@ export const getAsyncAjaxData = (url = '',data = {}) => {
  * @param {STRING} url 请求数据的路径
  * @param {JSON} data 需要发送的数据
  * @param {Function} fn 数据响应后的回调函数
+ * @param {Object} config 修改默认配置
  */
 export const getAjaxData = (url = '', data = {}, fn, config = {}) => {
 	axios.post(url, data, config).then(response => {

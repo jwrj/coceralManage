@@ -41,9 +41,14 @@
 			
 		</Card>
 		
-		<Affix :offset-bottom="20" style="botton">
-	        <span class="demo-affix">Fix at the bottom 20px</span>
-	    </Affix>
+	    <Card style="margin-top: 16px;">
+	    	
+	    	<h1 slot="title">富文本编辑器</h1>
+	    	
+	    	<UEditor :configs='editor_config'></UEditor>
+	    	
+	    </Card>
+	    
 		
 	</div>
 	
@@ -61,6 +66,8 @@ import postConfig from '@/components/postConfig/post-config.vue';//岗位配置
 
 import fileManage from '@/components/fileManage/file-manage.vue';//文件管理
 
+import UEditor from '@/components/richTextEditor/UEditor.vue';//富文本编辑器
+
 export default {
 	name: 'comPage',
 	components:{//组件模板
@@ -69,6 +76,7 @@ export default {
 		postCasc,
 		postConfig,
 		fileManage,
+		UEditor,
 	},
 	props:{//组件道具（参数）
 		/* ****属性用法*****
@@ -112,6 +120,11 @@ export default {
 			        ],
 			    }
 			],
+			
+			editor_config:{
+		    	width:'100%',
+		    	height:'500px'
+		   },
         	
         }
     },

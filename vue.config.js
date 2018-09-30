@@ -28,9 +28,21 @@ module.exports = {
 	productionSourceMap: false, // 打包时不生成.map文件
 
 	chainWebpack: config => {
-		config.resolve.alias //定义路径
+		
+		//路径别名
+		config.resolve.alias
 			.set('@', resolve('src'))//自定义路径配置, key,value自行定义，比如.set('@@', resolve('src/components'))
 			.set('_AXIOS', resolve('src/axios'))
+		
+		//修改babel-loader选项
+		config.module
+    		.rule('js')
+      		.use('babel-loader')
+      			.loader('babel-loader')
+      			.options({
+		            ignore: ['./public/UEditor/ueditor.all.js']
+		       	})
+		
 	},
 
 	css: { // 配置css模块
@@ -42,11 +54,13 @@ module.exports = {
 	},
 	
 	configureWebpack: {//配置webpack
+		
 	    plugins: [//插件
 	     	new webpack.ProvidePlugin({//全局变量插件
 			 	$ax: '_AXIOS',
 			})
 	    ]
+	    
 	},
 	
 	pluginOptions: {// 第三方插件配置
