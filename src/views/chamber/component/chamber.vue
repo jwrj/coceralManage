@@ -8,8 +8,8 @@
 			<FormItem label="上级商会:">
 				<Input v-model="chamData.highcham" type="text" class="linkIn"></Input>
 			</FormItem>
-			<FormItem label="注册地:" prop="register" style="width: 300px;">
-				<al-cascader v-model="chamData.register" />
+			<FormItem label="注册地:" prop="register" >
+				<al-cascader v-model="chamData.register" style="width: 300px;"/>
 			</FormItem>
 			<FormItem prop="core" label="归属地:">
 				<al-cascader v-model="chamData.core" style="width: 300px;" />

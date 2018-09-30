@@ -67,6 +67,7 @@
 		data() { //数据
 			return {
 				showAdd: false,
+				show:false,
 				newstaff: {
 					attach: '',
 					holdtime: '',
@@ -156,7 +157,8 @@
 			},
 			close() {
 				let bool = false
-				this.$store.commit('showstaffModal', this.bool);
+				//this.$store.commit('showstaffModal', this.bool);
+				this.show=false;
 			},
 			handleSubmit(name) {
 
@@ -164,7 +166,8 @@
 					this.$refs[name].validate((valid) => {
 						if (valid) {
 							let bool = false
-							this.$store.commit('showstaffModal', this.bool);
+							//this.$store.commit('showstaffModal', this.bool);
+							this.show=bool;
 							this.$Message.success('添加成功!');
 
 						} else {
@@ -182,14 +185,14 @@
 		},
 		computed: { //计算属性
 
-			show: {
+			/*show: {
 				get: function() {
 					return this.$store.state.cham.showstaff
 				},
 				set: function() {
 
 				},
-			}
+			}*/
 		},
 		watch: { //监测数据变化
 

@@ -10,31 +10,38 @@
 				<span>岗位任职</span>
 			</h1>
 			<Form :label-width="100" :model="link" ref="link" :rules="ruleValidate">
+
 				<FormItem label="性质:">
 					<RadioGroup v-model="link.nature" @on-change="radiochange">
 						<Radio label="商会" @click.native="view='chamber'"></Radio>
 						<Radio label="协会" @click.native="view='society'"></Radio>
 					</RadioGroup>
 				</FormItem>
-				<p class="cham" :is="view" ref="children"></p>
+				<Row :gutter="24">
+					<Col :lg="12" :md="16" :sm="24" :xs="24">
+					<p class="cham" :is="view" ref="children"></p>
+					</Col>
 
-				<FormItem label="联系人" prop="linkman">
-					<Input v-model="link.linkman" placeholder="请输入联系人" class="linkIn"></Input>
-				</FormItem>
-				<FormItem label="联系人电话:" prop="linkphone">
-					<Input v-model="link.linkphone" placeholder="请输入联系人电话" class="linkIn"></Input>
-				</FormItem>
+					<Col :lg="12" :md="16" :sm="24" :xs="24">
+					<FormItem label="联系人" prop="linkman">
+						<Input v-model="link.linkman" placeholder="请输入联系人" class="linkIn"></Input>
+					</FormItem>
+					<FormItem label="联系人电话:" prop="linkphone">
+						<Input v-model="link.linkphone" placeholder="请输入联系人电话" class="linkIn"></Input>
+					</FormItem>
 
-				<FormItem label="商会网址:" prop="linkweb">
-					<Input v-model="link.linkweb" placeholder="请输入商会网址" class="linkIn"></Input>
-				</FormItem>
-				<FormItem label="商会公众号:" prop="linknum">
-					<Input v-model="link.linknum" placeholder="请输入商会公众号" class="linkIn"></Input>
-				</FormItem>
-				<FormItem label="商会介绍:" prop="linknote">
-					<Input v-model="link.linknote" type="textarea" :autosize="{minRows: 2,maxRows: 7}" class="linkIn"></Input>
-				</FormItem>
-				<p style="text-align: center;margin-top: 15px;">
+					<FormItem label="商会网址:" prop="linkweb">
+						<Input v-model="link.linkweb" placeholder="请输入商会网址" class="linkIn"></Input>
+					</FormItem>
+					<FormItem label="商会公众号:" prop="linknum">
+						<Input v-model="link.linknum" placeholder="请输入商会公众号" class="linkIn"></Input>
+					</FormItem>
+					<FormItem label="商会介绍:" prop="linknote">
+						<Input v-model="link.linknote" type="textarea" :autosize="{minRows: 2,maxRows: 7}" class="linkIn"></Input>
+					</FormItem>
+					</Col>
+				</Row>
+				<p style="margin-top: 15px;text-align: center;width: 80%;">
 					<Button type="primary" @click="handleSubmit('link')">立即创建</Button>
 				</p>
 			</Form>
@@ -74,7 +81,7 @@
 					linkweb: '',
 					linkphone: '',
 					linknote: '',
-					society:[]
+					society: []
 				},
 				ruleValidate: {
 					linkman: [{
@@ -103,16 +110,16 @@
 			}
 		},
 		methods: { //方法
-      handleSubmit(name) {
+			handleSubmit(name) {
 				this.$refs.children.$refs.children.validate((ft) => {
-							console.log(ft);
+					console.log(ft);
 					this.$refs[name].validate((valid) => {
-						if (valid&&ft) {
-						this.$Message.success('添加成功!');						
+						if (valid && ft) {
+							this.$Message.success('添加成功!');
 						} else {
-						//this.$Message.error('添加失败!');
+							//this.$Message.error('添加失败!');
 						}
-					})			
+					})
 				})
 			},
 			handleReset(name) {
@@ -120,8 +127,8 @@
 				this.$refs.children.$refs.children.resetFields();
 
 			},
-			radiochange(){
-				
+			radiochange() {
+
 			}
 		},
 		computed: { //计算属性
@@ -136,7 +143,7 @@
 
 		},
 		mounted() { //模板被渲染完毕之后执行
-			
+
 		}
 	}
 </script>

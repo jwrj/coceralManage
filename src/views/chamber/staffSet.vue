@@ -14,7 +14,7 @@
 			
 				</div>
 			</table-list>
-				<staff-modal></staff-modal>
+				<staff-modal ref="staffM"></staff-modal>
 		</Card>
 		
 	</div>
@@ -84,8 +84,9 @@ export default {
     },
     methods: {//方法
     	addStaff(){
-			this.modalShow=true;
-			this.$store.commit('showstaffModal',this.modalShow)
+			//this.modalShow=true;
+			//this.$store.commit('showstaffModal',this.modalShow)
+			this.$refs.staffM.show=true;
 			//console.log(this.$store.state.cham.showstaff)
 		}
     },
