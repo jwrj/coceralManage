@@ -2,7 +2,7 @@
 	
 	<div>
 		
-		<Cascader placeholder="选择行业" :data="industryData" style="max-width: 200px;"></Cascader>
+		<Cascader placeholder="选择行业" :data="industryData"></Cascader>
 		
 	</div>
 	

@@ -2,7 +2,7 @@
 	
 	<div>
 		
-		<Cascader placeholder="选择岗位" :data="data" style="max-width: 200px;"></Cascader>
+		<Cascader placeholder="选择岗位" :data="data"></Cascader>
 		
 	</div>
 	
