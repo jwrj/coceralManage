@@ -2,19 +2,19 @@
 
 	<div class="chamber" ref="cha">
 		<Form :model="chamData" :label-width="100" ref="children" :rules="ruleValidate">
-			<FormItem label="商会名称:" prop="name">
+			<FormItem label="商会名称" prop="name">
 				<Input v-model="chamData.name" placeholder="请输入商会名称" class="linkIn"></Input>
 			</FormItem>
-			<FormItem label="上级商会:">
+			<FormItem label="上级商会">
 				<Input v-model="chamData.highcham" type="text" class="linkIn"></Input>
 			</FormItem>
-			<FormItem label="注册地:" prop="register" >
-				<al-cascader v-model="chamData.register" style="width: 300px;"/>
+			<FormItem label="注册地" prop="register" >
+				<al-cascader v-model="chamData.register" style="max-width: 300px;"/>
 			</FormItem>
-			<FormItem prop="core" label="归属地:">
-				<al-cascader v-model="chamData.core" style="width: 300px;" />
+			<FormItem prop="core" label="归属地">
+				<al-cascader v-model="chamData.core" style="max-width: 300px;" />
 			</FormItem>
-			<FormItem label="商会标志:">
+			<FormItem label="商会标志">
 				<Icon type="md-image" @click="openCoc" size="60"/>
 			</FormItem>
 		</Form>

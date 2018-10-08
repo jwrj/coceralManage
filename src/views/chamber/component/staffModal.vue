@@ -11,13 +11,13 @@
 				<Table border :highlight-row="true" :columns="columns" :data="row">
 				</Table>
 				<br>
-				<FormItem label="任职时间:" prop="holdtime">
+				<FormItem label="任职时间" prop="holdtime">
 					<DatePicker v-model="newstaff.holdtime" type="date"></DatePicker>
 				</FormItem>
-				<FormItem label="交接时间:" prop="jointime">
+				<FormItem label="交接时间" prop="jointime">
 					<DatePicker v-model="newstaff.jointime" type="date"></DatePicker>
 				</FormItem>
-				<FormItem label="相关附件:" prop="attach">
+				<FormItem label="相关附件" prop="attach">
 					<Input v-model="newstaff.attach"></Input>
 				</FormItem>
 

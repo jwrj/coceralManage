@@ -6,25 +6,25 @@
 				<h1>创建活动/会议</h1>
 			</div>
 			<Form ref="activity" :model="activity" :rules="ruleValidate" :label-width="130">
-				<FormItem label="活动/会议标题:" prop="name">
+				<FormItem label="活动/会议标题" prop="name">
 					<Input v-model="activity.name" style="width: 300px;"></Input>
 				</FormItem>
-				<FormItem label="开始时间:" prop="starting">
+				<FormItem label="开始时间" prop="starting">
 					<DatePicker v-model="activity.starting" type="datetime" format="yyyy-MM-dd HH:mm"></DatePicker>
 				</FormItem>
-				<FormItem label="结束时间:" prop="ending">
+				<FormItem label="结束时间" prop="ending">
 					<DatePicker v-model="activity.ending" type="datetime" format="yyyy-MM-dd HH:mm"></DatePicker>
 				</FormItem>
-				<FormItem label="会议地址:">
+				<FormItem label="会议地址">
 					<Input v-model="activity.where" style="width: 400px;"></Input>
 				</FormItem>
-				<FormItem label="是否住宿:" prop="live">
+				<FormItem label="是否住宿" prop="live">
 					<RadioGroup v-model="activity.live">
 						<Radio label="是"></Radio>
 						<Radio label="否"></Radio>
 					</RadioGroup>
 				</FormItem>
-				<FormItem label="住宿地址:" v-if="activity.live=='是'">
+				<FormItem label="住宿地址" v-if="activity.live=='是'">
 					<Input v-model="activity.address" style="width: 400px;"></Input>
 				</FormItem>
 

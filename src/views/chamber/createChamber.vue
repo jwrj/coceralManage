@@ -11,7 +11,7 @@
 			</h1>
 			<Form :label-width="100" :model="link" ref="link" :rules="ruleValidate">
 
-				<FormItem label="性质:">
+				<FormItem label="性质">
 					<RadioGroup style="margin-top: -3px;" v-model="link.nature" @on-change="radiochange">
 						<Radio label="商会" @click.native="view='chamber'"></Radio>
 						<Radio label="协会" @click.native="view='society'"></Radio>
@@ -26,17 +26,17 @@
 					<FormItem label="联系人" prop="linkman">
 						<Input v-model="link.linkman" placeholder="请输入联系人" class="linkIn"></Input>
 					</FormItem>
-					<FormItem label="联系人电话:" prop="linkphone">
+					<FormItem label="联系人电话" prop="linkphone">
 						<Input v-model="link.linkphone" placeholder="请输入联系人电话" class="linkIn"></Input>
 					</FormItem>
 
-					<FormItem label="商会网址:" prop="linkweb">
+					<FormItem label="商会网址" prop="linkweb">
 						<Input v-model="link.linkweb" placeholder="请输入商会网址" class="linkIn"></Input>
 					</FormItem>
-					<FormItem label="商会公众号:" prop="linknum">
+					<FormItem label="商会公众号" prop="linknum">
 						<Input v-model="link.linknum" placeholder="请输入商会公众号" class="linkIn"></Input>
 					</FormItem>
-					<FormItem label="商会介绍:" prop="linknote">
+					<FormItem label="商会介绍" prop="linknote">
 						<Input v-model="link.linknote" type="textarea" :autosize="{minRows: 2,maxRows: 7}" class="linkIn"></Input>
 					</FormItem>
 					</Col>

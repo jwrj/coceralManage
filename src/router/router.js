@@ -117,6 +117,15 @@ export default [
 					icon: 'md-alarm',
 				},
 				component: () => import('@/views/chamber/sessionSet.vue')
+			},
+			{
+				path: 'approve',
+				name: 'approve',
+				meta: {
+					title: '会员审批',
+					icon: 'md-alarm',
+				},
+				component: () => import('@/views/chamber/approve.vue')
 			}
 		]
 	},
