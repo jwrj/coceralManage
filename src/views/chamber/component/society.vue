@@ -5,19 +5,19 @@
         <FormItem label="协会名称:" prop="name">
             <Input v-model="socieData.name" placeholder="请输入协会名称" class="linkIn"></Input>
         </FormItem>
-		<FormItem label="上级协会:">
+		<FormItem label="上级协会">
 			<Input v-model="socieData.highcham" type="text" class="linkIn"></Input>
 		</FormItem>
-		<FormItem label="注册地:" prop="register">
-	<al-cascader v-model="socieData.register" style="width: 300px;" />
+		<FormItem label="注册地" prop="register">
+	<al-cascader v-model="socieData.register" style="max-width: 300px;" />
 		</FormItem>
-		<FormItem label="行业:" prop="trade">
-<industry-casc v-model="socieData.trade" style="margin-right: 10px;"></industry-casc>
+		<FormItem label="行业" prop="trade">
+<industry-casc v-model="socieData.trade" style="margin-right: 10px;max-width: 300px;"></industry-casc>
 		</FormItem>
-		<FormItem label="成立时间:" prop="time">
-       <DatePicker type="date" placeholder="Select date" style="width: 200px" v-model="socieData.time"></DatePicker>
+		<FormItem label="成立时间" prop="time">
+       <DatePicker type="date" placeholder="Select date" style="max-width: 200px" v-model="socieData.time"></DatePicker>
 		</FormItem>
-		<FormItem label="协会标志:">
+		<FormItem label="协会标志">
 			<Icon type="md-image" @click="openCoc" size="60"/>
 		</FormItem>
 </Form>
