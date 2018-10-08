@@ -4,30 +4,36 @@
 		
 		<Card>
 			
-			<h1 slot="title">申请加入商会</h1>
-			
-			<Alert show-icon>
-		    	温馨提示：如果您选择了公司将会以公司的名义加入商会，反之就以个人的名义加入商会。
-		    </Alert>
-		    
-			<Select filterable clearable placeholder="选择公司" style="width:300px;margin-bottom: 16px;display: block;">
-		        <Option :value="0">公司1</Option>
-		    </Select>
-		    
-			<div style="padding-bottom: 16px;">
-				<Button>查看个人资料</Button>
+			<div slot="title" class="cardTitle">
+				<h1>申请加入商会</h1>
+				<Button style="margin-left: auto;">查看个人资料（这里会跳到用户中心）</Button>
 			</div>
 			
+			<div style="padding-bottom: 16px;">
+				
+				<Alert show-icon>
+			    	温馨提示：如果您选择了公司将会以公司的名义加入商会，反之就以个人的名义加入商会。
+			    </Alert>
+			    
+				<Select filterable clearable placeholder="选择公司" style="width:300px;margin-bottom: 16px;display: block;">
+			        <Option :value="0">公司1</Option>
+			    </Select>
+				
+			</div>
+		    
 			<Divider orientation="left"><span style="font-size: 16px;">商会列表</span></Divider>
 			
 			<table-list :tableColumns="tableColumns" @on-btn-click="tabBtnClick">
 				<div slot="header" style="width: 100%;display: flex;align-items: center;">
-			
-				    <industry-casc style="margin-right: 10px;"></industry-casc>
-				    
-				    <post-casc style="margin-right: 10px;"></post-casc>
-				    
-				    <al-cascader v-model="res_c"/>
+					
+					<div style="margin-right: 10px;">
+						<RadioGroup v-model="type">
+					        <Radio label="1">商会</Radio>
+					        <Radio label="2">协会</Radio>
+					    </RadioGroup>
+					</div>
+					
+				    <al-cascader v-model="res_c" placeholder="选择地区" style="width: 260px;" />
 		    
 				</div>
 			</table-list>
@@ -42,16 +48,10 @@
 
 import tableList from '@/components/tableList/table-list.vue'
 
-import industryCasc from '@/components/industry/industry-casc.vue';//行业级联
-
-import postCasc from '@/components/post/post-casc.vue';//岗位级联
-
 export default {
-	name: '',
+	name: 'joinChamber',
 	components:{//组件模板
 		tableList,
-		industryCasc,
-		postCasc,
 	},
 	props:{//组件道具（参数）
 		/* ****属性用法*****
@@ -64,6 +64,8 @@ export default {
 	},
     data () {//数据
         return {
+        	
+        	type: '1',
         	
         	res_c: [],
         	
@@ -99,8 +101,11 @@ export default {
         }
     },
     methods: {//方法
+    	
     	tabBtnClick(params){
+    		
     		params.loading = true;
+    		
     		this.tableColumns.forEach(item => {
     			
     			if(item.handle){
@@ -115,8 +120,11 @@ export default {
     			}
     			
     		});
+    		
     		console.log(params);
+    		
     	},
+    	
     },
     computed: {//计算属性
         	

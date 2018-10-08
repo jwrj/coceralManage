@@ -42,12 +42,14 @@ export const buttonItem = (vm, h, params, btnParams={}, btnProps={}) => {
     return h('Button',{
     	props: Object.assign({}, defaultBtnProps, btnProps),
     	style: {
-    		margin: '0 2px',
+    		margin: '2px 2px',
     	},
     	on: {
     		click: () => {
     			vm.$emit('on-btn-click', Object.assign({}, btnParams, {index: params.index}));
-				vm.modalShow = true;
+    			if(btnParams.modalShow){
+    				vm.modalShow = btnParams.modalShow;
+    			}
     		}
     	},
     },btnParams.name || '按钮');

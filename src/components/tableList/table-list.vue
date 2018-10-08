@@ -62,8 +62,6 @@
 
 import { edit, details, buttonItem } from './handleButton.js'
 
-import { tableData } from './data.js'
-
 export default {
 	name: 'tableList',
 	components:{//组件模板
@@ -82,10 +80,10 @@ export default {
 			required: true
 		},
 		
-//		tableData: {//表格数据
-//			type: Array,
-//			default: () => []
-//		},
+		tableData: {//表格数据
+			type: Array,
+			default: () => []
+		},
 
 		filterShow: {
 			type: Boolean,
@@ -107,8 +105,6 @@ export default {
         return {
         	
         	modalShow: false,
-        	
-        	tableData: tableData,//表格数据
         	
         	checkedData: [],
         	
@@ -159,7 +155,11 @@ export default {
 	    					
 	    				});
 	    				
-	    				return h('div',children);
+	    				return h('div',{
+	    					style: {
+	    						padding: '4px 0'
+	    					}
+	    				},children);
 	    				
 	    			}
 	    			

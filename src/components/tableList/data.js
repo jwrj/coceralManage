@@ -1,5 +1,5 @@
 	
-export const tableData = [
+export const externalTableData = [
 	{
 		id: 1,
         name: 'John Brown',

@@ -74,7 +74,7 @@
 		},
 		methods: { //方法
 			openCoc() {
-				alert('waiting to open coc')
+				console.log(this);
 			}
 		},
 		computed: { //计算属性

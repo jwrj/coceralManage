@@ -126,6 +126,15 @@ export default [
 					icon: 'md-alarm',
 				},
 				component: () => import('@/views/chamber/approve.vue')
+			},
+			{
+				path: 'chamberList',
+				name: 'chamberList',
+				meta: {
+					title: '商协会列表',
+					icon: 'md-alarm',
+				},
+				component: () => import('@/views/chamber/chamberList.vue')
 			}
 		]
 	},

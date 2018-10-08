@@ -4,13 +4,12 @@
 		
 		<Card>
 			
-			<table-list :tableColumns="tableColumns">
-				 <div slot="header" style="width: 100%;display: flex;align-items: center;">
-				    
-				    <post-casc style="width: 300px;"></post-casc>
-		    
+			<table-list :tableColumns="tableColumns" :tableData="tableData">
+				<div slot="header" style="margin-right: 10px;">
+				    1231
 				</div>
 			</table-list>
+			
 		</Card>
 		
 	</div>
@@ -18,12 +17,12 @@
 </template>
 
 <script>
-import postCasc from '@/components/post/post-casc.vue';
+
 import tableList from '@/components/tableList/table-list.vue'
+
 export default {
-	name: 'userList',
-	components:{//组件模板,
-		postCasc,
+	name: 'chamberList',
+	components:{//组件模板
 		tableList
 	},
 	props:{//组件道具（参数）
@@ -36,11 +35,9 @@ export default {
 		 */
 	},
     data () {//数据
-    	return {
-    		
-    		// res_c: [],
-    		
-    		tableColumns: [
+        return {
+        	
+        	tableColumns: [
     			{
     				title: 'ID',
     				key: 'id'
@@ -50,28 +47,62 @@ export default {
     				key: 'name'
     			},
     			{
-    				title: '日期',
+    				title: '会长',
+    				key: 'president'
+    			},
+    			{
+    				title: '创建日期',
     				key: 'date'
     			},
     			{
-    				align: 'center',
-    				width: 130,
+    				width: 180,
     				title: '操作',
     				handle: [
     					{
-    						name: '查看',
+    						name: '详情',
     						key: 0,
-    						props: {
-    							loading: false
-    						}
+    					},
+    					{
+    						name: '审批',
+    						key: 1,
+    					},
+    					{
+    						name: '编辑',
+    						key: 2,
+    					},
+    					{
+    						name: '岗位配置',
+    						key: 3,
     					}
     				],
     			}
     		],
     		
-    	}
+    		tableData: [
+    			{
+    				id: 1,
+    				name: '广西湖北商会1',
+    				president: '张三',
+    				date: '2018-10-08'
+    			},
+    			{
+    				id: 2,
+    				name: '广西湖北商会2',
+    				president: '张三',
+    				date: '2018-10-08'
+    			},
+    			{
+    				id: 3,
+    				name: '广西湖北商会3',
+    				president: '张三',
+    				date: '2018-10-08'
+    			},
+    		]
+        	
+        }
     },
     methods: {//方法
+    	
     },
     computed: {//计算属性
         	
@@ -126,5 +157,4 @@ export default {
 </script>
 
 <style scoped lang="less">
-
 </style>

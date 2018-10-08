@@ -1,7 +1,9 @@
 <template>
 
 	<div class="createCham">
+		
 		<Card>
+			
 			<h1 slot="title">
 				创建商会/协会
 				<span class="zero"></span>
@@ -9,6 +11,7 @@
 				<span>岗位配置</span>>
 				<span>岗位任职</span>
 			</h1>
+			
 			<Form :label-width="100" :model="link" ref="link" :rules="ruleValidate">
 
 				<FormItem label="性质">
@@ -17,37 +20,52 @@
 						<Radio label="协会" @click.native="view='society'"></Radio>
 					</RadioGroup>
 				</FormItem>
+				
 				<Row :gutter="24">
+					
 					<Col :lg="12" :md="16" :sm="24" :xs="24">
-					<p class="cham" :is="view" ref="children"></p>
+						<p class="cham" :is="view" ref="children"></p>
 					</Col>
 
 					<Col :lg="12" :md="16" :sm="24" :xs="24">
-					<FormItem label="联系人" prop="linkman">
-						<Input v-model="link.linkman" placeholder="请输入联系人" class="linkIn"></Input>
-					</FormItem>
-					<FormItem label="联系人电话" prop="linkphone">
-						<Input v-model="link.linkphone" placeholder="请输入联系人电话" class="linkIn"></Input>
-					</FormItem>
-
-					<FormItem label="商会网址" prop="linkweb">
-						<Input v-model="link.linkweb" placeholder="请输入商会网址" class="linkIn"></Input>
-					</FormItem>
-					<FormItem label="商会公众号" prop="linknum">
-						<Input v-model="link.linknum" placeholder="请输入商会公众号" class="linkIn"></Input>
-					</FormItem>
-					<FormItem label="商会介绍" prop="linknote">
-						<Input v-model="link.linknote" type="textarea" :autosize="{minRows: 2,maxRows: 7}" class="linkIn"></Input>
-					</FormItem>
+						
+						<FormItem label="联系人" prop="linkman">
+							<Input v-model="link.linkman" placeholder="请输入联系人" class="linkIn"></Input>
+						</FormItem>
+						
+						<FormItem label="联系人电话" prop="linkphone">
+							<Input v-model="link.linkphone" placeholder="请输入联系人电话" class="linkIn"></Input>
+						</FormItem>
+	
+						<FormItem label="商会网址" prop="linkweb">
+							<Input v-model="link.linkweb" placeholder="请输入商会网址" class="linkIn"></Input>
+						</FormItem>
+						
+						<FormItem label="商会公众号" prop="linknum">
+							<Input v-model="link.linknum" placeholder="请输入商会公众号" class="linkIn"></Input>
+						</FormItem>
+						
+						<FormItem label="商会介绍" prop="linknote">
+							<Input v-model="link.linknote" type="textarea" :autosize="{minRows: 2,maxRows: 7}" class="linkIn"></Input>
+						</FormItem>
+						
 					</Col>
+					
 				</Row>
+				
 				<p style="margin-top: 15px;text-align: center;width: 80%;">
 					<Button type="primary" @click="handleSubmit('link')">立即创建</Button>
 				</p>
+				
 			</Form>
+			
 		</Card>
-	</div>
-
+		
+        <Modal v-model="modalShow" width="80%">
+	        <p slot="header">12312</p>
+        	<iframe src="http://192.168.2.200:8080/#/fileSelect/" frameborder="0" width="100%" height="400"></iframe>
+	    </Modal>
+		
 	</div>
 
 </template>
@@ -72,7 +90,7 @@
 		},
 		data() { //数据
 			return {
-
+				modalShow: false,
 				view: 'chamber',
 				link: {
 					linkman: '',
@@ -114,7 +132,7 @@
 				this.$refs.children.$refs.children.validate((ft) => {
 					console.log(ft);
 					this.$refs[name].validate((valid) => {
-						if (valid && ft) {
+						if(valid && ft) {
 							this.$Message.success('添加成功!');
 						} else {
 							//this.$Message.error('添加失败!');
@@ -151,30 +169,25 @@
 <style scoped lang="less">
 	.createCham {
 		margin: 5px;
-
 		.title {
 			font-size: 18px;
 			font-weight: 700;
 			color: black;
 		}
-
 		.tt {
 			text-align: left;
 			width: 100px;
 			display: inline-block;
 		}
-
 		.space {
 			margin-top: 5px;
 			display: flex;
 			align-items: center;
 		}
-
 		.zero {
 			display: inline-block;
 			width: 30px;
 		}
-
 		.linkIn {
 			width: 300px;
 		}

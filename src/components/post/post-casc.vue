@@ -29,42 +29,50 @@ export default {
         	cascaderValue: [],
         	
         	data: [
+        	
         		{
-        			label: '会员大会',
-        			value: '1',
-        			children: [
-        				{
-        					label: '名誉会长',
-        					value: '2',
-        				},
-        				{
-        					label: '理事大会',
-        					value: '3',
-        					children: [
-        						{
-        							label: '秘书长',
-        							value: '4',
-        						},
-        						{
-        							label: '监事委员会',
-        							value: '5',
-        						},
-        						{
-        							label: '常委执委会',
-        							value: '6',
-        						},
-        						{
-        							label: '理事长',
-        							value: '7',
-        						},
-        					]
-        				},
-        				{
-        					label: '总顾问',
-        					value: '8',
-        				},
-        			]
+        			label: '广西湖北商会',
+	        		value: '0',
+	        		children: [
+	        			{
+		        			label: '会员大会',
+		        			value: '1',
+		        			children: [
+		        				{
+		        					label: '名誉会长',
+		        					value: '2',
+		        				},
+		        				{
+		        					label: '理事大会',
+		        					value: '3',
+		        					children: [
+		        						{
+		        							label: '秘书长',
+		        							value: '4',
+		        						},
+		        						{
+		        							label: '监事委员会',
+		        							value: '5',
+		        						},
+		        						{
+		        							label: '常委执委会',
+		        							value: '6',
+		        						},
+		        						{
+		        							label: '理事长',
+		        							value: '7',
+		        						},
+		        					]
+		        				},
+		        				{
+		        					label: '总顾问',
+		        					value: '8',
+		        				},
+		        			]
+		        		}
+	        		]
         		}
+        		
         	],
         	
         }
