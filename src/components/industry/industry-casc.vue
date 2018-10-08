@@ -2,7 +2,7 @@
 	
 	<div>
 		
-		<Cascader placeholder="选择行业" :data="industryData"></Cascader>
+		<Cascader v-model="cascaderValue" filterable placeholder="选择行业" :data="industryData"></Cascader>
 		
 	</div>
 	
@@ -25,6 +25,8 @@ export default {
 	},
     data () {//数据
         return {
+        	
+        	cascaderValue: [],
         	
         	industryData: [],
         	
@@ -79,40 +81,7 @@ export default {
     mounted () {//模板被渲染完毕之后执行
     	
 	},
-	
-	//=================组件路由勾子==============================
-	
-	beforeRouteEnter (to, from, next) {//在组件创建之前调用（放置页面加载时请求的Ajax）
 		
-		(async() => {//执行异步函数
-			
-			//async、await错误处理
-			try {
-				
-				/*
-				 * 
-				 * ------串行执行---------
-				 * console.log(await getAjaxData());
-				 * ...
-				 * 
-				 * ---------并行：将多个promise直接发起请求（先执行async所在函数），然后再进行await操作。（执行效率高、快）----------
-				 * let abc = getAjaxData();//先执行promise函数
-				 * ...
-				 * console.log(await abc);
-				 * ...
-				*/
-				next(vm => {
-					
-				});
-				
-			} catch(err) {
-				console.log(err);
-			}
-			
-		})();
-		
-	},
-	
 }
 </script>
 

@@ -2,7 +2,7 @@
 	
 	<div>
 		
-		<Cascader placeholder="选择岗位" :data="data"></Cascader>
+		<Cascader v-model="cascaderValue" filterable placeholder="选择岗位" :data="data"></Cascader>
 		
 	</div>
 	
@@ -26,12 +26,46 @@ export default {
     data () {//数据
         return {
         	
+        	cascaderValue: [],
+        	
         	data: [
         		{
-        			label: '项目经理',
-        			value: '0',
+        			label: '会员大会',
+        			value: '1',
+        			children: [
+        				{
+        					label: '名誉会长',
+        					value: '2',
+        				},
+        				{
+        					label: '理事大会',
+        					value: '3',
+        					children: [
+        						{
+        							label: '秘书长',
+        							value: '4',
+        						},
+        						{
+        							label: '监事委员会',
+        							value: '5',
+        						},
+        						{
+        							label: '常委执委会',
+        							value: '6',
+        						},
+        						{
+        							label: '理事长',
+        							value: '7',
+        						},
+        					]
+        				},
+        				{
+        					label: '总顾问',
+        					value: '8',
+        				},
+        			]
         		}
-        	]
+        	],
         	
         }
     },
@@ -53,40 +87,7 @@ export default {
     mounted () {//模板被渲染完毕之后执行
     	
 	},
-	
-	//=================组件路由勾子==============================
-	
-	beforeRouteEnter (to, from, next) {//在组件创建之前调用（放置页面加载时请求的Ajax）
 		
-		(async() => {//执行异步函数
-			
-			//async、await错误处理
-			try {
-				
-				/*
-				 * 
-				 * ------串行执行---------
-				 * console.log(await getAjaxData());
-				 * ...
-				 * 
-				 * ---------并行：将多个promise直接发起请求（先执行async所在函数），然后再进行await操作。（执行效率高、快）----------
-				 * let abc = getAjaxData();//先执行promise函数
-				 * ...
-				 * console.log(await abc);
-				 * ...
-				*/
-				next(vm => {
-					
-				});
-				
-			} catch(err) {
-				console.log(err);
-			}
-			
-		})();
-		
-	},
-	
 }
 </script>
 

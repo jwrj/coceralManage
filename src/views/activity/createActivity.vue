@@ -69,6 +69,7 @@
 				</div>
 			</table-list>
 		</Modal>
+		
 	</div>
 
 </template>
