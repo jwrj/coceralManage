@@ -47,7 +47,7 @@
 			<div slot="title" class="title">
 				<h1>邀请人员</h1>
 			</div>
-			<table-list :tableColumns="tableColumns">
+			<table-list :tableColumns="tableColumns" :tableData="tableData">
 
 				<div slot="modalContent">
 					邀请成功
@@ -86,12 +86,20 @@
 						key: 'id'
 					},
 					{
-						title: '名称',
+						title: '姓名',
 						key: 'name'
 					},
 					{
-						title: '日期',
-						key: 'date'
+						title: '性别',
+						key: 'sex'
+					},
+					{
+						title: '手机号',
+						key: 'mobilePhone'
+					},
+					{
+						title: '身份证号码',
+						key: 'IDNumber'
 					},
 					{
 						align: 'center',
@@ -116,6 +124,37 @@
 							]);
 						}
 					}
+				],
+				
+				tableData: [
+					{
+						id: 1,
+						name: '张三',
+						sex: '男',
+						mobilePhone: '13800138000',
+						IDNumber: '450123*****63541245'
+					},
+					{
+						id: 1,
+						name: '张三',
+						sex: '男',
+						mobilePhone: '13800138000',
+						IDNumber: '450123*****63541245'
+					},
+					{
+						id: 1,
+						name: '张三',
+						sex: '男',
+						mobilePhone: '13800138000',
+						IDNumber: '450123*****63541245'
+					},
+					{
+						id: 1,
+						name: '张三',
+						sex: '男',
+						mobilePhone: '13800138000',
+						IDNumber: '450123*****63541245'
+					},
 				]
 			}
 		},

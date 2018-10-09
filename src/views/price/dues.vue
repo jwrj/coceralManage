@@ -2,28 +2,39 @@
 
 	<div>
 		<Card>
+			
 			<div slot="title">
 				<h1>会费情况-查看岗位的缴费情况</h1>
 			</div>
-			<table-list :tableColumns="tableColumns" :seekShow="false">
+			
+			<table-list :tableColumns="tableColumns" :seekShow="false" :tableData="tableData">
+				
 				<div slot="header" style="display: flex;">
-					<div><post-casc style="margin-right: 10px;"></post-casc></div>
-            <Select v-model="statescreen" placeholder="会费情况" style="width: 150px;margin-right: 10px;">
-							<Option value="全部">全部</Option>
-							<Option value="欠费">欠费</Option>
-							<Option value="缴清">缴清</Option>
-            </Select>
-						<Select v-model="modescreen" placeholder="缴纳方式" style="width: 150px;">
-							<Option value="全部">全部</Option>
-							<Option value="现金缴纳">现金缴纳</Option>
-							<Option value="对公转账">对公转账</Option>
-							<Option value="基金冲减">基金冲减</Option>
-						</Select>
+					
+					<div>
+						<post-casc style="margin-right: 10px;"></post-casc>
+					</div>
+					
+        			<Select v-model="statescreen" placeholder="会费情况" style="width: 150px;margin-right: 10px;">
+						<Option value="全部">全部</Option>
+						<Option value="欠费">欠费</Option>
+						<Option value="缴清">缴清</Option>
+        			</Select>
+        			
+					<Select v-model="modescreen" placeholder="缴纳方式" style="width: 150px;">
+						<Option value="全部">全部</Option>
+						<Option value="现金缴纳">现金缴纳</Option>
+						<Option value="对公转账">对公转账</Option>
+						<Option value="基金冲减">基金冲减</Option>
+					</Select>
+					
 				</div>
-  <pay-ment slot="modalContent"></pay-ment>
+				
+  				<pay-ment slot="modalContent"></pay-ment>
+  				
 			</table-list>
+			
 		</Card>
-
 
 	</div>
 
@@ -58,26 +69,85 @@
 						key: 'id'
 					},
 					{
-						title: '名称',
+						title: '姓名',
 						key: 'name'
 					},
 					{
-						title: '日期',
-						key: 'date'
+						title: '手机号',
+						key: 'mobilePhone'
+					},
+					{
+						title: '会内职务',
+						key: 'duty'
+					},
+					{
+						title: '会费状态',
+						key: 'state'
+					},
+					{
+						title: '缴费方式',
+						key: 'PayWay'
+					},
+					{
+						title: '应缴金额-本届',
+						key: 'payableMoney'
+					},
+					{
+						title: '实缴金额',
+						key: 'paidMoney'
+					},
+					{
+						title: '本届到期时间',
+						key: 'expirationTime'
 					},
 					{
 						align: 'center',
 						width: 130,
 						title: '操作',
-						handle: [{
-							name: '查看详情',
-							key: 0,
-							props: {
-								loading: false
+						handle: [
+							{
+								name: '查看详情',
+								key: 0,
+								modalShow: true,
 							}
-						}],
+						],
 					}
-				]
+				],
+				tableData: [
+					{
+						id: 1,
+						name: '张三',
+						mobilePhone: '13800138000',
+						duty: '普通会员',
+						state: '全部缴纳',
+						PayWay: '现金缴纳',
+						payableMoney: '100',
+						paidMoney: '100',
+						expirationTime: '2018-10-09'
+					},
+					{
+						id: 1,
+						name: '张三',
+						mobilePhone: '13800138000',
+						duty: '普通会员',
+						state: '全部缴纳',
+						PayWay: '现金缴纳',
+						payableMoney: '100',
+						paidMoney: '100',
+						expirationTime: '2018-10-09'
+					},
+					{
+						id: 1,
+						name: '张三',
+						mobilePhone: '13800138000',
+						duty: '普通会员',
+						state: '全部缴纳',
+						PayWay: '现金缴纳',
+						payableMoney: '100',
+						paidMoney: '100',
+						expirationTime: '2018-10-09'
+					},
+				],
 			}
 		},
 		methods: { //方法

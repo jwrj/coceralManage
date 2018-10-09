@@ -7,7 +7,7 @@
 							<h1>给{{chamber}}的岗位配置人员</h1>
 							<Button class="btnSmall" size="small" type="primary" @click="addStaff">添加/追加人员</Button>
 						</div>
-			<table-list :tableColumns="tableColumns">
+			<table-list :tableColumns="tableColumns" :tableData="tableData">
 				<div slot="header" style="width: 100%;display: flex;align-items: center;">
 					
 					<post-casc style="margin-right: 10px;"></post-casc>
@@ -51,35 +51,73 @@ export default {
 	},
     data () {//数据
         return {
+        	
         	modalShow:false,
-					tableColumns: [
-						{
-							title: 'ID',
-							key: 'id'
-						},
-						{
-							title: '名称',
-							key: 'name'
-						},
-						{
-							title: '日期',
-							key: 'date'
-						},
-						{
-							align: 'center',
-							width: 130,
-							title: '操作',
-							handle: [
-								{
-									name: '查看',
-									key: 0,
-									props: {
-										loading: false
-									}
-								}
-							],
-						}
-					],
+        	
+        	tableColumns: [
+    			{
+    				title: 'ID',
+    				key: 'id'
+    			},
+    			{
+    				title: '姓名',
+    				key: 'name'
+    			},
+    			{
+    				title: '手机号',
+    				key: 'mobilePhone'
+    			},
+    			{
+    				title: '任职时间',
+    				key: 'takeOfficeTime'
+    			},
+    			{
+    				title: '交接时间',
+    				key: 'connectTime'
+    			},
+    			{
+    				title: '相关链接',
+    				key: 'link'
+    			},
+    			{
+    				align: 'center',
+    				width: 180,
+    				title: '操作',
+    				handle: [
+    					{
+    						name: '卸任',
+    					},
+    				],
+    			}
+    		],
+    		
+    		tableData: [
+    			{
+    				id: 1,
+    				name: '张三',
+    				mobilePhone: '13800138000',
+    				takeOfficeTime: '2018-10-09',
+    				connectTime: '2018-10-09',
+    				link: '查看'
+    			},
+    			{
+    				id: 1,
+    				name: '张三',
+    				mobilePhone: '13800138000',
+    				takeOfficeTime: '2018-10-09',
+    				connectTime: '2018-10-09',
+    				link: '查看'
+    			},
+    			{
+    				id: 1,
+    				name: '张三',
+    				mobilePhone: '13800138000',
+    				takeOfficeTime: '2018-10-09',
+    				connectTime: '2018-10-09',
+    				link: '查看'
+    			},
+    		],
+        	
         }
     },
     methods: {//方法

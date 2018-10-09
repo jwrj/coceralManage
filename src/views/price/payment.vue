@@ -27,7 +27,7 @@
 				<h1>缴费记录</h1>
 				<Button class="btnSmall" size="small" type="primary" @click="addRecord">+添加条目</Button>
 			</div>
-			<table-list :tableColumns="tableColumns">
+			<table-list :tableColumns="tableColumns" :tableData="tableData">
 
 				<div slot="header" style="width: 100%;display: flex;align-items: center;">
 					<p>
@@ -120,25 +120,52 @@
 						key: 'id'
 					},
 					{
-						title: '名称',
-						key: 'name'
+						title: '缴费条目',
+						key: 'clauses'
 					},
 					{
-						title: '日期',
-						key: 'date'
+						title: '实缴金额',
+						key: 'paidMoney'
+					},
+					{
+						title: '时间',
+						key: 'time'
 					},
 					{
 						align: 'center',
 						width: 130,
 						title: '操作',
-						handle: [{
-							name: '查看',
-							key: 0,
-							props: {
-								loading: false
+						handle: [
+							{
+								name: '修改',
+								key: 0,
+							},
+							{
+								name: '删除',
+								key: 1,
 							}
-						}],
+						],
 					}
+				],
+				tableData: [
+					{
+						id: 1,
+						clauses: '会费',
+						paidMoney: '100',
+						time: '2018-10-09'
+					},
+					{
+						id: 1,
+						clauses: '特殊会费1',
+						paidMoney: '100',
+						time: '2018-10-09'
+					},
+					{
+						id: 1,
+						clauses: '基金会费',
+						paidMoney: '100',
+						time: '2018-10-09'
+					},
 				],
 				ruleValidate: {
 					time: [{

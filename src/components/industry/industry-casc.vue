@@ -2,7 +2,7 @@
 	
 	<div>
 		
-		<Cascader v-model="cascaderValue" filterable placeholder="选择行业" :data="industryData"></Cascader>
+		<Cascader v-model="cascaderValue" @on-change="setvalue" filterable placeholder="选择行业" :data="industryData"></Cascader>
 		
 	</div>
 	
@@ -22,6 +22,10 @@ export default {
 		 * 默认值 default: ''
 		 * 
 		 */
+		value: {
+			type: Array,
+			default: () => []
+		}
 	},
     data () {//数据
         return {
@@ -33,6 +37,12 @@ export default {
         }
     },
     methods: {//方法
+    	
+    	setvalue(val){
+    		
+    		this.$emit('input', val);
+    		
+    	},
     	
     },
     computed: {//计算属性
@@ -80,8 +90,10 @@ export default {
 	},
     mounted () {//模板被渲染完毕之后执行
     	
+    	this.$emit('input', this.cascaderValue);
+    	
 	},
-		
+	
 }
 </script>
 

@@ -7,11 +7,11 @@
 			
 			<h1 slot="title">表格列表</h1>
 			
-			<table-list :tableColumns="tableColumns">
+			<table-list :tableColumns="tableColumns" :tableData="tableData" @on-btn-click="onBtnClick">
 		
 				<div slot="header" style="width: 100%;display: flex;align-items: center;">
 			
-				    <industry-casc style="margin-right: 10px;"></industry-casc>
+				    <industry-casc v-model="industryData" style="margin-right: 10px;"></industry-casc>
 				    
 				    <post-casc style="margin-right: 10px;"></post-casc>
 				    
@@ -55,7 +55,6 @@
 	    	
 	    </Card>
 	    
-		
 	</div>
 	
 </template>
@@ -98,6 +97,8 @@ export default {
         	
         	res_c: [],
         	
+        	industryData: [],
+        	
         	tableColumns: [
 				{
 			        title: 'ID',
@@ -127,6 +128,34 @@ export default {
 			    }
 			],
 			
+			tableData: [
+				{
+					id: 1,
+			        name: 'John Brown',
+			        date: '2016-10-03'
+			    },
+			    {
+			    	id: 2,
+			        name: 'Jim Green',
+			        date: '2016-10-01'
+			    },
+			    {
+			    	id: 3,
+			        name: 'Joe Black',
+			        date: '2016-10-02'
+			    },
+			    {
+			    	id: 4,
+			        name: 'Jon Snow',
+			        date: '2016-10-04'
+			    },
+			    {
+			    	id: 5,
+			        name: 'Jon Snow',
+			        date: '2016-10-04'
+			    },
+			],
+			
 			editor_config:{
 		    	width:'100%',
 		    	height:'500px'
@@ -140,6 +169,10 @@ export default {
     	
     	upEditorContent(value){
     		this.editor_content = value;
+    	},
+    	
+    	onBtnClick(val){
+    		console.log(val);
     	},
     	
     },

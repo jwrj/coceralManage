@@ -6,11 +6,7 @@
 					<div slot="title" class="title">
 						<h1>会员审批</h1>
 					</div>
-					<table-list :tableColumns="tableColumns">
-		
-						<div slot="modalContent">
-							审批成功
-						</div>
+					<table-list :tableColumns="tableColumns" :tableData="tableData">
 		
 					</table-list>
 				</Card>
@@ -37,36 +33,67 @@ export default {
 	},
     data () {//数据
         return {
-        	tableColumns: [{
-        			title: 'ID',
-        			key: 'id'
-        		},
-        		{
-        			title: '名称',
-        			key: 'name'
-        		},
-        		{
-        			title: '日期',
-        			key: 'date'
-        		},
-        		{
-        			align: 'center',
-        			title: '操作',
-        			render: (h, params) => {
-        				return h('div', [
-        					h('Button', {
-        						props: {
-        							type: 'primary',
-        							size: 'small'
-        						},
-        						style: {
-        							marginRight: '5px'
-        						}
-        					}, '审批通过')
-        				]);
-        			}
-        		}
-        	]
+        	
+        	tableColumns: [
+    			{
+    				title: 'ID',
+    				key: 'id'
+    			},
+    			{
+    				title: '姓名',
+    				key: 'name'
+    			},
+    			{
+    				title: '公司',
+    				key: 'company'
+    			},
+    			{
+    				title: '手机号',
+    				key: 'mobilePhone'
+    			},
+    			{
+    				title: '申请时间',
+    				key: 'time'
+    			},
+    			{
+    				align: 'center',
+    				width: 180,
+    				title: '操作',
+    				handle: [
+    					{
+    						name: '通过',
+    					},
+    					{
+    						name: '拒绝',
+    					},
+    				],
+    			}
+    		],
+    		
+    		tableData: [
+    			{
+    				id: 1,
+    				name: '张三',
+    				company: '公司abc',
+    				mobilePhone: '13800138000',
+    				time: '2018-10-09'
+    			},
+    			{
+    				id: 1,
+    				name: '张三',
+    				company: '公司abc',
+    				mobilePhone: '13800138000',
+    				time: '2018-10-09'
+    			},
+    			{
+    				id: 1,
+    				name: '张三',
+    				company: '公司abc',
+    				mobilePhone: '13800138000',
+    				time: '2018-10-09'
+    			},
+    		],
+        	
         }
     },
     methods: {//方法

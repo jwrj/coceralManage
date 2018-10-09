@@ -2,7 +2,7 @@
 	
 	<div>
 		
-		<Cascader v-model="cascaderValue" filterable placeholder="选择岗位" :data="data"></Cascader>
+		<Cascader v-model="cascaderValue" @on-change="cascaderChange" change-on-select filterable placeholder="选择岗位" :data="data"></Cascader>
 		
 	</div>
 	
@@ -78,6 +78,11 @@ export default {
         }
     },
     methods: {//方法
+    	
+    	cascaderChange(value, selectedData){
+    		console.log(value);
+    		console.log(selectedData);
+    	},
     	
     },
     computed: {//计算属性

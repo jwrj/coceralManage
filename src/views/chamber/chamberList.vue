@@ -4,10 +4,24 @@
 		
 		<Card>
 			
-			<table-list :tableColumns="tableColumns" :tableData="tableData">
+			<table-list :tableColumns="tableColumns" :tableData="tableData" :modalTitle="modalTitle" @on-btn-click="onBtnClick">
+				
 				<div slot="header" style="margin-right: 10px;">
-				    1231
+					
+					<Select v-model="type" placeholder="选择类型" style="width:60px">
+				        <Option value="0">全部</Option>
+				        <Option value="1">商会</Option>
+				        <Option value="2">协会</Option>
+				    </Select>
+				    
 				</div>
+				
+				<div slot="modalContent">
+					
+					<post-config v-if="btnKey === 'config'"></post-config>
+					
+				</div>
+				
 			</table-list>
 			
 		</Card>
@@ -18,12 +32,15 @@
 
 <script>
 
-import tableList from '@/components/tableList/table-list.vue'
+import tableList from '@/components/tableList/table-list.vue';
+
+import postConfig from '@/components/postConfig/post-config.vue';//岗位配置
 
 export default {
 	name: 'chamberList',
 	components:{//组件模板
-		tableList
+		tableList,
+		postConfig
 	},
 	props:{//组件道具（参数）
 		/* ****属性用法*****
@@ -36,6 +53,12 @@ export default {
 	},
     data () {//数据
         return {
+        	
+        	type: '0',
+        	
+        	btnKey: '',
+        	
+        	modalTitle: '',
         	
         	tableColumns: [
     			{
@@ -51,6 +74,10 @@ export default {
     				key: 'president'
     			},
     			{
+			        title: '秘书长',
+			        key: 'secretary'
+			    },
+    			{
     				title: '创建日期',
     				key: 'date'
     			},
@@ -60,20 +87,29 @@ export default {
     				handle: [
     					{
     						name: '详情',
-    						key: 0,
-    					},
-    					{
-    						name: '审批',
-    						key: 1,
+    						key: 'details',
+    						modalShow: true,
     					},
     					{
     						name: '编辑',
-    						key: 2,
+    						key: 'edit',
+    						modalShow: true,
     					},
     					{
-    						name: '岗位配置',
-    						key: 3,
-    					}
+    						name: '审批',
+    						key: 'approval',
+    						modalShow: true,
+    					},
+    					{
+    						name: '岗配',
+    						key: 'config',
+    						modalShow: true,
+    					},
+    					{
+    						name: '会员',
+    						key: 'member',
+    						modalShow: true,
+    					},
     				],
     			}
     		],
@@ -83,18 +119,21 @@ export default {
     				id: 1,
     				name: '广西湖北商会1',
     				president: '张三',
+    				secretary: '李四',
     				date: '2018-10-08'
     			},
     			{
     				id: 2,
     				name: '广西湖北商会2',
     				president: '张三',
+    				secretary: '李四',
     				date: '2018-10-08'
     			},
     			{
     				id: 3,
     				name: '广西湖北商会3',
     				president: '张三',
+    				secretary: '李四',
     				date: '2018-10-08'
     			},
     		]
@@ -102,6 +141,14 @@ export default {
         }
     },
     methods: {//方法
+    	
+    	onBtnClick(val){
+    		
+    		console.log(val);
+    		this.btnKey = val.key;
+    		this.modalTitle = val.params.row.name + '（' + val.name + '）';
+    		
+    	},
     	
     },
     computed: {//计算属性

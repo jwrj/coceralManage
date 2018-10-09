@@ -23,15 +23,14 @@
 		    
 			<Divider orientation="left"><span style="font-size: 16px;">商会列表</span></Divider>
 			
-			<table-list :tableColumns="tableColumns" @on-btn-click="tabBtnClick">
+			<table-list :tableColumns="tableColumns" :tableData="tableData" @on-btn-click="tabBtnClick">
 				<div slot="header" style="width: 100%;display: flex;align-items: center;">
 					
-					<div style="margin-right: 10px;">
-						<RadioGroup v-model="type">
-					        <Radio label="1">商会</Radio>
-					        <Radio label="2">协会</Radio>
-					    </RadioGroup>
-					</div>
+					<Select v-model="type" placeholder="选择类型" style="width:60px;margin-right: 10px;">
+				        <Option value="0">全部</Option>
+				        <Option value="1">商会</Option>
+				        <Option value="2">协会</Option>
+				    </Select>
 					
 				    <al-cascader v-model="res_c" placeholder="选择地区" style="width: 260px;" />
 		    
@@ -65,7 +64,7 @@ export default {
     data () {//数据
         return {
         	
-        	type: '1',
+        	type: '0',
         	
         	res_c: [],
         	
@@ -77,6 +76,14 @@ export default {
 			    {
 			        title: '名称',
 			        key: 'name'
+			    },
+			    {
+			        title: '会长',
+			        key: 'president'
+			    },
+			    {
+			        title: '秘书长',
+			        key: 'secretary'
 			    },
 			    {
 			        title: '日期',
@@ -97,6 +104,30 @@ export default {
 			        ],
 			    }
 			],
+			
+			tableData: [
+    			{
+    				id: 1,
+    				name: '广西湖北商会1',
+    				president: '张三',
+    				secretary: '李四',
+    				date: '2018-10-08'
+    			},
+    			{
+    				id: 2,
+    				name: '广西湖北商会2',
+    				president: '张三',
+    				secretary: '李四',
+    				date: '2018-10-08'
+    			},
+    			{
+    				id: 3,
+    				name: '广西湖北商会3',
+    				president: '张三',
+    				secretary: '李四',
+    				date: '2018-10-08'
+    			},
+    		]
         	
         }
     },

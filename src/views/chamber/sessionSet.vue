@@ -6,7 +6,7 @@
 				<h1>届次配置</h1>
 				<Button class="btnSmall" size="small" type="primary" @click="addSession">添加届次</Button>
 			</div>
-			<table-list :tableColumns="tableColumns">
+			<table-list :tableColumns="tableColumns" :tableData="tableData">
 
 				<div slot="header" style="width: 100%;display: flex;align-items: center;">
 					<post-casc style="margin-right: 10px;"></post-casc>
@@ -78,25 +78,48 @@
 					},
 					{
 						title: '届次',
-						key: 'name'
+						key: 'jc'
 					},
 					{
 						title: '开始时间',
-						key: 'date'
+						key: 'startTime'
 					},
 					{
-						align: 'center',
-						width: 130,
-						title: '操作',
-						handle: [{
-							name: '查看',
-							key: 0,
-							props: {
-								loading: false
-							}
-						}],
-					}
-				]
+						title: '到期时间',
+						key: 'expirationTime'
+					},
+					{
+						title: '会费标准',
+						key: 'criterion'
+					},
+				],
+				
+				tableData: [
+	    			{
+	    				id: 1,
+	    				jc: '第一届',
+	    				mobilePhone: '13800138000',
+	    				startTime: '2018-10-09',
+	    				expirationTime: '2018-10-09',
+	    				criterion: '200'
+	    			},
+	    			{
+	    				id: 1,
+	    				jc: '第一届',
+	    				mobilePhone: '13800138000',
+	    				startTime: '2018-10-09',
+	    				expirationTime: '2018-10-09',
+	    				criterion: '200'
+	    			},
+	    			{
+	    				id: 1,
+	    				jc: '第一届',
+	    				mobilePhone: '13800138000',
+	    				startTime: '2018-10-09',
+	    				expirationTime: '2018-10-09',
+	    				criterion: '200'
+	    			},
+	    		],
 			}
 		},
 		methods: { //方法

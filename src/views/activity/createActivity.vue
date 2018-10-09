@@ -47,7 +47,7 @@
 				<h1>邀请人员</h1>
 				<Button class="btnSmall" size="small" type="primary" @click="importPerson">导入更多会员</Button>
 			</div>
-			<table-list :tableColumns="tableColumns">
+			<table-list :tableColumns="tableColumns" :tableData="tableData">
 				<div slot="header" style="width: 100%;display: flex;align-items: center;">
 
 					<post-casc style="margin-right: 10px;"></post-casc>
@@ -143,25 +143,52 @@
 						key: 'id'
 					},
 					{
-						title: '名称',
+						title: '姓名',
 						key: 'name'
 					},
 					{
-						title: '日期',
-						key: 'date'
+						title: '性别',
+						key: 'sex'
 					},
 					{
-						align: 'center',
-						width: 130,
-						title: '操作',
-						handle: [{
-							name: '查看',
-							key: 0,
-							props: {
-								loading: false
-							}
-						}],
-					}
+						title: '手机号',
+						key: 'mobilePhone'
+					},
+					{
+						title: '身份证号码',
+						key: 'IDNumber'
+					},
+				],
+				
+				tableData: [
+					{
+						id: 1,
+						name: '张三',
+						sex: '男',
+						mobilePhone: '13800138000',
+						IDNumber: '450123*****63541245'
+					},
+					{
+						id: 1,
+						name: '张三',
+						sex: '男',
+						mobilePhone: '13800138000',
+						IDNumber: '450123*****63541245'
+					},
+					{
+						id: 1,
+						name: '张三',
+						sex: '男',
+						mobilePhone: '13800138000',
+						IDNumber: '450123*****63541245'
+					},
+					{
+						id: 1,
+						name: '张三',
+						sex: '男',
+						mobilePhone: '13800138000',
+						IDNumber: '450123*****63541245'
+					},
 				]
 			}
 		},

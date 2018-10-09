@@ -6,7 +6,7 @@
 				<h1>活动/会议列表</h1>
 				<Button class="btnSmall" size="small" type="primary" @click="createactivity">创建会议</Button>
 			</div>
-			<table-list :tableColumns="tableColumns">
+			<table-list :tableColumns="tableColumns" :tableData="tableData">
 			</table-list>
 		</Card>
 
@@ -42,21 +42,63 @@
 						key: 'name'
 					},
 					{
-						title: '日期',
-						key: 'date'
+						title: '开始时间',
+						key: 'startTime'
+					},
+					{
+						title: '结束时间',
+						key: 'endTime'
+					},
+					{
+						title: '报名人数',
+						key: 'num'
 					},
 					{
 						align: 'center',
 						width: 130,
 						title: '操作',
-						handle: [{
-							name: '查看',
-							key: 0,
-							props: {
-								loading: false
-							}
-						}],
+						handle: [
+							{
+								name: '详情',
+								key: 0,
+							},
+							{
+								name: '编辑',
+								key: 0,
+							},
+						],
 					}
+				],
+				
+				tableData: [
+					{
+						id: 1,
+						name: '广西湖北商会2018迎新春晚会',
+						startTime: '2018-10-09',
+						endTime: '2018-11-09',
+						num: 100
+					},
+					{
+						id: 1,
+						name: '广西湖北商会2018迎新春晚会',
+						startTime: '2018-10-09',
+						endTime: '2018-11-09',
+						num: 100
+					},
+					{
+						id: 1,
+						name: '广西湖北商会2018迎新春晚会',
+						startTime: '2018-10-09',
+						endTime: '2018-11-09',
+						num: 100
+					},
+					{
+						id: 1,
+						name: '广西湖北商会2018迎新春晚会',
+						startTime: '2018-10-09',
+						endTime: '2018-11-09',
+						num: 100
+					},
 				]
 			}
 		},

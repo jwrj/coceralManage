@@ -37,7 +37,7 @@
 		:class-name="$store.state.app.isCollapsed ? 'my-ivu-modal-wrap leftmin' : 'my-ivu-modal-wrap leftmax'"
 		>
 	    	<div slot="header" style="position: relative;">
-	    		<h1>标题</h1>
+	    		<h1>{{modalTitle}}</h1>
 		    	<div style="position: absolute;top: -8px;right: 0;">
 		    		<Button icon="md-close" type="success" @click="modalShow = false">关闭</Button>
 		    		<Button type="primary" icon="md-refresh" style="margin-left: 6px;">刷新</Button>
@@ -98,6 +98,11 @@ export default {
 		pageShow: {//分页控件
 			type: Boolean,
 			default: true
+		},
+		
+		modalTitle: {//弹窗标题
+			type: String,
+			default: '标题'
 		},
 		
 	},
@@ -233,39 +238,6 @@ export default {
     mounted () {//模板被渲染完毕之后执行
 	},
 	
-	//=================组件路由勾子==============================
-	
-	beforeRouteEnter (to, from, next) {//在组件创建之前调用（放置页面加载时请求的Ajax）
-		
-		(async() => {//执行异步函数
-			
-			//async、await错误处理
-			try {
-				
-				/*
-				 * 
-				 * ------串行执行---------
-				 * console.log(await getAjaxData());
-				 * ...
-				 * 
-				 * ---------并行：将多个promise直接发起请求（先执行async所在函数），然后再进行await操作。（执行效率高、快）----------
-				 * let abc = getAjaxData();//先执行promise函数
-				 * ...
-				 * console.log(await abc);
-				 * ...
-				*/
-				next(vm => {
-					
-				});
-				
-			} catch(err) {
-				console.log(err);
-			}
-			
-		})();
-		
-	},
-	
 }
 </script>
 
@@ -310,5 +282,8 @@ export default {
 		     width: 100% !important;
 		     margin: 0 !important; 
 		}
+	}
+	.my-modal-box .ivu-modal-header{
+		height: 45px;
 	}
 </style>

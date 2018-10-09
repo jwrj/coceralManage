@@ -28,24 +28,67 @@
 			
 		</Card>
 		
+		<!--<Drawer
+            title="商会列表"
+            v-model="openChamberList"
+            width="50%"
+            :mask-closable="false"
+        >
+        	<table-list :tableColumns="tableColumns" :tableData="tableData">
+	        	
+	        	<Row slot="header" style="width: 100%;margin-right: 10px;">
+	        		<Col span="8">
+	        			<RadioGroup v-model="type">
+					        <Radio label="1">商会</Radio>
+					        <Radio label="2">协会</Radio>
+					    </RadioGroup>
+	        		</Col>
+	        		<Col span="16">
+	        			<al-cascader v-model="res_c" style="max-width: 300px;" />
+	        		</Col>
+	        	</Row>
+	        	
+			</table-list>
+			
+        </Drawer>-->
+		
 		<Modal
 	        v-model="openChamberList"
 	        title="商会列表"
 	        width="60%"
 	        :footer-hide="true"
 	       	>
+	       	
 	       	<Button slot="close">关闭</Button>
-	        <table-list :tableColumns="tableColumns">
-				<div slot="header" style="width: 100%;display: flex;align-items: center;">
-			
-				    <industry-casc style="margin-right: 10px;"></industry-casc>
-				    
-				    <post-casc style="margin-right: 10px;"></post-casc>
-				    
-				    <al-cascader v-model="res_c"/>
+	        
+	        <table-list :tableColumns="tableColumns" :tableData="tableData">
+	        	
+	        	<!--<Row slot="header" style="width: 100%;margin-right: 10px;">
+	        		<Col span="8">
+	        			<RadioGroup v-model="type">
+					        <Radio label="1">商会</Radio>
+					        <Radio label="2">协会</Radio>
+					    </RadioGroup>
+	        		</Col>
+	        		<Col span="16">
+	        			<al-cascader v-model="res_c" style="max-width: 300px;" />
+	        		</Col>
+	        	</Row>-->
+	        	
+	        	<div slot="header" style="width: 100%;display: flex;align-items: center;">
+					
+					<Select v-model="type" placeholder="选择类型" style="width:60px;margin-right: 10px;">
+				        <Option value="0">全部</Option>
+				        <Option value="1">商会</Option>
+				        <Option value="2">协会</Option>
+				    </Select>
+					
+				    <al-cascader v-model="res_c" placeholder="选择地区" style="width: 260px;" />
 		    
 				</div>
+	        	
 			</table-list>
+	        
 	    </Modal>
 		
 	</div>
@@ -56,16 +99,10 @@
 
 import tableList from '@/components/tableList/table-list.vue'
 
-import industryCasc from '@/components/industry/industry-casc.vue';//行业级联
-
-import postCasc from '@/components/post/post-casc.vue';//岗位级联
-
 export default {
 	name: 'login',
 	components:{//组件模板
 		tableList,
-		industryCasc,
-		postCasc
 	},
 	props:{//组件道具（参数）
 		/* ****属性用法*****
@@ -91,6 +128,8 @@ export default {
                 ],
             },
         	
+        	type: '0',
+        	
         	res_c: [],
         	
         	tableColumns: [
@@ -101,6 +140,14 @@ export default {
 			    {
 			        title: '名称',
 			        key: 'name'
+			    },
+			    {
+			        title: '会长',
+			        key: 'president'
+			    },
+			    {
+			        title: '秘书长',
+			        key: 'secretary'
 			    },
 			    {
 			        title: '日期',
@@ -121,6 +168,30 @@ export default {
 			        ],
 			    }
 			],
+			
+			tableData: [
+    			{
+    				id: 1,
+    				name: '广西湖北商会1',
+    				president: '张三',
+    				secretary: '李四',
+    				date: '2018-10-08'
+    			},
+    			{
+    				id: 2,
+    				name: '广西湖北商会2',
+    				president: '张三',
+    				secretary: '李四',
+    				date: '2018-10-08'
+    			},
+    			{
+    				id: 3,
+    				name: '广西湖北商会3',
+    				president: '张三',
+    				secretary: '李四',
+    				date: '2018-10-08'
+    			},
+    		]
         	
         }
     },

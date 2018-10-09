@@ -4,66 +4,110 @@
 		
 		<Card>
 			
-			<h1 slot="title">
-				创建商会/协会
-				<span class="zero"></span>
-				<span>步骤：创建商会/协会</span>>
-				<span>岗位配置</span>>
-				<span>岗位任职</span>
-			</h1>
+			<h1 slot="title">创建商/协会</h1>
 			
-			<Form :label-width="100" :model="link" ref="link" :rules="ruleValidate">
-
-				<FormItem label="性质">
-					<RadioGroup style="margin-top: -3px;" v-model="link.nature" @on-change="radiochange">
-						<Radio label="商会" @click.native="view='chamber'"></Radio>
-						<Radio label="协会" @click.native="view='society'"></Radio>
-					</RadioGroup>
-				</FormItem>
+			<Form ref="formInstance" :model="formData" :rules="ruleData" :label-width="100">
 				
-				<Row :gutter="24">
-					
-					<Col :lg="12" :md="16" :sm="24" :xs="24">
-						<p class="cham" :is="view" ref="children"></p>
+				<Row :gutter="16">
+				
+					<Col span="24">
+						<FormItem label="性质" prop="nature">
+							<RadioGroup v-model="formData.nature" @on-change="RadioGroupChange">
+								<Radio :label="1">商会</Radio>
+								<Radio :label="2">协会</Radio>
+							</RadioGroup>
+						</FormItem>
 					</Col>
-
-					<Col :lg="12" :md="16" :sm="24" :xs="24">
+					
+					<Col :xs="24" :sm="24" :md="12" :lg="12">
+						<FormItem :label="title+'名称'" prop="name">
+							<Input v-model="formData.name" clearable placeholder="请输入名称" style="max-width: 300px;" />
+						</FormItem>
+					</Col>
+					
+					<Col :xs="24" :sm="24" :md="12" :lg="12">
+						<FormItem label="上级商会">
+							<Input v-model="formData.superior" placeholder="这个字段为预留字段目前没用到" style="max-width: 300px;" />
+						</FormItem>
+					</Col>
+					
+					<Col :xs="24" :sm="24" :md="12" :lg="12">
+						<FormItem label="注册地" prop="domicile" >
+							<al-cascader v-model="formData.domicile" placeholder="选择注册地" style="max-width: 300px;" />
+						</FormItem>
+					</Col>
 						
+					<!--商会-->
+					<Col v-if="formData.nature === 1" :xs="24" :sm="24" :md="12" :lg="12">
+						<FormItem label="所属地" prop="originPlace">
+							<al-cascader v-model="formData.originPlace" placeholder="选择所属地" style="max-width: 300px;" />
+						</FormItem>
+					</Col>
+					<!--商会-->
+						
+					<!--协会-->
+					<Col v-if="formData.nature === 2" :xs="24" :sm="24" :md="12" :lg="12">
+						<FormItem label="行业" prop="industry">
+							<industry-casc v-model="formData.industry" style="max-width: 300px;"></industry-casc>
+						</FormItem>
+					</Col>
+					
+					<Col v-if="formData.nature === 2" :xs="24" :sm="24" :md="12" :lg="12">
+						<FormItem label="成立时间" prop="establishTime">
+				       		<DatePicker type="date" @on-change="timeChange" value="formData.establishTime" placeholder="选择日期"></DatePicker>
+						</FormItem>
+					</Col>
+					<!--协会-->
+					
+					<Col :xs="24" :sm="24" :md="12" :lg="12">
 						<FormItem label="联系人" prop="linkman">
-							<Input v-model="link.linkman" placeholder="请输入联系人" class="linkIn"></Input>
+							<Input v-model="formData.linkman" clearable placeholder="请输入联系人" style="max-width: 300px;" />
 						</FormItem>
+					</Col>
 						
-						<FormItem label="联系人电话" prop="linkphone">
-							<Input v-model="link.linkphone" placeholder="请输入联系人电话" class="linkIn"></Input>
+					<Col :xs="24" :sm="24" :md="12" :lg="12">
+						<FormItem label="联系人电话" prop="linkmanPhone">
+							<Input v-model="formData.linkmanPhone" clearable placeholder="请输入联系人电话" style="max-width: 300px;" />
 						</FormItem>
-	
-						<FormItem label="商会网址" prop="linkweb">
-							<Input v-model="link.linkweb" placeholder="请输入商会网址" class="linkIn"></Input>
-						</FormItem>
-						
-						<FormItem label="商会公众号" prop="linknum">
-							<Input v-model="link.linknum" placeholder="请输入商会公众号" class="linkIn"></Input>
-						</FormItem>
-						
-						<FormItem label="商会介绍" prop="linknote">
-							<Input v-model="link.linknote" type="textarea" :autosize="{minRows: 2,maxRows: 7}" class="linkIn"></Input>
-						</FormItem>
-						
 					</Col>
 					
+					<Col :xs="24" :sm="24" :md="12" :lg="12">
+						<FormItem :label="title+'网址'">
+							<Input v-model="formData.website" clearable placeholder="请输入网址" style="max-width: 300px;" />
+						</FormItem>
+					</Col>
+					
+					<Col :xs="24" :sm="24" :md="12" :lg="12">
+						<FormItem :label="title+'公众号'">
+							<Input v-model="formData.vipcn" clearable placeholder="请输入公众号" style="max-width: 300px;" />
+						</FormItem>
+					</Col>
+					
+					<Col :xs="24" :sm="24" :md="12" :lg="12">
+						<FormItem :label="title+'标志'">
+							<Icon type="md-image" @click.native="logoClick" size="60"/>
+						</FormItem>
+					</Col>
+					
+					<Col span="24">
+						<FormItem :label="title+'介绍'">
+							<Input v-model="formData.introduce" type="textarea" placeholder="请输入介绍..." />
+						</FormItem>
+					</Col>
+						
 				</Row>
 				
-				<p style="margin-top: 15px;text-align: center;width: 80%;">
-					<Button type="primary" @click="handleSubmit('link')">立即创建</Button>
-				</p>
-				
 			</Form>
+			
+			<div style="text-align: center;padding-top: 16px;">
+				<Button type="primary" @click="submit('formInstance')">立即创建</Button>
+			</div>
 			
 		</Card>
 		
         <Modal v-model="modalShow" width="80%">
-	        <p slot="header">12312</p>
-        	<iframe src="http://192.168.2.200:8080/#/fileSelect/" frameborder="0" width="100%" height="400"></iframe>
+	        <p slot="header">选择文件</p>
+	        <file-yun></file-yun>
 	    </Modal>
 		
 	</div>
@@ -71,125 +115,135 @@
 </template>
 
 <script>
-	import chamber from '@/views/chamber/component/chamber'
-	import society from '@/views/chamber/component/society'
-	export default {
-		name: 'createChamber',
-		components: { //组件模板,
-			chamber,
-			society
-		},
-		props: { //组件道具（参数）
-			/* ****属性用法*****
-			 * 
-			 * 传递类型 type: Array | Number | String | Object
-			 * 为必传 required: true
-			 * 默认值 default: ''
-			 * 
-			 */
-		},
-		data() { //数据
-			return {
-				modalShow: false,
-				view: 'chamber',
-				link: {
-					linkman: '',
-					nature: '商会',
-					linknum: '',
-					linkweb: '',
-					linkphone: '',
-					linknote: '',
-					society: []
-				},
-				ruleValidate: {
-					linkman: [{
-						required: true,
-						message: '请填写联系人',
-						trigger: 'blur'
-					}],
-					linkweb: [{
-						required: true,
-						message: '请填写网址',
-						trigger: 'blur'
-					}],
-					linkphone: [{
-							required: true,
-							message: '请填写联系方式',
-							trigger: 'blur'
-						},
-						{
-							type: 'string',
-							min: 6,
-							message: '不能小于6位数',
-							trigger: 'blur'
-						}
-					]
-				}
-			}
-		},
-		methods: { //方法
-			handleSubmit(name) {
-				this.$refs.children.$refs.children.validate((ft) => {
-					console.log(ft);
-					this.$refs[name].validate((valid) => {
-						if(valid && ft) {
-							this.$Message.success('添加成功!');
-						} else {
-							//this.$Message.error('添加失败!');
-						}
-					})
-				})
+
+import industryCasc from '@/components/industry/industry-casc.vue';//行业级联
+
+import fileYun from '@/components/fileY/file-yun.vue';
+
+export default {
+	name: 'createChamber',
+	components: { //组件模板,
+		industryCasc,
+		fileYun
+	},
+	props: { //组件道具（参数）
+		/* ****属性用法*****
+		 * 
+		 * 传递类型 type: Array | Number | String | Object
+		 * 为必传 required: true
+		 * 默认值 default: ''
+		 * 
+		 */
+	},
+	data() { //数据
+		return {
+			
+			modalShow: false,
+			
+			title: '商会',
+			
+			formData: {
+				nature: 1,//性质
+				name: '',//名称
+				superior: '',//上级
+				domicile: [],//注册地
+				originPlace: [],//所属地
+				industry: [],//行业
+				establishTime: '',//成立时间
+				linkman: '',//联系人
+				linkmanPhone: '',//联系人电话
+				website: '',//网址
+				vipcn: '',//公众号
+				introduce: ''//介绍
 			},
-			handleReset(name) {
-				this.$refs[name].resetFields();
-				this.$refs.children.$refs.children.resetFields();
-
-			},
-			radiochange() {
-
+			
+			ruleData: {
+				nature: [
+					{ type: 'number', required: true, message: '请选择性质', trigger: 'change' }
+				],
+				name: [
+					{ required: true, message: '请输入名称', trigger: 'blur' }
+				],
+				domicile: [
+					{ type: 'array', required: true, message: '请选择注册地', trigger: 'change' }
+				],
+				originPlace: [
+					{ type: 'array', required: true, message: '请选择所属地', trigger: 'change' }
+				],
+				industry: [
+					{ type: 'array', required: true, message: '请选择行业', trigger: 'change' }
+				],
+				establishTime: [
+					{ required: true, message: '请选择成立时间', trigger: 'change' }
+				],
+				linkman: [
+					{ required: true, message: '请输入联系人', trigger: 'blur' }
+				],
+				linkmanPhone: [
+					{ required: true, message: '请输入联系人电话', trigger: 'blur' }
+				],
 			}
-		},
-		computed: { //计算属性
-
-		},
-		watch: { //监测数据变化
-		},
-
-		//===================组件钩子===========================
-
-		created() { //实例被创建完毕之后执行
-
-		},
-		mounted() { //模板被渲染完毕之后执行
-
 		}
-	}
+	},
+	methods: { //方法
+		
+		RadioGroupChange(val){
+			
+			if(val === 1){
+				
+				this.title = '商会';
+				
+			}else if(val === 2){
+				
+				this.title = '协会';
+				
+			}
+			
+		},
+		
+		timeChange(date){
+			
+			this.formData.establishTime = date;
+			
+		},
+		
+		logoClick(){
+			
+			this.modalShow = true;
+			
+		},
+		
+		submit(name){
+			
+			this.$refs[name].validate((valid) => {
+                if (valid) {
+                    this.$Message.success('创建成功!');
+                } else {
+                    this.$Message.error('创建失败!');
+                }
+            })
+			
+		},
+		
+	},
+	computed: { //计算属性
+
+	},
+	watch: { //监测数据变化
+		
+	},
+
+	//===================组件钩子===========================
+
+	created() { //实例被创建完毕之后执行
+
+	},
+	mounted() { //模板被渲染完毕之后执行
+		
+	},
+	
+}
 </script>
 
 <style scoped lang="less">
-	.createCham {
-		margin: 5px;
-		.title {
-			font-size: 18px;
-			font-weight: 700;
-			color: black;
-		}
-		.tt {
-			text-align: left;
-			width: 100px;
-			display: inline-block;
-		}
-		.space {
-			margin-top: 5px;
-			display: flex;
-			align-items: center;
-		}
-		.zero {
-			display: inline-block;
-			width: 30px;
-		}
-		.linkIn {
-			width: 300px;
-		}
-	}
 </style>
