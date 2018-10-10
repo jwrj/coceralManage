@@ -61,7 +61,7 @@
 	       	
 	       	<Button slot="close">关闭</Button>
 	        
-	        <table-list :tableColumns="tableColumns" :tableData="tableData">
+	        <table-list :tableColumns="tableColumns" :tableData="tableData" @on-btn-click="tabBtnClick">
 	        	
 	        	<!--<Row slot="header" style="width: 100%;margin-right: 10px;">
 	        		<Col span="8">
@@ -161,7 +161,7 @@ export default {
 			        	{
 			        		name: '申请加入',
 			        		key: 0,
-			        		props: {
+			        		button_props: {
 			        			loading: false
 			        		}
 			        	}
@@ -196,6 +196,26 @@ export default {
         }
     },
     methods: {//方法
+    	
+    	tabBtnClick(params){
+    		
+    		this.tableColumns.forEach(item => {
+    			
+    			if(item.handle){
+    				item.handle.forEach(item2 => {
+    					if(item2.key === 0){
+    						item2.button_props.loading = true;
+    						setTimeout(() => {
+    							item2.button_props.loading = false;
+    							this.$Message.success('申请成功');
+    						},2000);
+    					}
+    				})
+    			}
+    			
+    		});
+    		
+    	},
     	
     	login(name){
     		
