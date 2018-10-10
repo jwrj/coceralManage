@@ -7,7 +7,7 @@
 							<h1>给{{chamber}}的岗位配置人员</h1>
 							<Button class="btnSmall" size="small" type="primary" @click="addStaff">添加/追加人员</Button>
 						</div>
-			<table-list :tableColumns="tableColumns" :tableData="tableData">
+			<table-list :tableColumns="tableColumns" :tableData="tableData" @on-poptip-ok="poptipOk">
 				<div slot="header" style="width: 100%;display: flex;align-items: center;">
 					
 					<post-casc style="margin-right: 10px;"></post-casc>
@@ -86,6 +86,10 @@ export default {
     				handle: [
     					{
     						name: '卸任',
+    						poptipOpen: true,
+    						poptip_props: {
+    							title: '您确定要卸任此人？'
+    						}
     					},
     				],
     			}
@@ -126,7 +130,12 @@ export default {
 			//this.$store.commit('showstaffModal',this.modalShow)
 			this.$refs.staffM.show=true;
 			//console.log(this.$store.state.cham.showstaff)
-		}
+		},
+		
+		poptipOk(){
+			this.$Message.success('卸任成功');
+		},
+		
     },
     computed: {//计算属性
         	

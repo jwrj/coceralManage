@@ -60,7 +60,7 @@
  * slot-scope
  */
 
-import { edit, details, buttonItem } from './handleButton.js'
+import { buttonItem } from './handleButton.js'
 
 export default {
 	name: 'tableList',
@@ -125,29 +125,6 @@ export default {
     		
     		this.tableColumns.forEach(item => {
     		
-//	    		if(item.handle){
-//	    			
-//	    			item.render = (h,params) => {
-//	    				
-//	    				let children = [];
-//	    				
-//	    				item.handle.forEach(btnItem => {
-//	    					
-//	    					if(btnItem === 'edit'){
-//	    						children.push(edit(this, h, params));
-//	    					}else if(btnItem === 'details'){
-//	    						children.push(details(this, h, params));
-//	    					}
-//	    					
-//	    				})
-//	    				
-//	    				return h('div',children);
-//	    				
-//	    			}
-//	    			
-//	    		}
-	    		
-	    		
 	    		if(item.handle){
 	    			
 	    			item.render = (h,params) => {
@@ -156,7 +133,7 @@ export default {
 	    				
 	    				item.handle.forEach(btnItem => {
 	    					
-	    					children.push(buttonItem(this, h, params, btnItem, btnItem.props || {}));
+	    					children.push(buttonItem(this, h, params, btnItem));
 	    					
 	    				});
 	    				
@@ -207,9 +184,10 @@ export default {
     			
     		}
     		
-//  		console.log('选择改变时');
-//  		this.checkedData = selection;
-//  		this.$emit('selectChange', this.checkedData);
+    		this.checkedData = selection;
+    		
+    		this.$emit('select-change', this.checkedData);
+    		
     	},
     	tabSelectCancel(selection, row){//单个取消选择
     		console.log('单个取消选择');

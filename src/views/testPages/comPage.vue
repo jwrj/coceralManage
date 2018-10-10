@@ -7,7 +7,7 @@
 			
 			<h1 slot="title">表格列表</h1>
 			
-			<table-list :tableColumns="tableColumns" :tableData="tableData" @on-btn-click="onBtnClick">
+			<table-list :tableColumns="tableColumns" :tableData="tableData" @select-change="selectChange" @on-btn-click="onBtnClick">
 		
 				<div slot="header" style="width: 100%;display: flex;align-items: center;">
 			
@@ -100,6 +100,11 @@ export default {
         	industryData: [],
         	
         	tableColumns: [
+        		{
+                    type: 'selection',
+                    width: 60,
+                    align: 'center'
+                },
 				{
 			        title: 'ID',
 			        key: 'id'
@@ -120,6 +125,7 @@ export default {
 			        	{
 			        		name: '申请加入',
 			        		key: 0,
+			        		modalShow: true,
 			        		props: {
 			        			loading: false
 			        		}
@@ -173,6 +179,10 @@ export default {
     	
     	onBtnClick(val){
     		console.log(val);
+    	},
+    	
+    	selectChange(checked){//选择改变时触发
+    		console.log(checked);
     	},
     	
     },

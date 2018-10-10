@@ -97,7 +97,7 @@ export default {
 			        	{
 			        		name: '申请加入',
 			        		key: 0,
-			        		props: {
+			        		button_props: {
 			        			loading: false
 			        		}
 			        	}
@@ -135,24 +135,21 @@ export default {
     	
     	tabBtnClick(params){
     		
-    		params.loading = true;
-    		
     		this.tableColumns.forEach(item => {
     			
     			if(item.handle){
     				item.handle.forEach(item2 => {
     					if(item2.key === 0){
-    						item2.props.loading = true;
+    						item2.button_props.loading = true;
     						setTimeout(() => {
-    							item2.props.loading = false;
+    							item2.button_props.loading = false;
+    							this.$Message.success('申请成功');
     						},2000);
     					}
     				})
     			}
     			
     		});
-    		
-    		console.log(params);
     		
     	},
     	

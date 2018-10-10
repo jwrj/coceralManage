@@ -62,9 +62,20 @@ export default {
     				handle: [
     					{
     						name: '通过',
+    						poptipOpen: true,
+    						poptip_props: {
+    							title: '您确认通过吗？'
+    						}
     					},
     					{
     						name: '拒绝',
+    						poptipOpen: true,
+    						button_props: {
+    							type: 'error',
+    						},
+    						poptip_props: {
+    							title: '您确认拒绝吗？'
+    						}
     					},
     				],
     			}
