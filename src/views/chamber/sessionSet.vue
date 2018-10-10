@@ -21,16 +21,26 @@
 			footer-hide>
 				<Form :model="formItem" :label-width="80">
         <FormItem label="届次名称:">
-            <Input v-model="formItem.name" placeholder="Enter something..."></Input>
+            <Input v-model="formItem.jc" placeholder="Enter something..."></Input>
         </FormItem>
 		<FormItem label="开始时间:">
-			<DatePicker v-model="formItem.starting" type="date"></DatePicker>
+			<DatePicker 
+			:value="formItem.startTime" 
+			type="date"
+			@on-change="start"
+			>
+			</DatePicker>
 		</FormItem>
 		<FormItem label="到期时间:">
-			<DatePicker v-model="formItem.ending" type="date"></DatePicker>
+			<DatePicker 
+			:value="formItem.expirationTime" 
+			type="date"
+			@on-change="end"
+			>
+			</DatePicker>
 		</FormItem>
 		<FormItem label="会费标准:">
-			<Input v-model="formItem.price" placeholder="Enter something..."></Input>
+			<Input v-model="formItem.criterion" placeholder="Enter something..."></Input>
 		</FormItem>				<FormItem>
 					<Button type="primary" size="large" @click.stop="add">确定添加</Button>
 				</FormItem>
@@ -67,10 +77,11 @@
 			return {
 				showSess:false,
 				formItem:{
-					name:'',
-					starting:'',
-					ending:'',
-					price:''
+					id:1,
+					jc:'',
+					startTime:'',
+					expirationTime:'',
+					criterion:''
 				},
 				tableColumns: [{
 						title: 'ID',
@@ -126,9 +137,19 @@
 			addSession(){
 				this.showSess=true;
 			},
+			start(date){
+				this.formItem.startTime = date;
+			},
+			end(date){
+				this.formItem.expirationTime = date;
+			},
 			add(){
 				console.log(this.formItem);
+				this.formItem.id=1;
+				let result = Object.assign({}, this.formItem);
+				this.tableData.push(result)
 				this.showSess=false;
+				this.formItem={}
 			}
 			
 		},
