@@ -14,7 +14,7 @@
 			
 				</div>
 			</table-list>
-				<staff-modal ref="staffM"></staff-modal>
+				<staff-modal ref="staffM" @addstaff="getStaff"></staff-modal>
 		</Card>
 		
 	</div>
@@ -131,7 +131,9 @@ export default {
 			this.$refs.staffM.show=true;
 			//console.log(this.$store.state.cham.showstaff)
 		},
-		
+		getStaff(list){
+			this.tableData.push(list)
+		},
 		poptipOk(){
 			this.$Message.success('卸任成功');
 		},
