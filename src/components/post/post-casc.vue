@@ -69,7 +69,7 @@ export default {
 		        					value: '8',
 		        				},
 		        			]
-		        		}
+		        		},
 	        		]
         		}
         		
