@@ -47,7 +47,7 @@
 			<div slot="title" class="title">
 				<h1>邀请人员</h1>
 			</div>
-			<table-list :tableColumns="tableColumns" :tableData="tableData">
+			<table-list @on-btn-click="btnClick" @on-poptip-ok="poptipOk" :tableColumns="tableColumns" :tableData="tableData">
 
 				<div slot="modalContent">
 					邀请成功
@@ -103,26 +103,22 @@
 					},
 					{
 						align: 'center',
+						width: 180,
 						title: '操作',
-						render: (h, params) => {
-							return h('div', [
-								h('Button', {
-									props: {
-										type: 'primary',
-										size: 'small'
-									},
-									style: {
-										marginRight: '5px'
-									}
-								}, '再次通知'),
-								h('Button', {
-									props: {
-										type: 'error',
-										size: 'small'
-									}
-								}, '删除名额')
-							]);
-						}
+						handle: [
+							{
+								name: '再次通知',
+								key: 'inform',
+							},
+							{
+								name: '删除名额',
+								key: 'del',
+								poptipOpen: true,
+								poptip_props: {
+									title: '您确定要删除该名额？'
+								}
+							},
+						],
 					}
 				],
 				
@@ -159,7 +155,19 @@
 			}
 		},
 		methods: { //方法
-
+			
+			btnClick(){
+				
+				this.$Message.success('通知成功');
+				
+			},
+			
+			poptipOk(){
+				
+				this.$Message.success('删除成功');
+				
+			}
+			
 		},
 		computed: { //计算属性
 

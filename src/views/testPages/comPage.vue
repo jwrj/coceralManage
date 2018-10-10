@@ -9,13 +9,15 @@
 			
 			<table-list :tableColumns="tableColumns" :tableData="tableData" @select-change="selectChange" @on-btn-click="onBtnClick">
 		
-				<div slot="header" style="width: 100%;display: flex;align-items: center;">
-			
+				<div slot="header" style="width: 100%;display: flex;align-items: center;margin-right: 10px;">
+					
+					<!--<div slot-scope="1">123123</div>-->
+					
 				    <industry-casc v-model="industryData" style="margin-right: 10px;"></industry-casc>
 				    
 				    <post-casc style="margin-right: 10px;"></post-casc>
 				    
-				    <al-cascader v-model="res_c"/>
+				    <al-cascader v-model="res_c" style="width: 240px;"/>
 		    
 				</div>
 				
@@ -54,6 +56,7 @@
 	    	<UEditor :configs='editor_config' @up_editor_content="upEditorContent"></UEditor>
 	    	
 	    </Card>
+	    
 	    
 	</div>
 	
@@ -172,6 +175,10 @@ export default {
         }
     },
     methods: {//方法
+    	
+    	abc(){
+    		
+    	},
     	
     	upEditorContent(value){
     		this.editor_content = value;

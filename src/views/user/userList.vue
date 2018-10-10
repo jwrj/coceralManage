@@ -7,7 +7,7 @@
 			<table-list :tableColumns="tableColumns" :tableData="tableData">
 				 <div slot="header" style="width: 100%;display: flex;align-items: center;">
 				    
-				    <post-casc style="width: 300px;"></post-casc>
+				    <post-casc></post-casc>
 		    
 				</div>
 			</table-list>

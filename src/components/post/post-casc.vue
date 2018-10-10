@@ -2,7 +2,7 @@
 	
 	<div>
 		
-		<Cascader v-model="cascaderValue" @on-change="cascaderChange" change-on-select filterable placeholder="选择岗位" :data="data"></Cascader>
+		<Cascader v-model="cascaderValue" @on-change="cascaderChange" change-on-select filterable placeholder="选择岗位" :data="data" style="width: 240px;"></Cascader>
 		
 	</div>
 	
@@ -80,8 +80,11 @@ export default {
     methods: {//方法
     	
     	cascaderChange(value, selectedData){
-    		console.log(value);
-    		console.log(selectedData);
+    		
+    		this.$emit('input', value);
+    		
+    		this.$emit('on-change', value, selectedData);
+    		
     	},
     	
     },
@@ -98,6 +101,8 @@ export default {
     	
 	},
     mounted () {//模板被渲染完毕之后执行
+    	
+    	this.$emit('input', this.cascaderValue);
     	
 	},
 		

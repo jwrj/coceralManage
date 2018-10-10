@@ -3,7 +3,7 @@
 	<div>
 		
 		<header class="header">
-			<slot name="header" :binEvent="selectChange"></slot>
+			<slot name="header" :binEvent="outsideEvent"></slot>
 			<Input v-if="seekShow" :search="true" enter-button clearable placeholder="搜索..." class="seek" />
 		</header>
 		
@@ -85,11 +85,6 @@ export default {
 			default: () => []
 		},
 
-		filterShow: {
-			type: Boolean,
-			default: true
-		},
-		
 		seekShow: {//搜索框控件
 			type: Boolean,
 			default: true
@@ -117,7 +112,7 @@ export default {
     },
     methods: {//方法
     	
-    	selectChange(val){
+    	outsideEvent(val){//监听外部传入的事件
     		console.log(val);
     	},
     	
@@ -241,7 +236,7 @@ export default {
 <style lang="less">
 	.my-ivu-modal-wrap{
 		position: flex !important;
-		top: 91px !important;
+		top: 93px !important;
 		transition: left 0.2s ease-in-out;
 	}
 	.leftmax{

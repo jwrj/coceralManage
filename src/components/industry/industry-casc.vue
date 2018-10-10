@@ -2,7 +2,7 @@
 	
 	<div>
 		
-		<Cascader v-model="cascaderValue" @on-change="setvalue" filterable placeholder="选择行业" :data="industryData"></Cascader>
+		<Cascader v-model="cascaderValue" @on-change="setvalue" filterable placeholder="选择行业" :data="industryData" style="width: 200px;"></Cascader>
 		
 	</div>
 	
@@ -38,9 +38,11 @@ export default {
     },
     methods: {//方法
     	
-    	setvalue(val){
+    	setvalue(value, selectedData){
     		
-    		this.$emit('input', val);
+    		this.$emit('input', value);
+    		
+    		this.$emit('on-change', value, selectedData);
     		
     	},
     	

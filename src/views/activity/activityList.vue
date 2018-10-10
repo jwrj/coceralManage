@@ -6,7 +6,14 @@
 				<h1>活动/会议列表</h1>
 				<Button class="btnSmall" size="small" type="primary" @click="createactivity">创建会议</Button>
 			</div>
-			<table-list :tableColumns="tableColumns" :tableData="tableData">
+			<table-list @on-btn-click="btnClick" :tableColumns="tableColumns" :tableData="tableData" :modalTitle="modalTitle">
+				
+				<div slot="modalContent">
+					
+					<activity-details></activity-details>
+					
+				</div>
+				
 			</table-list>
 		</Card>
 
@@ -17,10 +24,12 @@
 
 <script>
 	import tableList from '@/components/tableList/table-list.vue'
+	import activityDetails from '@/views/activity/activityDetails.vue'
 	export default {
 		name: '',
 		components: { //组件模板,
-			tableList
+			tableList,
+			activityDetails
 		},
 		props: { //组件道具（参数）
 			/* ****属性用法*****
@@ -33,6 +42,9 @@
 		},
 		data() { //数据
 			return {
+				
+				modalTitle: '标题',
+				
 				tableColumns: [{
 						title: 'ID',
 						key: 'id'
@@ -60,11 +72,13 @@
 						handle: [
 							{
 								name: '详情',
-								key: 0,
+								key: 'details',
+								modalShow: true,
 							},
 							{
 								name: '编辑',
-								key: 0,
+								key: 'edit',
+								modalShow: true,
 							},
 						],
 					}
@@ -103,9 +117,17 @@
 			}
 		},
 		methods: { //方法
+			
 			createactivity() {
 				this.$router.push('/activity/createActivity');
-			}
+			},
+			
+			btnClick(val){
+				
+				this.modalTitle = val.name;
+				
+			},
+			
 		},
 		computed: { //计算属性
 

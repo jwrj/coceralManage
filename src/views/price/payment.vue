@@ -60,9 +60,11 @@
 							<span slot="append">元</span>
 							</Input>
 						</FormItem>
+						
 						<FormItem label="时间:" prop="time">
-							<DatePicker type="date" v-model="paying.time"></DatePicker>
+							<DatePicker type="date" @on-change="dateChange" :value="paying.time"></DatePicker>
 						</FormItem>
+						
 						<FormItem label="缴纳方式:" prop="way">
 							<Select v-model="paying.way" placeholder="请选择" style="width: 200px;">
 								<Option value="wayOne">现金缴纳</Option>
@@ -170,7 +172,6 @@
 				ruleValidate: {
 					time: [{
 						required: true,
-						type: 'date',
 						message: '请选择日期',
 						trigger: 'change'
 					}],
@@ -193,19 +194,44 @@
 			}
 		},
 		methods: { //方法
-			addRecord() {
-				this.modalShow = true;
+			
+			dateChange(date){
+				
+				this.paying.time = date;
+				
 			},
-      handleSubmit(name) {
-					this.$refs[name].validate((valid) => {
-						if (valid) {
-						this.$Message.success('添加成功!');		
+			
+			addRecord() {
+				
+				this.modalShow = true;
+				
+			},
+			
+      		handleSubmit(name) {
+      			
+				this.$refs[name].validate((valid) => {
+					
+					if (valid) {
+						
+						this.$Message.success('添加成功!');
+						
 					    this.modalShow=false;
-						} else {
+					    
+					    this.tableData.push({
+							id: 1,
+							clauses: '会费',
+							paidMoney: '100',
+							time: '2018-10-09'
+						})
+					    
+					} else {
+						
 						//this.$Message.error('添加失败!');
-						}	
+						
+					}	
 				})
 			}
+      		
 		},
 		computed: { //计算属性
 

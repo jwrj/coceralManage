@@ -6,7 +6,7 @@
 					<div slot="title" class="title">
 						<h1>会员审批</h1>
 					</div>
-					<table-list :tableColumns="tableColumns" :tableData="tableData">
+					<table-list @on-poptip-ok="poptipOk" :tableColumns="tableColumns" :tableData="tableData">
 		
 					</table-list>
 				</Card>
@@ -62,6 +62,7 @@ export default {
     				handle: [
     					{
     						name: '通过',
+    						key: 'pass',
     						poptipOpen: true,
     						poptip_props: {
     							title: '您确认通过吗？'
@@ -69,6 +70,7 @@ export default {
     					},
     					{
     						name: '拒绝',
+    						key: 'reject',
     						poptipOpen: true,
     						button_props: {
     							type: 'error',
@@ -108,6 +110,21 @@ export default {
         }
     },
     methods: {//方法
+    	
+    	poptipOk(val){
+    		
+    		if(val.key === 'pass'){
+    			
+    			this.$Message.success('成功通过');
+    			
+    		}else if(val.key === 'reject'){
+    			
+    			this.$Message.success('拒绝成功');
+    			
+    		}
+    		
+    		
+    	},
     	
     },
     computed: {//计算属性
