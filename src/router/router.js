@@ -166,15 +166,6 @@ export default [
 				},
 				component: () => import('@/views/activity/createActivity.vue')
 			},
-			{
-				path: 'activityDetails',
-				name: 'activityDetails',
-				meta: {
-					title: '活动/会议详情',
-					icon: 'md-alarm',
-				},
-				component: () => import('@/views/activity/activityDetails.vue')
-			}
 
 		]
 	},
