@@ -100,11 +100,6 @@ export default {
     data () {//数据
         return {
         	
-        	obj: {
-        		abc: 123,
-        		ccc: 456
-        	},
-        	
         	modalShow: false,
         	
         	checkedData: [],
@@ -113,7 +108,7 @@ export default {
     },
     methods: {//方法
     	
-    	slotEvent(val){//监听外部传入的事件
+    	slotEvent(val){//插槽事件
     		
     		console.log(val);
     		console.log('执行了子组件的事件');
