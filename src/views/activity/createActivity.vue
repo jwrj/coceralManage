@@ -10,10 +10,17 @@
 					<Input v-model="activity.name" style="width: 300px;"></Input>
 				</FormItem>
 				<FormItem label="开始时间" prop="starting">
-					<DatePicker v-model="activity.starting" type="datetime" format="yyyy-MM-dd HH:mm"></DatePicker>
+					<DatePicker :value="activity.starting" 
+					type="datetime" 
+					@on-change="startChange"
+					format="yyyy-MM-dd HH:mm">
+					</DatePicker>
 				</FormItem>
 				<FormItem label="结束时间" prop="ending">
-					<DatePicker v-model="activity.ending" type="datetime" format="yyyy-MM-dd HH:mm"></DatePicker>
+					<DatePicker :value="activity.ending" 
+					type="datetime" 
+					@on-change="endChange"
+					format="yyyy-MM-dd HH:mm"></DatePicker>
 				</FormItem>
 				<FormItem label="会议地址">
 					<Input v-model="activity.where" style="width: 400px;"></Input>
@@ -60,8 +67,12 @@
     </div>
 		</Card>
 
-		<Modal v-model="showImport" :mask-closable="false" title="会员库" :width="700">
-			<table-list :tableColumns="tableColumns">
+		<Modal v-model="showImport" :mask-closable="false" title="会员库" width="80%">
+			<table-list 
+			:tableColumns="tableColumns" 
+			:tableData="row"
+			@select-change="selectEnd"
+			>
 				<div slot="header" style="width: 100%;display: flex;align-items: center;">
 
 					<post-casc style="margin-right: 10px;"></post-casc>
@@ -119,13 +130,11 @@
 					}],
 					starting: [{
 						required: true,
-						type: 'date',
 						message: '请选择开始时间',
 						trigger: 'change'
 					}],
 					ending: [{
 						required: true,
-						type: 'date',
 						message: '请选择结束时间',
 						trigger: 'change'
 					}],
@@ -169,22 +178,52 @@
 						IDNumber: '450123*****63541245'
 					},
 					{
-						id: 1,
-						name: '张三',
+						id: 4,
+						name: '李四',
 						sex: '男',
 						mobilePhone: '13800138000',
 						IDNumber: '450123*****63541245'
 					},
 					{
-						id: 1,
-						name: '张三',
+						id: 9,
+						name: '麻九',
 						sex: '男',
 						mobilePhone: '13800138000',
 						IDNumber: '450123*****63541245'
 					},
 					{
-						id: 1,
-						name: '张三',
+						id: 7,
+						name: '田七',
+						sex: '男',
+						mobilePhone: '13800138000',
+						IDNumber: '450123*****63541245'
+					},
+				],
+				row: [
+					{
+						id: 2,
+						name: '牛二',
+						sex: '男',
+						mobilePhone: '13800138000',
+						IDNumber: '450123*****63541245'
+					},
+					{
+						id: 6,
+						name: '徐六',
+						sex: '男',
+						mobilePhone: '13800138000',
+						IDNumber: '450123*****63541245'
+					},
+					{
+						id: 8,
+						name: '吴八',
+						sex: '男',
+						mobilePhone: '13800138000',
+						IDNumber: '450123*****63541245'
+					},
+					{
+						id: 10,
+						name: '陆拾',
 						sex: '男',
 						mobilePhone: '13800138000',
 						IDNumber: '450123*****63541245'
@@ -207,6 +246,19 @@
 			},
 			get_editor_content(v) {
 				this.editor_content = v;
+			},
+			endChange(date){ //日期转换
+				this.activity.ending = date;
+			},
+			startChange(date){//日期转换
+				this.activity.starting = date;
+			},
+			selectEnd(list){ //bug1:重复添加？  bug2:勾选了=>push  勾选了然后取消呢？？
+			//list.forEach(item => {
+			//this.tableData.push(item)
+			//})
+			console.log(list)
+      this.tableData=list
 			}
 		},
 		computed: { //计算属性
