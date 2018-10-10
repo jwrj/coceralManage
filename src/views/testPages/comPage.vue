@@ -9,11 +9,11 @@
 			
 			<table-list :tableColumns="tableColumns" :tableData="tableData" @select-change="selectChange" @on-btn-click="onBtnClick">
 		
-				<div slot="header" style="width: 100%;display: flex;align-items: center;margin-right: 10px;">
+				<div slot="header" slot-scope="{ slotEvent }" style="width: 100%;display: flex;align-items: center;margin-right: 10px;">
 					
-					<!--<div slot-scope="1">123123</div>-->
+					<Button @click="slotEvent('我是传入的参数abc')">点击执行插槽传出的事件</Button>
 					
-				    <industry-casc v-model="industryData" style="margin-right: 10px;"></industry-casc>
+				    <industry-casc v-model="industryData" @on-change style="margin-right: 10px;"></industry-casc>
 				    
 				    <post-casc style="margin-right: 10px;"></post-casc>
 				    

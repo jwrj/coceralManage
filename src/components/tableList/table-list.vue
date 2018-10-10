@@ -3,7 +3,7 @@
 	<div>
 		
 		<header class="header">
-			<slot name="header" :binEvent="outsideEvent"></slot>
+			<slot name="header" :slotEvent="slotEvent"></slot>
 			<Input v-if="seekShow" :search="true" enter-button clearable placeholder="搜索..." class="seek" />
 		</header>
 		
@@ -56,10 +56,6 @@
 
 <script>
 
-/**
- * slot-scope
- */
-
 import { buttonItem } from './handleButton.js'
 
 export default {
@@ -104,6 +100,11 @@ export default {
     data () {//数据
         return {
         	
+        	obj: {
+        		abc: 123,
+        		ccc: 456
+        	},
+        	
         	modalShow: false,
         	
         	checkedData: [],
@@ -112,8 +113,11 @@ export default {
     },
     methods: {//方法
     	
-    	outsideEvent(val){//监听外部传入的事件
+    	slotEvent(val){//监听外部传入的事件
+    		
     		console.log(val);
+    		console.log('执行了子组件的事件');
+    		
     	},
     	
     	initColumns(){//初始化表头数据
