@@ -1,10 +1,10 @@
 <template>
 
-	<div style="height: 53px;display: flex;align-items: center;overflow: hidden;">
+	<div class="breadcrumb-box">
 			
 		<Icon @click.native="collapsedSider" :class="{'rotate-icon': isCollapsed}" class="menu-collapsed-icon" type="md-menu" size="28"></Icon>
 		
-		<div style="white-space:nowrap;overflow: hidden;margin-right: 16px;">
+		<div class="breadcrumb-box-breadcrumb">
 	
 			<Breadcrumb>
 				<template v-for="item in breadCrumbList">
@@ -17,17 +17,34 @@
 	
 		</div>
 		
-		<div style="margin: 0 46px 0 auto;flex-shrink: 0;">
-			<Dropdown placement="bottom-end">
-		        <a style="display: inline-block;">
-	           		<Avatar icon="ios-person" />
-	           		<Icon size="20" type="md-arrow-dropdown" />
-		        </a>
-		        <DropdownMenu slot="list">
-		            <DropdownItem>设置</DropdownItem>
-		            <DropdownItem>退出登录</DropdownItem>
-		        </DropdownMenu>
-		    </Dropdown>
+		<div class="breadcrumb-box-right">
+			
+			<div style="margin-right: 16px;">
+				<Poptip placement="left">
+					<Button type="primary" size="small">切换商会</Button>
+			        <div slot="content">
+						<Select v-model="chamber" filterable size="small">
+			                <Option value="广西湖北商会">广西湖北商会</Option>
+			                <Option value="商会2">商会2</Option>
+			                <Option value="商会3">商会3</Option>
+			            </Select>
+			        </div>
+			    </Poptip>
+			</div>
+			
+			<div style="flex-shrink: 0;">
+				<Dropdown placement="bottom-end">
+			        <a style="display: inline-block;">
+		           		<!--<Avatar icon="ios-person" />-->
+		           		<span>{{chamber}}</span>
+		           		<Icon size="20" type="md-arrow-dropdown" />
+			        </a>
+			        <DropdownMenu slot="list">
+			            <DropdownItem>退出登录</DropdownItem>
+			        </DropdownMenu>
+			    </Dropdown>
+			</div>
+		    
         </div>
 		
 	</div>
@@ -55,6 +72,8 @@ export default {
 	},
 	data() { //数据
 		return {
+			
+			chamber: '广西湖北商会',
 			
 		}
 	},
@@ -92,5 +111,22 @@ export default {
 	}
 	.rotate-icon {
 		transform: rotate(-90deg);
+	}
+	.breadcrumb-box{
+		height: 53px;
+		display: flex;
+		align-items: center;
+		overflow: hidden;
+		.breadcrumb-box-breadcrumb{
+			white-space:nowrap;
+			overflow: hidden;
+			margin-right: 16px;
+		}
+		.breadcrumb-box-right{
+			margin: 0 46px 0 auto;
+			flex-shrink: 0;
+			display: flex;
+			align-items: center;
+		}
 	}
 </style>

@@ -1,16 +1,12 @@
 <template>
 	
 	<div>
-		
+		{{postValue}}
 		<Card style="margin-bottom: 16px;">
 	    	
 	    	<h1 slot="title">岗位选择器</h1>
 	    	
-    		<transition-group name="fade" tag="div" style="display: flex;align-items: center;">
-		    	<div v-for="(item, index) in newPostData" :key="index" style="margin-right: 6px;display: flex;flex-direction: column;">
-		    		<div v-for="child in item" @click="postClick(child, index)" :class="{active: child.value === selected[index]}" style="background: #ccc;padding: 6px 8px;margin: 4px 0;cursor: pointer;">{{child.label}}</div>
-		    	</div>
-			</transition-group>
+    		<post-casc v-model="postValue"></post-casc>
 		    	
 	    </Card>
 		
@@ -26,8 +22,6 @@
 					<Button @click="slotEvent('我是传入的参数abc')">点击执行插槽传出的事件</Button>
 					
 				    <industry-casc v-model="industryData" @on-change style="margin-right: 10px;"></industry-casc>
-				    
-				    <post-casc style="margin-right: 10px;"></post-casc>
 				    
 				    <al-cascader v-model="res_c" style="width: 240px;"/>
 		    
@@ -109,63 +103,7 @@ export default {
     data () {//数据
         return {
         	
-        	selected: [],
-        	
-        	selectedData: [],
-        	
-        	newPostData: [],
-        	
-        	postData: [
-        	
-        		{
-        			label: '广西湖北商会',
-	        		value: '0',
-	        		children: [
-	        			{
-		        			label: '会员大会',
-		        			value: '1',
-		        			children: [
-		        				{
-		        					label: '名誉会长',
-		        					value: '2',
-		        				},
-		        				{
-		        					label: '理事大会',
-		        					value: '3',
-		        					children: [
-		        						{
-		        							label: '秘书长',
-		        							value: '4',
-		        						},
-		        						{
-		        							label: '监事委员会',
-		        							value: '5',
-		        						},
-		        						{
-		        							label: '常委执委会',
-		        							value: '6',
-		        						},
-		        						{
-		        							label: '理事长',
-		        							value: '7',
-		        						},
-		        					]
-		        				},
-		        				{
-		        					label: '总顾问',
-		        					value: '8',
-		        				},
-		        			]
-		        		},
-	        		]
-        		}
-        		
-        	],
-        	
-        	
-        	
-        	
-        	
+        	postValue: [],
         	
         	res_c: [],
         	
@@ -245,34 +183,6 @@ export default {
     },
     methods: {//方法
     	
-    	postClick(item, index){
-    		
-    		if(item.children && item.children.length > 0){
-    			
-    			this.newPostData.splice(index+1,this.newPostData.length-(index+1));
-    			
-		    	this.newPostData.splice(index+1, 0, item.children);
-		    	
-    		}else{
-    			
-    			this.newPostData.splice(index+1,this.newPostData.length-(index+1));
-    			
-    		}
-    		
-    		this.selectedData.splice(index+1, this.selectedData.length-(index+1));
-    		
-    		this.selectedData.splice(index, 1, {label: item.label,value: item.value});
-    		
-    		this.selected.splice(index+1, this.selected.length-(index+1));
-    		
-    		this.selected.splice(index, 1, item.value);
-    		
-    		console.log(this.newPostData);
-    		console.log(this.selected);
-    		console.log(this.selectedData);
-	    	
-    	},
-    	
     	upEditorContent(value){
     		this.editor_content = value;
     	},
@@ -300,31 +210,10 @@ export default {
 	},
     mounted () {//模板被渲染完毕之后执行
     	
-    	let newArr = [];
-    	
-    	this.postData.forEach(item => {
-    		
-    		newArr.push([item]);
-    		
-    	});
-    	
-    	this.newPostData = newArr;
-    	
 	},
 	
 }
 </script>
 
 <style scoped lang="less">
-
-.fade-enter-active,.fade-leave-active {
-	transition: opacity .5s;
-}
-
-.fade-enter,.fade-leave-to{
-	opacity: 0;
-}
-.active{
-	background: yellow !important;
-}
 </style>

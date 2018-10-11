@@ -1,13 +1,20 @@
 <template>
 	
 	<div>
-		<Card>
-			
-			<h1 slot="title">给商会/协会配置岗位</h1>
-			<post-config></post-config>
-			
-		</Card>
 		
+		<div style="border: 1px solid red;height: 600px;">
+			
+			<Split v-model="split1">
+	            <div slot="left" style="overflow-y: auto;overflow-x: hidden;height: 100%;">
+	                <post-config></post-config>
+	            </div>
+	            <div slot="right" style="margin-left: 8px;overflow-y: auto;overflow-x: hidden;height: 100%;">
+	            	<div>人员配置列表</div>
+	            	<div>届次配置列表</div>
+	            </div>
+	        </Split>
+	        
+		</div>
 		
 	</div>
 	
@@ -35,6 +42,8 @@ export default {
 	},
     data () {//数据
         return {
+        	
+        	split1: 0.5,
         	
         }
     },

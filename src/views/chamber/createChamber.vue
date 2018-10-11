@@ -2,9 +2,9 @@
 
 	<div class="createCham">
 		
-		<Card>
+		<!--<Card>
 			
-			<h1 slot="title">创建商/协会</h1>
+			<h1 slot="title">创建商/协会</h1>-->
 			
 			<Form ref="formInstance" :model="formData" :rules="ruleData" :label-width="100">
 				
@@ -103,7 +103,7 @@
 				<Button type="primary" @click="submit('formInstance')">立即创建</Button>
 			</div>
 			
-		</Card>
+		<!--</Card>-->
 		
         <Modal v-model="modalShow" width="80%">
 	        <p slot="header">选择文件</p>

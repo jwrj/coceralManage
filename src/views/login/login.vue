@@ -2,55 +2,49 @@
 	
 	<div style="height: 100%;background: #001529;display: flex;">
 		
-		<Card style="width: 400px;margin: auto;">
+		<Card style="width: 50%;margin: auto;">
 			
-			<h1 slot="title">选择商会进入系统</h1>
+			<Divider orientation="left">申请记录列表</Divider>
+			<Table :columns="columns1" :data="data1"></Table>
 			
-			<Form ref="formInline" :model="formInline" :rules="ruleInline" :label-width="70">
+			<Divider orientation="left">选择商会进入系统</Divider>
+			<div style="width: 50%;margin: auto;">
 				
-				<FormItem prop="chamberId" label="选择商会">
+				<Form ref="formInline" :model="formInline" :rules="ruleInline" :label-width="70">
 					
-					<Select v-model="formInline.chamberId" filterable clearable placeholder="选择您已加入的商会">
-				        <Option :value="1">商会1</Option>
-				        <Option :value="2">商会2</Option>
-				        <Option :value="3">商会3</Option>
-				    </Select>
+					<FormItem prop="identity" label="选择">
+						
+						<RadioGroup v-model="formInline.identity">
+					        <Radio :label="1">我加入的商会</Radio>
+					        <Radio :label="2">我创建的商会</Radio>
+					    </RadioGroup>
+					    
+					</FormItem>
 					
-				</FormItem>
+					<FormItem prop="chamberId" label="选择商会">
+						
+						<Select v-model="formInline.chamberId" filterable clearable :placeholder="placeholder">
+					        <Option :value="1">商会1</Option>
+					        <Option :value="2">商会2</Option>
+					        <Option :value="3">商会3</Option>
+					    </Select>
+						
+					</FormItem>
+					
+				</Form>
 				
-			</Form>
-			
-			<div style="text-align: center;">
-				<Button type="primary" long @click="login('formInline')">确定</Button>
+				<div style="text-align: center;">
+					<Button type="primary" long @click="login('formInline')">确定</Button>
+				</div>
+				
+				<div style="margin-top: 16px;text-align: center;">
+					没有商会
+					<a @click="modalOpen">{{text}}</a>
+				</div>
+				
 			</div>
 			
-			<div style="margin-top: 16px;text-align: center;">没有商会<a @click="openChamberList = true">立即申请加入</a></div>
-			
 		</Card>
-		
-		<!--<Drawer
-            title="商会列表"
-            v-model="openChamberList"
-            width="50%"
-            :mask-closable="false"
-        >
-        	<table-list :tableColumns="tableColumns" :tableData="tableData">
-	        	
-	        	<Row slot="header" style="width: 100%;margin-right: 10px;">
-	        		<Col span="8">
-	        			<RadioGroup v-model="type">
-					        <Radio label="1">商会</Radio>
-					        <Radio label="2">协会</Radio>
-					    </RadioGroup>
-	        		</Col>
-	        		<Col span="16">
-	        			<al-cascader v-model="res_c" style="max-width: 300px;" />
-	        		</Col>
-	        	</Row>
-	        	
-			</table-list>
-			
-        </Drawer>-->
 		
 		<Modal
 	        v-model="openChamberList"
@@ -61,19 +55,7 @@
 	       	
 	       	<Button slot="close">关闭</Button>
 	        
-	        <table-list :tableColumns="tableColumns" :tableData="tableData" @on-btn-click="tabBtnClick">
-	        	
-	        	<!--<Row slot="header" style="width: 100%;margin-right: 10px;">
-	        		<Col span="8">
-	        			<RadioGroup v-model="type">
-					        <Radio label="1">商会</Radio>
-					        <Radio label="2">协会</Radio>
-					    </RadioGroup>
-	        		</Col>
-	        		<Col span="16">
-	        			<al-cascader v-model="res_c" style="max-width: 300px;" />
-	        		</Col>
-	        	</Row>-->
+	        <table-list v-if="formInline.identity === 1" :tableColumns="tableColumns" :tableData="tableData" @on-btn-click="tabBtnClick">
 	        	
 	        	<div slot="header" style="width: 100%;display: flex;align-items: center;">
 					
@@ -88,6 +70,8 @@
 				</div>
 	        	
 			</table-list>
+			
+			<create-chamber v-if="formInline.identity === 2"></create-chamber>
 	        
 	    </Modal>
 		
@@ -99,10 +83,13 @@
 
 import tableList from '@/components/tableList/table-list.vue'
 
+import createChamber from '@/views/chamber/createChamber.vue';
+
 export default {
 	name: 'login',
 	components:{//组件模板
 		tableList,
+		createChamber
 	},
 	props:{//组件道具（参数）
 		/* ****属性用法*****
@@ -119,10 +106,14 @@ export default {
         	openChamberList: false,
         	
         	formInline: {
+        		identity: 1,
                 chamberId: '',
             },
             
             ruleInline: {
+                identity: [
+                    { type: 'number', required: true, message: '请选择您的身份', trigger: 'change' }
+                ],
                 chamberId: [
                     { type: 'number', required: true, message: '请选择商会', trigger: 'change' }
                 ],
@@ -191,11 +182,63 @@ export default {
     				secretary: '李四',
     				date: '2018-10-08'
     			},
-    		]
+    		],
+    		
+    		columns1: [
+			    {
+			        title: '名称',
+			        key: 'name'
+			    },
+			    {
+			        title: '会长',
+			        key: 'president'
+			    },
+			    {
+			        title: '秘书长',
+			        key: 'secretary'
+			    },
+			    {
+			        title: '审核状态',
+			        key: 'state'
+			    },
+			    {
+			        title: '申请日期',
+			        key: 'date'
+			    },
+            ],
+            data1: [
+                {
+    				name: '广西湖北商会1',
+    				president: '张三',
+    				secretary: '李四',
+    				state: '已通过',
+    				date: '2018-10-08'
+    			},
+                {
+    				name: '广西湖北商会2',
+    				president: '张三',
+    				secretary: '李四',
+    				state: '审核中',
+    				date: '2018-10-08'
+    			},
+                {
+    				name: '广西湖北商会3',
+    				president: '张三',
+    				secretary: '李四',
+    				state: '已拒绝',
+    				date: '2018-10-08'
+    			},
+            ]
         	
         }
     },
     methods: {//方法
+    	
+    	modalOpen(){
+    		
+    		this.openChamberList = true;
+    		
+    	},
     	
     	tabBtnClick(params){
     		
@@ -239,7 +282,35 @@ export default {
     	
     },
     computed: {//计算属性
+        
+        placeholder(){
         	
+        	let txt = '选择您已加入的商会';
+        	
+        	if(this.formInline.identity === 1){
+        		txt = '选择您已加入的商会';
+        	}else if(this.formInline.identity === 2){
+        		txt = '选择您已创建的商会';
+        	}
+        	
+        	return txt;
+        	
+        },
+        
+        text(){
+        	
+        	let txt = '立即申请加入';
+        	
+        	if(this.formInline.identity === 1){
+        		txt = '立即申请加入';
+        	}else if(this.formInline.identity === 2){
+        		txt = '立即创建';
+        	}
+        	
+        	return txt;
+        	
+        }
+        
     },
     watch: {//监测数据变化
     	

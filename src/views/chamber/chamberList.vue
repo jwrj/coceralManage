@@ -4,27 +4,57 @@
 		
 		<Card>
 			
+			<div slot="title" style="display: flex;align-items: center;">
+				<h1>商协会列表</h1>
+				<Button style="margin-left: 10px;" type="primary" size="small" @click="establish">创建商会</Button>
+			</div>
+			
 			<table-list :tableColumns="tableColumns" :tableData="tableData" :modalTitle="modalTitle" @on-btn-click="onBtnClick">
 				
-				<div slot="header" style="margin-right: 10px;">
+				<div slot="header" style="margin-right: 10px;display: flex;align-items: center;">
 					
-					<Select v-model="type" placeholder="选择类型" style="width:60px">
-				        <Option value="0">全部</Option>
-				        <Option value="1">商会</Option>
-				        <Option value="2">协会</Option>
-				    </Select>
+					<div style="border: 1px solid #dcdee2;margin-right: 10px;padding: 4px 7px;border-radius: 4px;">
+						<RadioGroup>
+					        <Radio label="1">全部</Radio>
+					        <Radio label="2">商会</Radio>
+					        <Radio label="3">协会</Radio>
+					    </RadioGroup>
+					</div>
 				    
+				    <div style="border: 1px solid #dcdee2;padding: 4px 7px;border-radius: 4px;">
+						<RadioGroup>
+					        <Radio label="1">我创建的商会</Radio>
+					        <Radio label="2">我加入的商会</Radio>
+					    </RadioGroup>
+					</div>
+					
 				</div>
 				
 				<div slot="modalContent">
 					
-					<post-config v-if="btnKey === 'config'"></post-config>
+					<post-config v-if="btnKey === 'config'" style="width: 50%;"></post-config>
+					
+					<create-chamber v-if="btnKey === 'details'"></create-chamber>
+					
+					<create-chamber v-if="btnKey === 'edit'"></create-chamber>
+					
+					<approve v-if="btnKey === 'approval'"></approve>
+					
+					<user-list v-if="btnKey === 'member'"></user-list>
 					
 				</div>
 				
 			</table-list>
 			
 		</Card>
+		
+		<Modal v-model="modal2" width="80%" :footer-hide="true">
+	        <p slot="header">创建商/协会</p>
+	        <create-chamber></create-chamber>
+	        <!--<div slot="footer">
+	        	
+	        </div>-->
+	    </Modal>
 		
 	</div>
 	
@@ -36,11 +66,20 @@ import tableList from '@/components/tableList/table-list.vue';
 
 import postConfig from '@/components/postConfig/post-config.vue';//岗位配置
 
+import createChamber from '@/views/chamber/createChamber.vue';
+
+import approve from '@/views/chamber/approve.vue';
+
+import userList from '@/views/user/userList.vue';
+
 export default {
 	name: 'chamberList',
 	components:{//组件模板
 		tableList,
-		postConfig
+		postConfig,
+		createChamber,
+		approve,
+		userList
 	},
 	props:{//组件道具（参数）
 		/* ****属性用法*****
@@ -53,6 +92,8 @@ export default {
 	},
     data () {//数据
         return {
+        	
+        	modal2: false,
         	
         	type: '0',
         	
@@ -82,7 +123,8 @@ export default {
     				key: 'date'
     			},
     			{
-    				width: 180,
+    				align: 'center',
+    				width: 300,
     				title: '操作',
     				handle: [
     					{
@@ -147,6 +189,12 @@ export default {
     		console.log(val);
     		this.btnKey = val.key;
     		this.modalTitle = val.params.row.name + '（' + val.name + '）';
+    		
+    	},
+    	
+    	establish(){
+    		
+    		this.modal2 = true;
     		
     	},
     	

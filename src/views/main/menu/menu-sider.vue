@@ -34,7 +34,7 @@
 		width="auto"
 		:active-name="$route.meta.highlightName || $route.name"
 		:open-names="currentOpenNames"
-		:accordion="true"
+		:accordion="false"
 		@on-select="menuItemClick"
 		>
 			<template v-for="item in menuList">
@@ -157,10 +157,10 @@ export default {
 			
 			openNamesArr.splice(openNamesArr.length-1,1);
 			
-			this.$nextTick(() => {
-				this.$refs.menuInstance.updateOpened();
-				this.$refs.menuInstance.updateActiveName();
-			});
+//			this.$nextTick(() => {
+//				this.$refs.menuInstance.updateOpened();
+//				this.$refs.menuInstance.updateActiveName();
+//			});
 			
 			return openNamesArr;
 			

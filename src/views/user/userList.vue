@@ -63,6 +63,16 @@ export default {
     				title: '任职时间',
     				key: 'time'
     			},
+    			{
+    				align: 'center',
+    				width: 100,
+    				title: '操作',
+    				handle: [
+    					{
+    						name: '详细资料',
+    					},
+    				],
+    			}
     		],
     		
     		tableData: [

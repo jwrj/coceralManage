@@ -57,9 +57,12 @@ export default {
     			},
     			{
     				align: 'center',
-    				width: 180,
+    				width: 200,
     				title: '操作',
     				handle: [
+    					{
+    						name: '详细资料',
+    					},
     					{
     						name: '通过',
     						key: 'pass',

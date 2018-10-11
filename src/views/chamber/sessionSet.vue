@@ -1,11 +1,14 @@
 <template>
 
 	<div>
+		
 		<Card>
+			
 			<div slot="title" class="title">
 				<h1>届次配置</h1>
-				<Button class="btnSmall" size="small" type="primary" @click="addSession">添加届次</Button>
+				<Button style="margin-left: 10px;" size="small" type="primary" @click="addSession">添加届次</Button>
 			</div>
+			
 			<table-list :tableColumns="tableColumns" :tableData="tableData">
 
 				<div slot="header" style="width: 100%;display: flex;align-items: center;">
@@ -20,36 +23,44 @@
 			title="添加届次"
 			footer-hide>
 				<Form :model="formItem" :label-width="80">
-        <FormItem label="届次名称:">
-            <Input v-model="formItem.jc" placeholder="Enter something..."></Input>
-        </FormItem>
-		<FormItem label="开始时间:">
-			<DatePicker 
-			:value="formItem.startTime" 
-			type="date"
-			@on-change="start"
-			>
-			</DatePicker>
-		</FormItem>
-		<FormItem label="到期时间:">
-			<DatePicker 
-			:value="formItem.expirationTime" 
-			type="date"
-			@on-change="end"
-			>
-			</DatePicker>
-		</FormItem>
-		<FormItem label="会费标准:">
-			<Input v-model="formItem.criterion" placeholder="Enter something..."></Input>
-		</FormItem>				<FormItem>
-					<Button type="primary" size="large" @click.stop="add">确定添加</Button>
-				</FormItem>
+					
+			        <FormItem label="届次名称:">
+			            <Input v-model="formItem.jc" placeholder="Enter something..." style="width: 240px;"></Input>
+			        </FormItem>
+			        
+					<FormItem label="开始时间:">
+						<DatePicker 
+						:value="formItem.startTime" 
+						type="date"
+						@on-change="start"
+						style="width: 240px;"
+						>
+						</DatePicker>
+					</FormItem>
+					
+					<FormItem label="到期时间:">
+						<DatePicker 
+						:value="formItem.expirationTime" 
+						type="date"
+						@on-change="end"
+						style="width: 240px;"
+						>
+						</DatePicker>
+					</FormItem>
+					
+					<FormItem label="会费标准:">
+						<Input v-model="formItem.criterion" placeholder="Enter something..." style="width: 240px;"></Input>
+					</FormItem>
+					
+					<FormItem>
+						<Button type="primary" size="large" @click.stop="add">确定添加</Button>
+					</FormItem>
+					
 				</Form>
 
 			</Modal>
 			
 		</Card>
-
 
 	</div>
 
@@ -103,6 +114,19 @@
 						title: '会费标准',
 						key: 'criterion'
 					},
+					{
+	    				align: 'center',
+	    				width: 140,
+	    				title: '操作',
+	    				handle: [
+	    					{
+	    						name: '编辑',
+	    					},
+	    					{
+	    						name: '删除',
+	    					},
+	    				],
+	    			}
 				],
 				
 				tableData: [
@@ -206,10 +230,6 @@
 </script>
 
 <style scoped lang="less">
-	.btnSmall {
-		margin-left: auto;
-	}
-
 	.title {
 		display: flex;
 		align-items: center;
