@@ -8,18 +8,79 @@
 				<h1>给{{chamber}}的岗位配置人员</h1>
 			</div>
 			
-			<table-list :tableColumns="tableColumns" :tableData="tableData" @on-poptip-ok="poptipOk">
-				<div slot="header" style="width: 100%;display: flex;align-items: center;">
+			<div>
+				
+			    <Form :label-width="80">
 					
-				    <post-casc></post-casc>
-					&nbsp;
-					&nbsp;
-					<Button type="primary" @click="addStaff">添加/追加人员</Button>
+					<Row>
+						<Col span="12">
+							
+							<FormItem label="岗位">
+								<post-casc style="width: 240px;"></post-casc>
+							</FormItem>
+							
+							<FormItem label="届次">
+								<Select placeholder="选择届次" style="width:240px">
+							        <Option value="1">第1届</Option>
+							        <Option value="2">第2届</Option>
+							        <Option value="3">第3届</Option>
+							        <Option value="4">第4届</Option>
+							    </Select>
+							</FormItem>
+							
+						</Col>
+						<Col span="12">
+							
+							<FormItem label="任职时间">
+								<DatePicker placeholder="选择时间" type="date" style="width: 240px;"></DatePicker>
+							</FormItem>
+							
+							<FormItem label="相关附件">
+								<Input placeholder="比如任命通知 / coc云盘的附件链接等等" style="width: 240px;"></Input>
+							</FormItem>
+							
+						</Col>
+					</Row>
 					
+					<FormItem label="已选会员">
+						<div style="width: 240px;">
+							<Poptip placement="bottom-start">
+								<Button type="primary" size="small">从会员列表选择</Button>
+								<userList slot="content"></userList>
+							</Poptip>
+						</div>
+						<div>
+							<Tag closable>张三</Tag>
+							<Tag closable>李四</Tag>
+							<Tag closable>王五</Tag>
+							<Tag closable>张三</Tag>
+							<Tag closable>李四</Tag>
+							<Tag closable>王五</Tag>
+						</div>
+					</FormItem>
+					
+				</Form>
+				
+				<div style="text-align: center;padding-bottom: 16px;">
+					<Button type="primary">添加人员</Button>
 				</div>
-			</table-list>
+				
+			</div>
 			
-			<staff-modal ref="staffM" @addstaff="getStaff"></staff-modal>
+			
+			<Divider orientation="left">
+				<Tag color="cyan">
+					会员大会
+					<Icon type="md-arrow-forward" />
+					理事大会
+					<Icon type="md-arrow-forward" />
+					秘书长
+				</Tag>
+				<Tag color="volcano">第1届</Tag>
+				<span>人员列表（这里会根据上面选择的岗位和届次来列出数据）</span>
+			</Divider>
+			
+			<table-list :tableColumns="tableColumns" :tableData="tableData" @on-poptip-ok="poptipOk"></table-list>
 			
 		</Card>
 		
@@ -29,14 +90,14 @@
 
 <script>
 	import tableList from '@/components/tableList/table-list.vue'
-	import staffModal from '@/views/chamber/component/staffModal'
 	import postCasc from '@/components/post/post-casc.vue';
+	import userList from '@/views/user/userList.vue';
 export default {
 	name: 'staffSet',
 	components:{//组件模板,
 		tableList,
-		staffModal,
-		postCasc
+		postCasc,
+		userList
 	},
 	props:{//组件道具（参数）
 		/* ****属性用法*****
@@ -58,7 +119,7 @@ export default {
     data () {//数据
         return {
         	
-        	modal12: false,
+        	split1: 0.5,
         	
         	modalShow:false,
         	
@@ -129,19 +190,56 @@ export default {
     				link: '查看'
     			},
     		],
+    		
+			columns1: [
+                {
+                    title: 'Name',
+                    key: 'name'
+                },
+                {
+                    title: 'Age',
+                    key: 'age'
+                },
+                {
+                    title: 'Address',
+                    key: 'address'
+                }
+            ],
+            data1: [
+                {
+                    name: 'John Brown',
+                    age: 18,
+                    address: 'New York No. 1 Lake Park',
+                    date: '2016-10-03'
+                },
+                {
+                    name: 'Jim Green',
+                    age: 24,
+                    address: 'London No. 1 Lake Park',
+                    date: '2016-10-01'
+                },
+                {
+                    name: 'Joe Black',
+                    age: 30,
+                    address: 'Sydney No. 1 Lake Park',
+                    date: '2016-10-02'
+                },
+                {
+                    name: 'Jon Snow',
+                    age: 26,
+                    address: 'Ottawa No. 2 Lake Park',
+                    date: '2016-10-04'
+                }
+            ]
         	
         }
     },
     methods: {//方法
-    	addStaff(){
-			//this.modalShow=true;
-			//this.$store.commit('showstaffModal',this.modalShow)
-			this.$refs.staffM.show=true;
-			//console.log(this.$store.state.cham.showstaff)
-		},
+    	
 		getStaff(list){
 			this.tableData.push(list)
 		},
+		
 		poptipOk(){
 			this.$Message.success('卸任成功');
 		},
@@ -207,4 +305,11 @@ export default {
 			display: flex;
 			align-items: center;
 		}
+		.demo-split{
+        height: 200px;
+        border: 1px solid #dcdee2;
+    }
+    .demo-split-pane{
+        padding: 10px;
+    }
 </style>

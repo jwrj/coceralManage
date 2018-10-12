@@ -2,16 +2,13 @@
 	
 	<div>
 		
-		<Card>
-			
-			<table-list :tableColumns="tableColumns" :tableData="tableData">
-				 <div slot="header" style="width: 100%;display: flex;align-items: center;">
-				    
-				    <post-casc></post-casc>
-		    
-				</div>
-			</table-list>
-		</Card>
+		<table-list :tableColumns="tableColumns" :tableData="tableData">
+			 <div slot="header" style="width: 100%;display: flex;align-items: center;">
+			    
+			    <post-casc></post-casc>
+	    
+			</div>
+		</table-list>
 		
 	</div>
 	
@@ -40,26 +37,35 @@ export default {
     		
     		tableColumns: [
     			{
+    				width: 60,
+    				type: 'selection'
+    			},
+    			{
     				title: 'ID',
     				key: 'id'
     			},
     			{
+    				width: 120,
     				title: '姓名',
     				key: 'name'
     			},
     			{
+    				width: 120,
     				title: '公司',
     				key: 'company'
     			},
     			{
+    				width: 120,
     				title: '手机号',
     				key: 'mobilePhone'
     			},
     			{
+    				width: 100,
     				title: '会内职务',
     				key: 'duty'
     			},
     			{
+    				width: 120,
     				title: '任职时间',
     				key: 'time'
     			},

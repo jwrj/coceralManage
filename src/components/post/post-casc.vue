@@ -4,11 +4,13 @@
 		
 		<!--<Cascader v-model="cascaderValue" @on-change="cascaderChange" change-on-select filterable placeholder="选择岗位" :data="postData" style="width: 240px;"></Cascader>-->
 		
-		<Poptip placement="right-start">
+		<Poptip placement="bottom-start" class="abc">
 			
-			<Button>选择岗位</Button>
+			<Button long :style="{color: checkedText ? '' : '#c5c8ce', textAlign: 'left', padding: '5px 7px 6px', overflow: 'hidden'}">
+				{{checkedText ? checkedText : '选择岗位'}}
+			</Button>
 			
-			<div slot="content" style="overflow-x: auto;height: 200px;">
+			<div slot="content" style="overflow-x: auto;">
 				
 				<transition-group name="fade" tag="div" class="postCasc-box">
 					
@@ -163,6 +165,24 @@ export default {
     },
     computed: {//计算属性
         
+        checkedText(){
+        	
+        	let txt = '';
+        	
+        	if(this.selectedData && this.selectedData.length > 0){
+        		let newArr = [];
+        	
+        		this.selectedData.forEach(item => {
+        			newArr.push(item.label);
+        		});
+        	
+        		txt = newArr.join(' / ');
+        	}
+        	
+        	return txt
+        	
+        }
+        
     },
     watch: {//监测数据变化
     	
@@ -228,5 +248,15 @@ export default {
 		}
 	}
 }
+.abc{
+	width: 100%;
+}
+</style>
 
+<style lang="less">
+.abc {
+	.ivu-poptip-rel{
+		width: 100%;
+	}
+}
 </style>
