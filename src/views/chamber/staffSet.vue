@@ -14,7 +14,7 @@
 				    <post-casc></post-casc>
 					&nbsp;
 					&nbsp;
-					<Button size="small" type="primary" @click="addStaff">添加/追加人员</Button>
+					<Button type="primary" @click="addStaff">添加/追加人员</Button>
 					
 				</div>
 			</table-list>

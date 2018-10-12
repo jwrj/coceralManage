@@ -6,7 +6,7 @@
 		
 		<Poptip placement="right-start">
 			
-			<Button size="small">选择岗位</Button>
+			<Button>选择岗位</Button>
 			
 			<div slot="content" style="overflow-x: auto;height: 200px;">
 				
