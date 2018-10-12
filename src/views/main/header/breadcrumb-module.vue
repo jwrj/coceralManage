@@ -20,23 +20,17 @@
 		<div class="breadcrumb-box-right">
 			
 			<div style="margin-right: 16px;">
-				<Poptip placement="left">
-					<Button type="primary" size="small">切换商会</Button>
-			        <div slot="content">
-						<Select v-model="chamber" filterable size="small">
-			                <Option value="广西湖北商会">广西湖北商会</Option>
-			                <Option value="商会2">商会2</Option>
-			                <Option value="商会3">商会3</Option>
-			            </Select>
-			        </div>
-			    </Poptip>
+				<Select v-model="chamber" filterable size="small" placeholder="选择商会">
+	                <Option value="广西湖北商会">广西湖北商会</Option>
+	                <Option value="商会2">商会2</Option>
+	                <Option value="商会3">商会3</Option>
+	            </Select>
 			</div>
 			
 			<div style="flex-shrink: 0;">
 				<Dropdown placement="bottom-end">
 			        <a style="display: inline-block;">
-		           		<!--<Avatar icon="ios-person" />-->
-		           		<span>{{chamber}}</span>
+		           		<Avatar icon="ios-person" />
 		           		<Icon size="20" type="md-arrow-dropdown" />
 			        </a>
 			        <DropdownMenu slot="list">

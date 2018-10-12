@@ -4,20 +4,35 @@
 		
 		<!--<Cascader v-model="cascaderValue" @on-change="cascaderChange" change-on-select filterable placeholder="选择岗位" :data="postData" style="width: 240px;"></Cascader>-->
 		
-		<transition-group name="fade" tag="div" style="display: flex;align-items: center;">
-	    	<div
-	    		v-for="(item, index) in newPostData"
-	    		:key="index"
-	    		class="main-box">
-	    		<div
-	    			v-for="child in item"
-	    			@click="postClick(child, index)"
-	    			class="main-box-btn"
-	    			:class="{active: child.value === selected[index]}">
-	    			{{child.label}}
-	    		</div>
-	    	</div>
-		</transition-group>
+		<Poptip placement="right-start">
+			
+			<Button size="small">选择岗位</Button>
+			
+			<div slot="content" style="overflow-x: auto;height: 200px;">
+				
+				<transition-group name="fade" tag="div" class="postCasc-box">
+					
+			    	<div
+			    		v-for="(item, index) in newPostData"
+			    		:key="index"
+			    		class="main-box">
+			    		
+			    		<div
+			    			v-for="child in item"
+			    			@click="postClick(child, index)"
+			    			class="main-box-btn"
+			    			:class="{active: child.value === selected[index]}">
+			    			<span>{{child.label}}</span>
+			    			<Icon v-if="child.children && child.children.length > 0" class="icon" type="ios-arrow-forward" />
+			    		</div>
+			    		
+			    	</div>
+			    	
+				</transition-group>
+				
+			</div>
+			
+	    </Poptip>
 		
 	</div>
 	
@@ -40,6 +55,8 @@ export default {
 	},
     data () {//数据
         return {
+        	
+        	modalShow: false,
         	
         	selected: [],//只获取value值
         	
@@ -175,22 +192,39 @@ export default {
 	opacity: 0;
 }
 .active{
-	background-color: #2d8cf0 !important;
+	background-color: #5cadff !important;
 	color: #fff;
 }
+.postCasc-box{
+	display: flex;
+}
 .main-box{
-	margin-right: 6px;
+	padding: 4px 6px 4px 0;
 	display: flex;
 	flex-direction: column;
+	flex-shrink: 0;
+	background: #fff;
 	.main-box-btn{
+		flex-shrink: 0;
 		border-radius: 4px;
-		background-color: #c5c8ce;
-		padding: 6px 8px;
+		background-color: #e8eaec;
+		padding: 2px 16px;
 		margin: 4px 0;
 		cursor: pointer;
+		font-size: 12px;
 		transition: background-color .3s;
+		position: relative;
 		&:hover{
 			background-color: #dcdee2;
+		}
+		.icon{
+			position: absolute;
+			right: 0;
+			top: 0;
+			bottom: 0;
+			margin: auto;
+			display: flex;
+			align-items: center;
 		}
 	}
 }

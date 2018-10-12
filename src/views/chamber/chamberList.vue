@@ -13,7 +13,7 @@
 				
 				<div slot="header" style="margin-right: 10px;display: flex;align-items: center;">
 					
-					<div style="border: 1px solid #dcdee2;margin-right: 10px;padding: 4px 7px;border-radius: 4px;">
+					<div style="border: 1px solid #dcdee2;margin-right: 10px;padding: 5px 7px;border-radius: 4px;">
 						<RadioGroup>
 					        <Radio label="1">全部</Radio>
 					        <Radio label="2">商会</Radio>
@@ -21,7 +21,7 @@
 					    </RadioGroup>
 					</div>
 				    
-				    <div style="border: 1px solid #dcdee2;padding: 4px 7px;border-radius: 4px;">
+				    <div style="border: 1px solid #dcdee2;padding: 5px 7px;border-radius: 4px;">
 						<RadioGroup>
 					        <Radio label="1">我创建的商会</Radio>
 					        <Radio label="2">我加入的商会</Radio>

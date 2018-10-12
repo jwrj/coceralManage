@@ -2,68 +2,65 @@
 	
 	<div style="height: 100%;background: #001529;display: flex;">
 		
-		<Card style="width: 50%;margin: auto;">
+		<Card style="width: 400px;margin: auto;">
 			
-			<Divider orientation="left">申请记录列表</Divider>
-			<Table :columns="columns1" :data="data1"></Table>
+			<Form ref="formInline" :model="formInline" :rules="ruleInline" :label-width="70">
+				
+				<FormItem prop="identity">
+					
+					<RadioGroup v-model="formInline.identity">
+				        <Radio :label="1">我加入的商会</Radio>
+				        <Radio :label="2">我创建的商会</Radio>
+				    </RadioGroup>
+				    
+				</FormItem>
+				
+				<FormItem prop="chamberId" label="选择商会">
+					
+					<Select v-model="formInline.chamberId" filterable clearable :placeholder="placeholder">
+				        <Option :value="1">商会1</Option>
+				        <Option :value="2">商会2</Option>
+				        <Option :value="3">商会3</Option>
+				    </Select>
+					
+				</FormItem>
+				
+			</Form>
 			
-			<Divider orientation="left">选择商会进入系统</Divider>
-			<div style="width: 50%;margin: auto;">
-				
-				<Form ref="formInline" :model="formInline" :rules="ruleInline" :label-width="70">
-					
-					<FormItem prop="identity" label="选择">
-						
-						<RadioGroup v-model="formInline.identity">
-					        <Radio :label="1">我加入的商会</Radio>
-					        <Radio :label="2">我创建的商会</Radio>
-					    </RadioGroup>
-					    
-					</FormItem>
-					
-					<FormItem prop="chamberId" label="选择商会">
-						
-						<Select v-model="formInline.chamberId" filterable clearable :placeholder="placeholder">
-					        <Option :value="1">商会1</Option>
-					        <Option :value="2">商会2</Option>
-					        <Option :value="3">商会3</Option>
-					    </Select>
-						
-					</FormItem>
-					
-				</Form>
-				
-				<div style="text-align: center;">
-					<Button type="primary" long @click="login('formInline')">确定</Button>
-				</div>
-				
-				<div style="margin-top: 16px;text-align: center;">
-					没有商会
-					<a @click="modalOpen">{{text}}</a>
-				</div>
-				
+			<div style="text-align: center;">
+				<Button type="primary" long @click="login('formInline')">确定</Button>
 			</div>
 			
+			<div style="margin-top: 16px;text-align: center;">
+				没有商会
+				<a @click="modalOpen">{{text}}</a>
+			</div>
+				
 		</Card>
 		
 		<Modal
 	        v-model="openChamberList"
 	        title="商会列表"
-	        width="60%"
+	        width="80%"
 	        :footer-hide="true"
 	       	>
 	       	
 	       	<Button slot="close">关闭</Button>
 	        
+	        <Button @click="record = true" type="primary" size="small" style="margin-bottom: 16px;">查看我的申请记录</Button>
+	        
 	        <table-list v-if="formInline.identity === 1" :tableColumns="tableColumns" :tableData="tableData" @on-btn-click="tabBtnClick">
 	        	
 	        	<div slot="header" style="width: 100%;display: flex;align-items: center;">
 					
-					<Select v-model="type" placeholder="选择类型" style="width:60px;margin-right: 10px;">
-				        <Option value="0">全部</Option>
-				        <Option value="1">商会</Option>
-				        <Option value="2">协会</Option>
-				    </Select>
+					
+					<div style="border: 1px solid #dcdee2;margin-right: 10px;padding: 5px 7px;border-radius: 4px;">
+						<RadioGroup v-model="type">
+					        <Radio label="1">全部</Radio>
+					        <Radio label="2">商会</Radio>
+					        <Radio label="3">协会</Radio>
+					    </RadioGroup>
+					</div>
 					
 				    <al-cascader v-model="res_c" placeholder="选择地区" style="width: 260px;" />
 		    
@@ -73,6 +70,17 @@
 			
 			<create-chamber v-if="formInline.identity === 2"></create-chamber>
 	        
+	    </Modal>
+	    
+	    <Modal
+	        v-model="record"
+	        title="申请记录列表"
+	        width="60%"
+	        :footer-hide="true"
+	       	>
+	       	
+	       	<Table :columns="columns1" :data="data1"></Table>
+	       	
 	    </Modal>
 		
 	</div>
@@ -104,6 +112,8 @@ export default {
         return {
         	
         	openChamberList: false,
+        	
+        	record: false,
         	
         	formInline: {
         		identity: 1,

@@ -1,20 +1,26 @@
 <template>
 	
 	<div>
+		
 		<Card style="position: initial;">
 			
-	<div slot="title" class="title">
-							<h1>给{{chamber}}的岗位配置人员</h1>
-							<Button class="btnSmall" size="small" type="primary" @click="addStaff">添加/追加人员</Button>
-						</div>
+			<div slot="title" class="title">
+				<h1>给{{chamber}}的岗位配置人员</h1>
+			</div>
+			
 			<table-list :tableColumns="tableColumns" :tableData="tableData" @on-poptip-ok="poptipOk">
 				<div slot="header" style="width: 100%;display: flex;align-items: center;">
 					
-					<post-casc style="margin-right: 10px;"></post-casc>
-			
+				    <post-casc></post-casc>
+					&nbsp;
+					&nbsp;
+					<Button size="small" type="primary" @click="addStaff">添加/追加人员</Button>
+					
 				</div>
 			</table-list>
-				<staff-modal ref="staffM" @addstaff="getStaff"></staff-modal>
+			
+			<staff-modal ref="staffM" @addstaff="getStaff"></staff-modal>
+			
 		</Card>
 		
 	</div>
@@ -51,6 +57,8 @@ export default {
 	},
     data () {//数据
         return {
+        	
+        	modal12: false,
         	
         	modalShow:false,
         	
