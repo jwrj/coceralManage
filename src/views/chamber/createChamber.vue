@@ -48,13 +48,18 @@
 					<!--协会-->
 					<Col v-if="formData.nature === 2" :xs="24" :sm="24" :md="12" :lg="12">
 						<FormItem label="行业" prop="industry">
-							<industry-casc v-model="formData.industry" style="max-width: 300px;"></industry-casc>
+							<industry-casc v-model="formData.industry" style="width: 300px;"></industry-casc>
 						</FormItem>
 					</Col>
 					
 					<Col v-if="formData.nature === 2" :xs="24" :sm="24" :md="12" :lg="12">
 						<FormItem label="成立时间" prop="establishTime">
-				       		<DatePicker type="date" @on-change="timeChange" value="formData.establishTime" placeholder="选择日期"></DatePicker>
+				       		<DatePicker type="date" 
+							@on-change="timeChange" 
+							value="formData.establishTime" 
+							placeholder="选择日期"
+							style="width: 300px;">
+							</DatePicker>
 						</FormItem>
 					</Col>
 					<!--协会-->
@@ -89,9 +94,11 @@
 						</FormItem>
 					</Col>
 					
-					<Col span="24">
+					<Col :xs="24" :sm="24" :md="12" :lg="12">
 						<FormItem :label="title+'介绍'">
-							<Input v-model="formData.introduce" type="textarea" placeholder="请输入介绍..." />
+							<Input v-model="formData.introduce" 
+							type="textarea" placeholder="请输入介绍..." 
+							style="max-width: 300px;"/>
 						</FormItem>
 					</Col>
 						

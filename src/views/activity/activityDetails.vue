@@ -5,27 +5,33 @@
 			<div slot="title" class="title">
 				<h1>活动/会议列表</h1>
 			</div>
-			<div class="content" style="display: flex;">
-				<div class="left" style="text-align: right;font-weight: 700;">
-					<p>类型：</p>
-					<p>活动/会议标题：</p>
-					<p>开始时间：</p>
-					<p>结束时间：</p>
-					<p>会议地址：</p>
-					<p>是否住宿：</p>
-					<p>住宿地址：</p>
-					<p>会议说明：</p>
-				</div>
-				<div class="right">
-					<p>会议</p>
-					<p>广西湖北商会2018迎新春抽奖晚会</p>
-					<p>2018-1-1</p>
-					<p>2018-3-4</p>
-					<p>广西南宁市民族大道123号</p>
-					<p>是</p>
-					<p>广西南宁市民族大道123号</p>
-					<p> 我是这次会议的会议说明，我是这次会议的会议说明</p>
-				</div>
+			<div class="content">
+           <Row>
+			   <Col span="4" style="text-align: right;">
+				   <p>类型：</p>
+				   <p>开始时间：</p>
+				   <p>结束时间：</p>
+				   <p>是否住宿：</p>
+			   </Col>
+			   <Col span="6">
+				   <p>会议</p>
+				   <p>2018-01-01</p>
+				   <p>2018-02-02</p>
+				   <p>是</p>
+			   </Col>
+			   <Col span="4" style="text-align: right;">
+				   <p>标题：</p>
+				   <p>会议地址：</p>
+				   <p>住宿地址：</p>
+				   <p>会议说明：</p>
+			   </Col>
+			   <Col span="6">
+				   <p>广西湖北商会2018迎新春抽奖晚会</p>
+				   <p>广西南宁市民族大道123号</p>
+				   <p>广西南宁市民族大道123号</p>
+				   <p>我是会议说明噢噢噢噢</p>
+			   </Col>
+		   </Row>
 			</div>
 
 		</Card>
@@ -230,4 +236,5 @@
 		display: flex;
 		align-items: center;
 	}
+
 </style>

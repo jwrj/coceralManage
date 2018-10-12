@@ -2,7 +2,7 @@
 	
 	<div>
 		
-		<Cascader v-model="cascaderValue" @on-change="setvalue" filterable placeholder="选择行业" :data="industryData" style="width: 200px;"></Cascader>
+		<Cascader v-model="cascaderValue" @on-change="setvalue" filterable placeholder="选择行业" :data="industryData" style="width: 300px;"></Cascader>
 		
 	</div>
 	

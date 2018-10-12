@@ -6,54 +6,69 @@
 				<h1>创建活动/会议</h1>
 			</div>
 			<Form ref="activity" :model="activity" :rules="ruleValidate" :label-width="130">
-				<FormItem label="活动/会议标题" prop="name">
-					<Input v-model="activity.name" style="width: 300px;"></Input>
-				</FormItem>
-				<FormItem label="开始时间" prop="starting">
-					<DatePicker :value="activity.starting" 
-					type="datetime" 
-					@on-change="startChange"
-					format="yyyy-MM-dd HH:mm">
-					</DatePicker>
-				</FormItem>
-				<FormItem label="结束时间" prop="ending">
-					<DatePicker :value="activity.ending" 
-					type="datetime" 
-					@on-change="endChange"
-					format="yyyy-MM-dd HH:mm"></DatePicker>
-				</FormItem>
-				<FormItem label="会议地址">
-					<Input v-model="activity.where" style="width: 400px;"></Input>
-				</FormItem>
-				<FormItem label="是否住宿" prop="live">
-					<RadioGroup v-model="activity.live">
-						<Radio label="是"></Radio>
-						<Radio label="否"></Radio>
-					</RadioGroup>
-				</FormItem>
-				<FormItem label="住宿地址" v-if="activity.live=='是'">
-					<Input v-model="activity.address" style="width: 400px;"></Input>
-				</FormItem>
+				
+				<Row>
+					<Col :xs="24" :sm="24" :md="16" :lg="12">
+						<FormItem label="活动/会议标题" prop="name">
+							<Input v-model="activity.name" style="width: 300px;"></Input>
+						</FormItem>
+						
+						<FormItem label="开始时间" prop="starting">
+							<DatePicker :value="activity.starting" 
+							type="datetime" 
+							@on-change="startChange"
+							format="yyyy-MM-dd HH:mm"
+							style="width: 300px;">
+							</DatePicker>
+						</FormItem>
+						
+						<FormItem label="结束时间" prop="ending">
+							<DatePicker :value="activity.ending" 
+							type="datetime" 
+							@on-change="endChange"
+							format="yyyy-MM-dd HH:mm"
+							style="width: 300px;">
+							</DatePicker>
+						</FormItem>
+					</Col>
+					
+					<Col :xs="24" :sm="24" :md="16" :lg="12">
+						<FormItem label="会议地址">
+							<Input v-model="activity.where" style="width: 300px;"></Input>
+						</FormItem>
+						
+						<FormItem label="是否住宿" prop="live">
+							<RadioGroup v-model="activity.live">
+								<Radio label="是"></Radio>
+								<Radio label="否"></Radio>
+							</RadioGroup>
+						</FormItem>
+						
+						<FormItem label="住宿地址" v-if="activity.live=='是'">
+							<Input v-model="activity.address" style="width: 300px;"></Input>
+						</FormItem>
+					</Col>
+				</Row>
 
 			</Form>
 		</Card>
+		
         <Card style="margin-top: 16px;">
 					<h1 slot="title">会议说明</h1>
-		<UEditor :configs='editor_config'></UEditor>
-			</Card>
+						<UEditor :configs='editor_config'></UEditor>
+				</Card>
+				
 		<Card style="margin-top: 16px;height: 600px;">
-
 			<h1 slot="title">文件管理</h1>
-
 			<file-manage currentRouteName="createActivity"></file-manage>
-
 		</Card>
 
 		<Card style="margin-top: 16px;height: 600px;">
 			<div slot="title" class="title">
 				<h1>邀请人员</h1>
-				<Button class="btnSmall" size="small" type="primary" @click="importPerson">导入更多会员</Button>
+				<Button style="margin-left: 10px;" size="small" type="primary" @click="importPerson">导入更多会员</Button>
 			</div>
+			
 			<table-list :tableColumns="tableColumns" :tableData="tableData">
 				<div slot="header" style="width: 100%;display: flex;align-items: center;">
 
@@ -63,8 +78,8 @@
 			</table-list>
 			<br>
 			    <div style="margin: 0 45%;">
-      <Button type="primary"  @click="handleSubmit('activity')">创建会议</Button>
-    </div>
+						<Button type="primary"  @click="handleSubmit('activity')">创建会议</Button>
+					</div>
 		</Card>
 
 		<Modal v-model="showImport" :mask-closable="false" title="会员库" width="80%">

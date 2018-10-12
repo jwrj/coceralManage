@@ -3,8 +3,11 @@
 	<div>
 		<Card>
 			<div slot="title" class="title">
-				<h1>活动/会议列表</h1>
-				<Button class="btnSmall" size="small" type="primary" @click="createactivity">创建会议</Button>
+				<h1>
+					活动/会议列表
+					<Button style="margin-left: 10px;" type="primary" size="small" @click="createactivity">创建活动/会议</Button>
+				</h1>
+				
 			</div>
 			<table-list @on-btn-click="btnClick" :tableColumns="tableColumns" :tableData="tableData" :modalTitle="modalTitle">
 				
