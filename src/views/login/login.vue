@@ -8,7 +8,7 @@
 				
 				<FormItem prop="identity">
 					
-					<RadioGroup v-model="formInline.identity">
+					<RadioGroup v-model="formInline.identity" @on-change="radioGroupChange">
 				        <Radio :label="1">我加入的商会</Radio>
 				        <Radio :label="2">我创建的商会</Radio>
 				    </RadioGroup>
@@ -18,11 +18,9 @@
 				<FormItem prop="chamberId" label="选择商会">
 					
 					<Select v-model="formInline.chamberId" filterable clearable :placeholder="placeholder">
-				        <Option :value="1">商会1</Option>
-				        <Option :value="2">商会2</Option>
-				        <Option :value="3">商会3</Option>
+				        <Option v-for="item in chamberList" :value="item.value" :key="item.value">{{ item.label }}</Option>
 				    </Select>
-					
+				    
 				</FormItem>
 				
 			</Form>
@@ -33,12 +31,12 @@
 			
 			<div style="margin-top: 16px;text-align: center;">
 				没有商会
-				<a @click="modalOpen">{{text}}</a>
+				<!--<a @click="modalOpen">{{text}}</a>-->
 			</div>
 				
 		</Card>
 		
-		<Modal
+		<!--<Modal
 	        v-model="openChamberList"
 	        title="商会列表"
 	        width="80%"
@@ -81,7 +79,7 @@
 	       	
 	       	<Table :columns="columns1" :data="data1"></Table>
 	       	
-	    </Modal>
+	    </Modal>-->
 		
 	</div>
 	
@@ -132,6 +130,8 @@ export default {
         	type: '0',
         	
         	res_c: [],
+        	
+        	chamberList: [],//商会列表
         	
         	tableColumns: [
 				{
@@ -244,6 +244,38 @@ export default {
     },
     methods: {//方法
     	
+    	setSelectData(url, param, type){ //设置下拉列表数据切换
+    		
+    		$ax.getAjaxData(url, param, (res)=> {
+    			let newArr = [];
+				res.data.forEach(item => {
+					newArr.push({
+						label: item[type.label],
+						value: Number(item[type.value]),
+					});
+				});
+				this.chamberList = newArr;
+				if(this.chamberList.length > 0){
+					this.formInline.chamberId = this.chamberList[0].value;
+				}
+			});
+    		
+    	},
+    	
+    	radioGroupChange(val){ //商会类型切换
+    		
+    		if(val === 1){//我加入的商会
+    			
+    			this.setSelectData('user.Comm/myJoinOrganize', {company_id: -1}, {label: 'org_name', value: 'mid'});
+    			
+    		}else if(val === 2){//我加创建的商会
+    			
+    			this.setSelectData('user.Comm/myCreateOrganize', {}, {label: 'name', value: 'id'});
+    			
+    		}
+    		
+    	},
+    	
     	modalOpen(){
     		
     		this.openChamberList = true;
@@ -270,20 +302,40 @@ export default {
     		
     	},
     	
-    	login(name){
+    	login(name){//提交数据
     		
     		this.$refs[name].validate((valid) => {
     			
                 if (valid) {
                     
-                    sessionStorage.chamberId = this.formInline.chamberId;
+                    if(this.formInline.identity === 1){
+                    	
+                    	//普通会员
+	                    $ax.getAjaxData('user.Comm/loginMember', {
+	                    	mid: this.formInline.chamberId
+	                    }, (res)=> {
+	                    	if(res.code == 0){
+	                    		sessionStorage.chamberId = this.formInline.chamberId;
+					    		this.$router.replace({name: 'home'});
+								this.$Message.success('普通会员进入成功');
+	                    	}
+	                    });
+                    	
+                    }else if(this.formInline.identity === 2){
+                    	
+                    	//管理者
+	                    $ax.getAjaxData('user.Comm/loginManage', {
+	                    	oid: this.formInline.chamberId
+	                    }, (res)=> {
+	                    	if(res.code == 0){
+	                    		sessionStorage.chamberId = this.formInline.chamberId;
+					    		this.$router.replace({name: 'home'});
+								this.$Message.success('管理者进入成功');
+	                    	}
+	                    });
+                    	
+                    }
                     
-		    		this.$router.replace({
-						name: 'home'
-					});
-					
-					this.$Message.success('选择成功!');
-					
                 }
                 
             });
@@ -339,32 +391,24 @@ export default {
 	
 	beforeRouteEnter (to, from, next) {//在组件创建之前调用（放置页面加载时请求的Ajax）
 		
-		(async() => {//执行异步函数
-			
-			//async、await错误处理
-			try {
-				
-				/*
-				 * 
-				 * ------串行执行---------
-				 * console.log(await getAjaxData());
-				 * ...
-				 * 
-				 * ---------并行：将多个promise直接发起请求（先执行async所在函数），然后再进行await操作。（执行效率高、快）----------
-				 * let abc = getAjaxData();//先执行promise函数
-				 * ...
-				 * console.log(await abc);
-				 * ...
-				*/
-				next(vm => {
-					
+		let newArr = [];
+		
+		$ax.getAjaxData('user.Comm/myJoinOrganize', {
+			company_id: -1
+		}, (res)=> {
+			res.data.forEach(item => {
+				newArr.push({
+					label: item.org_name,
+					value: Number(item.mid),
 				});
-				
-			} catch(err) {
-				console.log(err);
-			}
-			
-		})();
+			});
+			next(vm => {
+				vm.chamberList = newArr;
+				if(vm.chamberList.length > 0){
+					vm.formInline.chamberId = vm.chamberList[0].value;
+				}
+			});
+		});
 		
 	},
 	

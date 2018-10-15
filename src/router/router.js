@@ -14,6 +14,14 @@ import secondaryView from '@/components/secondary-view.vue';
 
 export default [
 	{
+	    path: '/mainLogin',
+	    name: 'mainLogin',
+	    meta: {
+	      hideMenu: true,
+	    },
+	    component: () => import('@/views/login/mainLogin.vue')
+	},
+	{
 	    path: '/login',
 	    name: 'login',
 	    meta: {
@@ -82,15 +90,15 @@ export default [
 		},
 		component: Main,
 		children: [
-			{
-				path: 'chamberList',
-				name: 'chamberList',
-				meta: {
-					title: '商协会列表',
-					icon: 'md-alarm',
-				},
-				component: () => import('@/views/chamber/chamberList.vue')
-			},
+//			{
+//				path: 'chamberList',
+//				name: 'chamberList',
+//				meta: {
+//					title: '商协会列表',
+//					icon: 'md-alarm',
+//				},
+//				component: () => import('@/views/chamber/chamberList.vue')
+//			},
 			{
 				path: 'createChamber',
 				name: 'createChamber',
@@ -136,6 +144,15 @@ export default [
 				},
 				component: () => import('@/views/chamber/approve.vue')
 			},
+			{
+				path: 'userList',
+				name: 'userList',
+				meta: {
+					title: '会员列表',
+					icon: 'md-alarm',
+				},
+				component: () => import('@/views/user/userList.vue')
+			}
 		]
 	},
 	{

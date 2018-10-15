@@ -2,9 +2,9 @@
 
 	<div class="createCham">
 		
-		<!--<Card>
+		<Card>
 			
-			<h1 slot="title">创建商/协会</h1>-->
+			<h1 slot="title">创建商/协会</h1>
 			
 			<Form ref="formInstance" :model="formData" :rules="ruleData" :label-width="100">
 				
@@ -33,14 +33,14 @@
 					
 					<Col :xs="24" :sm="24" :md="12" :lg="12">
 						<FormItem label="注册地" prop="domicile" >
-							<al-cascader v-model="formData.domicile" placeholder="选择注册地" style="max-width: 300px;" />
+							<al-cascader v-model="formData.domicile" data-type="code" placeholder="选择注册地" style="max-width: 300px;" />
 						</FormItem>
 					</Col>
 						
 					<!--商会-->
 					<Col v-if="formData.nature === 1" :xs="24" :sm="24" :md="12" :lg="12">
 						<FormItem label="所属地" prop="originPlace">
-							<al-cascader v-model="formData.originPlace" placeholder="选择所属地" style="max-width: 300px;" />
+							<al-cascader v-model="formData.originPlace" data-type="code" placeholder="选择所属地" style="max-width: 300px;" />
 						</FormItem>
 					</Col>
 					<!--商会-->
@@ -110,7 +110,7 @@
 				<Button type="primary" @click="submit('formInstance')">立即创建</Button>
 			</div>
 			
-		<!--</Card>-->
+		</Card>
 		
         <Modal v-model="modalShow" width="80%">
 	        <p slot="header">选择文件</p>
@@ -223,11 +223,46 @@ export default {
 		submit(name){
 			
 			this.$refs[name].validate((valid) => {
+				
                 if (valid) {
-                    this.$Message.success('创建成功!');
+                	
+                	$ax.getAjaxData('user.Comm/addOrganize', {
+				
+						isshang: this.formData.nature,//商会还是协会
+						name: this.formData.name, //名称
+						fid: 0, //上级商协会ID
+						nation: 86, //国家
+						provice: this.formData.domicile[0], //省
+						city: this.formData.domicile[1], //市
+						county: this.formData.domicile[2], //县
+						town: this.formData.domicile[3], //镇
+						contact: this.formData.linkman, //联系人
+						mobile: this.formData.linkmanPhone, //电话
+						website: this.formData.website, //网址
+						gzh: this.formData.vipcn, //公众号
+						introduce: this.formData.introduce, //介绍
+						nation2: 86, //所属地国家
+						provice2: this.formData.originPlace[0], //省
+						city2: this.formData.originPlace[1], //城市
+						county2: this.formData.originPlace[2], //县
+						town2: this.formData.originPlace[3], //镇
+						hx1: this.formData.industry[0], //一级行业
+						hx2: this.formData.industry[1], //二级行业
+						setup_time: this.formData.establishTime, //成立时间
+						icon: '', //图标
+						
+					}, res => {
+						
+					});
+                	
+                    //this.$Message.success('创建成功!');
+                    
                 } else {
-                    this.$Message.error('创建失败!');
+                	
+                    //this.$Message.error('创建失败!');
+                    
                 }
+                
             })
 			
 		},

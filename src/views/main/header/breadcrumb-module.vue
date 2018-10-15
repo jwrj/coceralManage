@@ -34,6 +34,7 @@
 		           		<Icon size="20" type="md-arrow-dropdown" />
 			        </a>
 			        <DropdownMenu slot="list">
+			            <DropdownItem>切换身份（当前为管理者）</DropdownItem>
 			            <DropdownItem>退出登录</DropdownItem>
 			        </DropdownMenu>
 			    </Dropdown>
