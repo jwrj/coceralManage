@@ -6,7 +6,7 @@
 			
 			<Split v-model="split1">
 	            <div slot="left" style="overflow-y: auto;overflow-x: hidden;height: 100%;">
-	                <post-config></post-config>
+	                <post-config @on-add="addPost"></post-config>
 	            </div>
 	            <div slot="right" style="margin-left: 8px;overflow-y: auto;overflow-x: hidden;height: 100%;">
 	            	<div>人员配置列表</div>
@@ -48,6 +48,15 @@ export default {
         }
     },
     methods: {//方法
+    	
+    	addPost(name, fid){
+    		$ax.getAjaxData('manage.Organize/gangweiAdd', {
+        		name: name,
+        		fid: fid
+        	}, res => {
+        		
+        	});
+    	},
     	
     },
     computed: {//计算属性

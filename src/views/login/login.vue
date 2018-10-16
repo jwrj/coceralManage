@@ -31,27 +31,24 @@
 			
 			<div style="margin-top: 16px;text-align: center;">
 				没有商会
-				<!--<a @click="modalOpen">{{text}}</a>-->
+				<a @click="modalOpen">{{text}}</a>
 			</div>
 				
 		</Card>
 		
-		<!--<Modal
+		<Modal
 	        v-model="openChamberList"
-	        title="商会列表"
+	        :title="titleTxt"
 	        width="80%"
 	        :footer-hide="true"
 	       	>
 	       	
 	       	<Button slot="close">关闭</Button>
 	        
-	        <Button @click="record = true" type="primary" size="small" style="margin-bottom: 16px;">查看我的申请记录</Button>
+	        <Button v-if="formInline.identity === 1" @click="record = true" type="primary" size="small" style="margin-bottom: 16px;">查看我的申请记录</Button>
 	        
 	        <table-list v-if="formInline.identity === 1" :tableColumns="tableColumns" :tableData="tableData" @on-btn-click="tabBtnClick">
-	        	
 	        	<div slot="header" style="width: 100%;display: flex;align-items: center;">
-					
-					
 					<div style="border: 1px solid #dcdee2;margin-right: 10px;padding: 5px 7px;border-radius: 4px;">
 						<RadioGroup v-model="type">
 					        <Radio label="1">全部</Radio>
@@ -59,11 +56,8 @@
 					        <Radio label="3">协会</Radio>
 					    </RadioGroup>
 					</div>
-					
 				    <al-cascader v-model="res_c" placeholder="选择地区" style="width: 260px;" />
-		    
 				</div>
-	        	
 			</table-list>
 			
 			<create-chamber v-if="formInline.identity === 2"></create-chamber>
@@ -76,10 +70,8 @@
 	        width="60%"
 	        :footer-hide="true"
 	       	>
-	       	
 	       	<Table :columns="columns1" :data="data1"></Table>
-	       	
-	    </Modal>-->
+	    </Modal>
 		
 	</div>
 	
@@ -308,32 +300,26 @@ export default {
     			
                 if (valid) {
                     
-                    if(this.formInline.identity === 1){
-                    	
-                    	//普通会员
+                    if(this.formInline.identity === 1){//普通会员
 	                    $ax.getAjaxData('user.Comm/loginMember', {
 	                    	mid: this.formInline.chamberId
 	                    }, (res)=> {
 	                    	if(res.code == 0){
-	                    		sessionStorage.chamberId = this.formInline.chamberId;
+	                    		sessionStorage.identityType = this.formInline.identity;
 					    		this.$router.replace({name: 'home'});
 								this.$Message.success('普通会员进入成功');
 	                    	}
 	                    });
-                    	
-                    }else if(this.formInline.identity === 2){
-                    	
-                    	//管理者
+                    }else if(this.formInline.identity === 2){//管理者
 	                    $ax.getAjaxData('user.Comm/loginManage', {
 	                    	oid: this.formInline.chamberId
 	                    }, (res)=> {
 	                    	if(res.code == 0){
-	                    		sessionStorage.chamberId = this.formInline.chamberId;
+	                    		sessionStorage.identityType = this.formInline.identity;
 					    		this.$router.replace({name: 'home'});
 								this.$Message.success('管理者进入成功');
 	                    	}
 	                    });
-                    	
                     }
                     
                 }
@@ -346,32 +332,34 @@ export default {
     computed: {//计算属性
         
         placeholder(){
-        	
         	let txt = '选择您已加入的商会';
-        	
         	if(this.formInline.identity === 1){
         		txt = '选择您已加入的商会';
         	}else if(this.formInline.identity === 2){
         		txt = '选择您已创建的商会';
         	}
-        	
         	return txt;
-        	
         },
         
         text(){
-        	
         	let txt = '立即申请加入';
-        	
         	if(this.formInline.identity === 1){
         		txt = '立即申请加入';
         	}else if(this.formInline.identity === 2){
         		txt = '立即创建';
         	}
-        	
         	return txt;
-        	
-        }
+        },
+        
+        titleTxt(){
+        	let txt = '';
+        	if(this.formInline.identity === 1){
+        		txt = '商协会列表';
+        	}else if(this.formInline.identity === 2){
+        		txt = '创建商协会';
+        	}
+        	return txt;
+        },
         
     },
     watch: {//监测数据变化

@@ -31,18 +31,13 @@ export default {
     methods: {//方法
     	
     	receiveMessage(e) {
-    		
 		    var origin = e.origin;
-		
 		    if (origin !== "http://192.168.2.200:8080") {//消息来自这个域名
 		    	return;
 		    } else {
 		    	let data = e.data;//接收到的数据
-		      
-		    	console.log(data);
-		
+		    	this.$emit('input', data);
 		    }
-		
 		}
     	
     },

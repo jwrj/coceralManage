@@ -120,10 +120,13 @@ export const getAsyncAjaxData = (url = '',data = {}) => {
  * @param {Function} fn 数据响应后的回调函数
  * @param {Object} config 修改默认配置
  */
-export const getAjaxData = (url = '', data = {}, fn, config = {}) => {
+export const getAjaxData = (url = '', data = {}, fn, config = {}, errorCallBack) => {
 	axios.post(url, data, config).then(response => {
 		fn && fn(response);
-	}).catch(error => console.log('发生了错误：'+error));
+	}).catch(error => {
+		console.log('!!!发生了错误!!!：' + error);
+		errorCallBack && errorCallBack(error);
+	});
 }
 
 /**

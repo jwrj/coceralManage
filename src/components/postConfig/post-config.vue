@@ -2,18 +2,26 @@
 	
 	<div>
 		
-		<Tree :data="treeData" :render="renderContent"></Tree>
+		<Tree :data="treeData" :render="renderContent" empty-text=""></Tree>
+		
+		<div v-if="treeData.length <= 0" style="margin-top: 16px;text-align: center;">
+			<Button type="primary" @click="addMaxPost">添加岗位</Button>
+		</div>
 		
 		<Modal v-model="modalShow" width="360">
-	        <p slot="header">{{type === 'add'?'添加岗位':'编辑岗位'}}</p>
+	        <p slot="header">{{text}}</p>
 	        <div>
-	        	<Input v-model="name" clearable placeholder="请输入岗位名称" />
+	        	<Form ref="formInline" :model="formInline">
+	        		<FormItem prop="name" :rules="ruleInline">
+			        	<Input v-model="formInline.name" clearable placeholder="请输入岗位名称" />
+	        		</FormItem>
+	        	</Form>
 	        </div>
 	        <div slot="footer">
-	            <Button type="primary" size="large" long @click="submit">确定</Button>
+	            <Button type="primary" size="large" long @click="submit('formInline')">确定</Button>
 	        </div>
 	    </Modal>
-		
+	    
 	</div>
 	
 </template>
@@ -40,84 +48,88 @@ export default {
         	
         	currentData: {},
         	
-        	name: '',
+        	formInline: {
+        		name: ''
+        	},
+        	
+        	ruleInline: { required: true, message: '请输入名称', trigger: 'blur' },
         	
         	type: 'add',
         	
         	treeData: [
-        		{
-        			title: '未配置',
-                    expand: true,
-                    render: (h, { root, node, data }) => {
-                        return h('div',{
-                        	style: {
-	                    		display: 'inline-block',
-            					width: '100%',
-            					paddingRight: '16px',
-	                        },
-                        },[
-	                        h('span', {
-	                            style: {
-	                            },
-	                            class: 'ivu-tree-title my-tree-node'
-	                        }, [
-	                            h('span', {
-	                            	class: 'my-tree-title'
-	                            }, [
-	                                h('Icon', {
-	                                    props: {
-	                                        type: 'md-cube'
-	                                    },
-	                                    style: {
-	                                        marginRight: '8px'
-										
-	                                    }
-	                                }),
-	                                h('span', data.title)
-	                            ]),
-	                            h('span', {
-	                                style: {
-	                                	marginLeft: 'auto'
-	                                }
-	                            }, [
-		                            h('Button', {
-				                        props: Object.assign({}, this.buttonProps, {
-				                            icon: 'md-create',
-				                            type: 'success',
-				                        }),
-				                        style: {
-				                            marginRight: '8px'
-				                        },
-				                        on: {
-				                            click: () => {
-				                            	this.type = 'edit';
-				                            	this.name = data.title;
-				                            	this.modalShow = true;
-				                                this.currentData = data;
-				                            }
-				                        }
-				                    }),
-	                                h('Button', {
-	                                    props: Object.assign({}, this.buttonProps, {
-	                                        icon: 'md-add',
-	                                        type: 'primary',
-	                                    }),
-	                                    style: {
-	                                    	
-	                                    },
-	                                    on: {
-	                                        click: () => {
-	                                        	this.type = 'add';
-	                                        	this.modalShow = true;
-	                                        	this.currentData = data;
-	                                        }
-	                                    }
-	                                })
-	                            ])
-	                        ])
-                        ]);
-        			}
-                }
+//      		{
+//      			title: '未配置',
+//                  expand: true,
+//                  render: (h, { root, node, data }) => {
+//                      return h('div',{
+//                      	style: {
+//	                    		display: 'inline-block',
+//          					width: '100%',
+//          					paddingRight: '16px',
+//	                        },
+//                      },[
+//	                        h('span', {
+//	                            style: {
+//	                            },
+//	                            class: 'ivu-tree-title my-tree-node'
+//	                        }, [
+//	                            h('span', {
+//	                            	class: 'my-tree-title'
+//	                            }, [
+//	                                h('Icon', {
+//	                                    props: {
+//	                                        type: 'md-cube'
+//	                                    },
+//	                                    style: {
+//	                                        marginRight: '8px'
+//										
+//	                                    }
+//	                                }),
+//	                                h('span', data.title)
+//	                            ]),
+//	                            h('span', {
+//	                                style: {
+//	                                	marginLeft: 'auto'
+//	                                }
+//	                            }, [
+//		                            h('Button', {
+//				                        props: Object.assign({}, this.buttonProps, {
+//				                            icon: 'md-create',
+//				                            type: 'success',
+//				                        }),
+//				                        style: {
+//				                            marginRight: '8px'
+//				                        },
+//				                        on: {
+//				                            click: () => {
+//				                            	this.type = 'edit';
+//				                            	this.formInline.name = data.title;
+//				                            	this.modalShow = true;
+//				                                this.currentData = data;
+//				                            }
+//				                        }
+//				                    }),
+//	                                h('Button', {
+//	                                    props: Object.assign({}, this.buttonProps, {
+//	                                        icon: 'md-add',
+//	                                        type: 'primary',
+//	                                    }),
+//	                                    style: {
+//	                                    	
+//	                                    },
+//	                                    on: {
+//	                                        click: () => {
+//	                                        	this.type = 'add';
+//	                                        	this.modalShow = true;
+//	                                        	this.currentData = data;
+//	                                        }
+//	                                    }
+//	                                })
+//	                            ])
+//	                        ])
+//                      ]);
+//      			}
+//              }
         	],
             buttonProps: {
                 type: 'default',
@@ -173,7 +185,7 @@ export default {
 	                        on: {
 	                            click: () => {
 	                            	this.type = 'edit';
-	                            	this.name = data.title;
+	                            	this.formInline.name = data.title;
 	                            	this.modalShow = true;
 	                                this.currentData = data;
 	                            }
@@ -190,6 +202,7 @@ export default {
 	                        on: {
 	                            click: () => {
 	                            	this.type = 'add';
+	                            	this.formInline.name = '';
 	                            	this.modalShow = true;
 	                                this.currentData = data;
 	                            }
@@ -201,17 +214,26 @@ export default {
 	                            type: 'error',
 	                        }),
 	                        on: {
-	                            click: () => { this.remove(root, node, data) }
+	                            click: () => {
+	                            	this.remove(root, node, data)
+	                            }
 	                        }
 	                    })
 	                ])
 	            ])
             ]);
         },
-        edit(data, title){
+        
+        addMaxPost(){//添加顶级岗位
+    		this.type = 'addMaxPost';
+    		this.modalShow = true;
+    	},
+        
+        edit(data, title){//编辑
         	data.title = title;
         },
-        append (data,title) {
+        
+        append (data,title) {//添加方法
             const children = data.children || [];
             children.push({
                 title: title,
@@ -219,25 +241,55 @@ export default {
             });
             this.$set(data, 'children', children);
         },
-        remove (root, node, data) {
-            const parentKey = root.find(el => el === node).parent;
-            const parent = root.find(el => el.nodeKey === parentKey).node;
-            const index = parent.children.indexOf(data);
-            parent.children.splice(index, 1);
-        },
-        submit(){
-        	if(this.type === 'add'){
-        		this.append(this.currentData, this.name);
-        	}else if(this.type === 'edit'){
-        		this.edit(this.currentData, this.name);
+        
+        remove (root, node, data) {//删除岗位
+        	if(node.nodeKey === 0 && !node.parent){//删除最顶级
+        		this.treeData = [];
+        	}else{
+	        	const parentKey = root.find(el => el === node).parent;
+	            const parent = root.find(el => el.nodeKey === parentKey).node;
+	            const index = parent.children.indexOf(data);
+	            parent.children.splice(index, 1);
         	}
-        	this.name = '';
-        	this.modalShow = false;
+        	
+        },
+        
+        submit(name){//添加岗位
+        	this.$refs[name].validate((valid) => {
+        		if(valid){
+		        	if(this.type === 'add'){
+		        		this.append(this.currentData, this.formInline.name);
+		        		this.$emit('on-add', this.formInline.name, this.currentData.nodeKey);
+		        	}else if(this.type === 'edit'){
+		        		this.edit(this.currentData, this.formInline.name);
+		        	}else if(this.type === 'addMaxPost'){
+		        		this.treeData = [{
+			    			title: this.formInline.name,
+			                expand: true
+			    		}];
+			    		this.$emit('on-add', this.formInline.name, 0);
+		        	}
+		        	this.formInline.name = '';
+		        	this.modalShow = false;
+        		}
+        	});
         },
     	
     },
     computed: {//计算属性
-        	
+        
+        text(){
+        	let txt = '';
+        	if(this.type === 'add'){
+        		txt = '添加岗位';
+        	}else if(this.type === 'edit'){
+        		txt = '编辑岗位';
+        	}else if(this.type === 'addMaxPost'){
+        		txt = '顶级岗位';
+        	}
+        	return txt;
+        },
+        
     },
     watch: {//监测数据变化
     	
@@ -249,7 +301,6 @@ export default {
     	
 	},
     mounted () {//模板被渲染完毕之后执行
-    	
 	},
 	
 	//=================组件路由勾子==============================

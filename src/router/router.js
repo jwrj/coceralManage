@@ -118,15 +118,6 @@ export default [
 				component: () => import('@/views/chamber/postSet.vue')
 			},
 			{
-				path: 'staffSet',
-				name: 'staffSet',
-				meta: {
-					title: '人员配置',
-					icon: 'md-alarm',
-				},
-				component: () => import('@/views/chamber/staffSet.vue')
-		  },
-			{
 				path: 'sessionSet',
 				name: 'sessionSet',
 				meta: {
@@ -135,6 +126,15 @@ export default [
 				},
 				component: () => import('@/views/chamber/sessionSet.vue')
 			},
+			{
+				path: 'staffSet',
+				name: 'staffSet',
+				meta: {
+					title: '人员配置',
+					icon: 'md-alarm',
+				},
+				component: () => import('@/views/chamber/staffSet.vue')
+		  	},
 			{
 				path: 'approve',
 				name: 'approve',

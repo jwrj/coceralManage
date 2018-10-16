@@ -2,86 +2,90 @@
 	
 	<div>
 		
-		<Card style="position: initial;">
+		<Card>
 			
 			<div slot="title" class="title">
-				<h1>给{{chamber}}的岗位配置人员</h1>
+				
+				<h1>给广西湖北商会的岗位配置人员</h1>
+				
+				<post-casc style="margin-left: 10px;"></post-casc>
+				
+				<Select v-model="jieCiData" placeholder="选择届次" style="width:100px;margin-left: 10px;">
+			        <Option value="1">第1届</Option>
+			        <Option value="2">第2届</Option>
+			        <Option value="3">第3届</Option>
+			        <Option value="4">第4届</Option>
+			    </Select>
+			    
 			</div>
 			
 			<div>
 				
-			    <Form :label-width="80">
+			    <Form ref="formInstance" :model="formData" :rules="formRules" :label-width="80">
 					
 					<Row>
+						
 						<Col span="12">
-							
-							<FormItem label="岗位">
-								<post-casc style="width: 240px;"></post-casc>
+							<FormItem prop="takeOfficeTime" label="任职时间">
+								<DatePicker @on-change="takeOfficeTime" :value="formData.takeOfficeTime" placeholder="选择时间" type="date" style="width: 240px;"></DatePicker>
 							</FormItem>
-							
-							<FormItem label="届次">
-								<Select placeholder="选择届次" style="width:240px">
-							        <Option value="1">第1届</Option>
-							        <Option value="2">第2届</Option>
-							        <Option value="3">第3届</Option>
-							        <Option value="4">第4届</Option>
-							    </Select>
-							</FormItem>
-							
 						</Col>
+						
 						<Col span="12">
-							
-							<FormItem label="任职时间">
-								<DatePicker placeholder="选择时间" type="date" style="width: 240px;"></DatePicker>
-							</FormItem>
-							
 							<FormItem label="相关附件">
-								<Input placeholder="比如任命通知 / coc云盘的附件链接等等" style="width: 240px;"></Input>
+								<Input placeholder="(没用到)比如任命通知/coc云盘的附件链接等等" style="width: 240px;"></Input>
 							</FormItem>
-							
 						</Col>
+						
+						<Col span="24">
+							<FormItem label="已选会员">
+								<div style="width: 240px;">
+									<Poptip placement="bottom-start">
+										<Button type="primary" size="small">从会员列表选择</Button>
+										<userList slot="content"></userList>
+									</Poptip>
+								</div>
+								<div>
+									<Tag closable>张三</Tag>
+									<Tag closable>李四</Tag>
+									<Tag closable>王五</Tag>
+									<Tag closable>张三</Tag>
+									<Tag closable>李四</Tag>
+									<Tag closable>王五</Tag>
+								</div>
+							</FormItem>
+						</Col>
+						
 					</Row>
 					
-					<FormItem label="已选会员">
-						<div style="width: 240px;">
-							<Poptip placement="bottom-start">
-								<Button type="primary" size="small">从会员列表选择</Button>
-								<userList slot="content"></userList>
-							</Poptip>
-						</div>
-						<div>
-							<Tag closable>张三</Tag>
-							<Tag closable>李四</Tag>
-							<Tag closable>王五</Tag>
-							<Tag closable>张三</Tag>
-							<Tag closable>李四</Tag>
-							<Tag closable>王五</Tag>
-						</div>
-					</FormItem>
+					<div style="text-align: center;padding-bottom: 16px;">
+						<Button type="primary" @click="addPersonnel('formInstance')">添加人员</Button>
+					</div>
 					
 				</Form>
-				
-				<div style="text-align: center;padding-bottom: 16px;">
-					<Button type="primary">添加人员</Button>
-				</div>
 				
 			</div>
 			
 			
 			<Divider orientation="left">
-				<Tag color="cyan">
+				<Tag color="geekblue">
 					会员大会
 					<Icon type="md-arrow-forward" />
 					理事大会
 					<Icon type="md-arrow-forward" />
 					秘书长
 				</Tag>
-				<Tag color="volcano">第1届</Tag>
-				<span>人员列表（这里会根据上面选择的岗位和届次来列出数据）</span>
+				<Tag color="geekblue">第1届</Tag>
+				<span>人员列表（根据上面选择的岗位和届次列出对应数据，默认列出全部数据）</span>
 			</Divider>
 			
-			<table-list :tableColumns="tableColumns" :tableData="tableData" @on-poptip-ok="poptipOk"></table-list>
-			
+			<table-list
+			:headerShow="false"
+			:tableColumns="tableColumns"
+			:tableData="tableData"
+			@on-poptip-ok="poptipOk">
+			</table-list>
+			{{jieCiData}}
 		</Card>
 		
 	</div>
@@ -107,21 +111,23 @@ export default {
 		 * 默认值 default: ''
 		 * 
 		 */
-		chamber:{
-			type:String,
-			default:'广西湖北商会'
-		},
-		staffs:{
-			type:Array,
-			default: () => ['1','2','3']
-		}
 	},
     data () {//数据
         return {
         	
-        	split1: 0.5,
+        	postData: [],
         	
-        	modalShow:false,
+        	jieCiData: null,
+				
+			formData: {
+				takeOfficeTime: ''
+			},
+			
+			formRules: {
+				takeOfficeTime: [
+					{ required: true, message: '请选择任职时间', trigger: 'change' }
+				],
+			},
         	
         	tableColumns: [
     			{
@@ -236,17 +242,29 @@ export default {
     },
     methods: {//方法
     	
-		getStaff(list){
-			this.tableData.push(list)
-		},
-		
+    	takeOfficeTime(date){
+    		this.formData.takeOfficeTime = date;
+    	},
+    	
 		poptipOk(){
 			this.$Message.success('卸任成功');
 		},
 		
+		addPersonnel(name){
+			if(this.postData.length <= 0 && !this.jieCiData){
+				this.$Message.info('必须选择岗位和届次');
+			}else{
+				this.$refs[name].validate((valid) => {
+					if(valid){
+						this.$Message.success('添加成功');
+					}
+				});
+			}
+		},
+		
     },
     computed: {//计算属性
-        	
+        
     },
     watch: {//监测数据变化
     	

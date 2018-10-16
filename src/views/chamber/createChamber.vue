@@ -1,6 +1,6 @@
 <template>
 
-	<div class="createCham">
+	<div>
 		
 		<Card>
 			
@@ -114,8 +114,10 @@
 		
         <Modal v-model="modalShow" width="80%">
 	        <p slot="header">选择文件</p>
-	        <file-yun></file-yun>
+	        <file-yun v-model="selectFile"></file-yun>
 	    </Modal>
+	    
+	    {{selectFile}}
 		
 	</div>
 
@@ -144,6 +146,8 @@ export default {
 	},
 	data() { //数据
 		return {
+			
+			selectFile: [],
 			
 			modalShow: false,
 			

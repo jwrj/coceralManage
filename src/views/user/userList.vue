@@ -2,13 +2,19 @@
 	
 	<div>
 		
-		<table-list :tableColumns="tableColumns" :tableData="tableData">
-			 <div slot="header" style="width: 100%;display: flex;align-items: center;">
-			    
-			    <post-casc></post-casc>
-	    
-			</div>
-		</table-list>
+		<Card>
+			
+			<h1 slot="title">会员列表</h1>
+			
+			<table-list :tableColumns="tableColumns" :tableData="tableData" @select-change="tabSelectChange">
+				 <div slot="header" style="width: 100%;display: flex;align-items: center;">
+				    
+				    <post-casc></post-casc>
+		    
+				</div>
+			</table-list>
+			
+		</Card>
 		
 	</div>
 	
@@ -91,7 +97,7 @@ export default {
     				time: '2018-10-09'
     			},
     			{
-    				id: 1,
+    				id: 2,
     				name: '张三',
     				company: '公司abc',
     				mobilePhone: '13800138000',
@@ -99,7 +105,7 @@ export default {
     				time: '2018-10-09'
     			},
     			{
-    				id: 1,
+    				id: 3,
     				name: '张三',
     				company: '公司abc',
     				mobilePhone: '13800138000',
@@ -107,7 +113,7 @@ export default {
     				time: '2018-10-09'
     			},
     			{
-    				id: 1,
+    				id: 4,
     				name: '张三',
     				company: '公司abc',
     				mobilePhone: '13800138000',
@@ -119,6 +125,11 @@ export default {
     	}
     },
     methods: {//方法
+    	
+    	tabSelectChange(data){
+    		console.log(data);
+    	},
+    	
     },
     computed: {//计算属性
         	

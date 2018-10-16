@@ -21,13 +21,13 @@ router.beforeEach((to, from, next) => {//路由跳转前
 	}else if(sessionStorage.login){//已未登录
 		
 		//检测系统内部登录
-		if(!sessionStorage.chamberId && to.name !== 'login'){//未登录
+		if(!sessionStorage.identityType && to.name !== 'login'){//未登录
 			
 			next({
 				name: 'login'
 			});
 			
-		}else if(sessionStorage.chamberId){//已未登录
+		}else if(sessionStorage.identityType){//已未登录
 			
 			if(to.name === 'login'){
 				

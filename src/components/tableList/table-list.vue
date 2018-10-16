@@ -2,24 +2,28 @@
 	
 	<div>
 		
-		<header class="header">
+		<!--页眉-->
+		<header v-if="headerShow" class="header">
 			<slot name="header" :slotEvent="slotEvent"></slot>
 			<Input v-if="seekShow" :search="true" enter-button clearable placeholder="搜索..." class="seek" />
 		</header>
 		
+		<!--表格-->
 		<Table
 		stripe
 		:columns="tableColumns"
 		:data="tableData"
 		:highlight-row="true"
 		@on-select-all="tabSelectAll"
+		@on-select-all-cancel="tabSelectAllCancel"
 		@on-select="tabSelect"
 		@on-selection-change="tabSelectionChange"
 		@on-select-cancel="tabSelectCancel"
 		>
 		</Table>
 		
-		<footer class="footer">
+		<!--页脚-->
+		<footer v-if="footerShow" class="footer">
 			<slot name="footer"></slot>
 			<Page v-if="pageShow" :total="100" show-total show-sizer show-elevator style="margin-left: auto;" />
 		</footer>
@@ -81,6 +85,16 @@ export default {
 			default: () => []
 		},
 
+		headerShow: {//页眉
+			type: Boolean,
+			default: true
+		},
+		
+		footerShow: {//页脚
+			type: Boolean,
+			default: true
+		},
+		
 		seekShow: {//搜索框控件
 			type: Boolean,
 			default: true
@@ -93,7 +107,7 @@ export default {
 		
 		modalTitle: {//弹窗标题
 			type: String,
-			default: '标题'
+			default: '对话框标题'
 		},
 		
 	},
@@ -102,7 +116,7 @@ export default {
         	
         	modalShow: false,
         	
-        	checkedData: [],
+        	checkedData: [],//已选数据
         	
         }
     },
@@ -120,76 +134,69 @@ export default {
     		this.tableColumns.forEach(item => {
     		
 	    		if(item.handle){
-	    			
 	    			item.render = (h,params) => {
-	    				
 	    				let children = [];
-	    				
 	    				item.handle.forEach(btnItem => {
-	    					
 	    					children.push(buttonItem(this, h, params, btnItem));
-	    					
 	    				});
-	    				
 	    				return h('div',{
 	    					style: {
 	    						padding: '4px 0'
 	    					}
 	    				},children);
-	    				
 	    			}
-	    			
 	    		}
-	    		
 	    		
 	    	});
     		
     	},
+    	
     	tabSelectAll(selection){//全选
-    		console.log('全选');
-    		this.checkedData = selection;
+    		
     		this.tableData.forEach(item => {
     			selection.forEach(item2 => {
     				if(item.id === item2.id){
-    					console.log(item.id);
     					this.$set(item, '_checked', true);
     				}
     			});
     		});
+    		
     	},
+    	
+    	tabSelectAllCancel(selection){//取消全选
+    		
+    		this.tableData.forEach(item => {
+				this.$set(item, '_checked', false);
+			});
+			
+    	},
+    	
     	tabSelect(selection, row){//单选
-    		console.log('单选');
+    		
     		this.tableData.forEach(item => {
     			if(item.id === row.id){
       				this.$set(item, '_checked', true);
     			}
     		});
-    	},
-    	tabSelectionChange(selection){//勾选改变时
-    		
-    		if(selection.length === 0){
-    			console.log('取消全选');
-    			this.tableData.forEach(item => {
-    				this.$set(item, '_checked', false);
-    			});
-    		}else{
-    			
-    			
-    			
-    		}
-    		
-    		this.checkedData = selection;
-    		
-    		this.$emit('select-change', this.checkedData);
     		
     	},
-    	tabSelectCancel(selection, row){//单个取消选择
-    		console.log('单个取消选择');
+    	
+    	tabSelectCancel(selection, row){//单个取消
+    		
     		this.tableData.forEach(item => {
     			if(item.id === row.id){
       				this.$set(item, '_checked', false);
     			}
     		});
+    		
+    	},
+    	
+    	tabSelectionChange(selection){//勾选改变时
+    		
+    		this.checkedData = selection;
+    		
+    		this.$emit('select-change', this.checkedData);
+    		
     	},
     	
     },

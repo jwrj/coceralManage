@@ -5,63 +5,70 @@
 		<Card>
 			
 			<div slot="title" class="title">
-				<h1>届次配置</h1>
-				<Button style="margin-left: 10px;" size="small" type="primary" @click="addSession">添加届次</Button>
+				<h1>给广西湖北商会配置届次</h1>
+				<post-casc v-model="postData" style="margin-left: 10px;"></post-casc>
 			</div>
 			
-			<table-list :tableColumns="tableColumns" :tableData="tableData">
-
-				<div slot="header" style="width: 100%;display: flex;align-items: center;">
-					<post-casc style="margin-right: 10px;"></post-casc>
-
-				</div>
-
-			</table-list>
-			
-			<Modal 
-			v-model="showSess"
-			title="添加届次"
-			footer-hide>
-				<Form :model="formItem" :label-width="80">
+			<div>
+				
+			    <Form ref="formInstance" :model="formData" :rules="formRules" :label-width="80">
 					
-			        <FormItem label="届次名称:">
-			            <Input v-model="formItem.jc" placeholder="Enter something..." style="width: 240px;"></Input>
-			        </FormItem>
-			        
-					<FormItem label="开始时间:">
-						<DatePicker 
-						:value="formItem.startTime" 
-						type="date"
-						@on-change="start"
-						style="width: 240px;"
-						>
-						</DatePicker>
-					</FormItem>
-					
-					<FormItem label="到期时间:">
-						<DatePicker 
-						:value="formItem.expirationTime" 
-						type="date"
-						@on-change="end"
-						style="width: 240px;"
-						>
-						</DatePicker>
-					</FormItem>
-					
-					<FormItem label="会费标准:">
-						<Input v-model="formItem.criterion" placeholder="Enter something..." style="width: 240px;"></Input>
-					</FormItem>
-					
-					<FormItem>
-						<Button type="primary" size="large" @click.stop="add">确定添加</Button>
-					</FormItem>
+					<Row>
+						
+						<Col span="12">
+							<FormItem prop="name" label="届次名称">
+								<Input v-model="formData.name" placeholder="届次名称" style="width: 240px;"></Input>
+							</FormItem>
+						</Col>
+						
+						<Col span="12">
+							<FormItem prop="startTime" label="开始时间">
+								<DatePicker @on-change="startTime" :value="formData.startTime" placeholder="选择时间" type="date" style="width: 240px;"></DatePicker>
+							</FormItem>
+						</Col>
+						
+						<Col span="12">
+							<FormItem prop="finishTime" label="到期时间">
+								<DatePicker @on-change="finishTime" :value="formData.finishTime" placeholder="选择时间" type="date" style="width: 240px;"></DatePicker>
+							</FormItem>
+						</Col>
+						
+						<Col span="12">
+							<FormItem prop="standard" label="会费标准">
+								<Input v-model="formData.standard" placeholder="会费标准" style="width: 240px;"></Input>
+							</FormItem>
+						</Col>
+						
+					</Row>
 					
 				</Form>
-
-			</Modal>
+				
+				<div style="text-align: center;padding-bottom: 16px;">
+					<Button type="primary" @click="addData('formInstance')">添加届次</Button>
+				</div>
+				
+			</div>
+			
+			
+			<Divider orientation="left">
+				<Tag color="geekblue">
+					会员大会
+					<Icon type="md-arrow-forward" />
+					理事大会
+					<Icon type="md-arrow-forward" />
+					秘书长
+				</Tag>
+				<span>届次列表</span>
+			</Divider>
+			
+			<table-list
+			:headerShow="false"
+			:tableColumns="tableColumns"
+			:tableData="tableData">
+			</table-list>
 			
 		</Card>
-
+		
 	</div>
 
 </template>
@@ -70,7 +77,7 @@
 	import postCasc from '@/components/post/post-casc.vue'; //岗位级联
 	import tableList from '@/components/tableList/table-list.vue';//表格列表组件
 	export default {
-		name: '',
+		name: 'sessionSet',
 		components: { //组件模板,
 			postCasc,
 			tableList
@@ -86,15 +93,33 @@
 		},
 		data() { //数据
 			return {
-				showSess:false,
-				formItem:{
-					id:1,
-					jc:'',
-					startTime:'',
-					expirationTime:'',
-					criterion:''
+				
+				postData: [],
+				
+				formData: {
+					name: '',
+					startTime: '',
+					finishTime: '',
+					standard: '',
 				},
-				tableColumns: [{
+				
+				formRules: {
+					name: [
+						{ required: true, message: '请输入名称', trigger: 'blur' }
+					],
+					startTime: [
+						{ required: true, message: '请选择开始时间', trigger: 'change' }
+					],
+					finishTime: [
+						{ required: true, message: '请选择到期时间', trigger: 'change' }
+					],
+					standard: [
+						{ required: true, message: '请输入会费标准', trigger: 'blur' }
+					],
+				},
+				
+				tableColumns: [
+					{
 						title: 'ID',
 						key: 'id'
 					},
@@ -158,22 +183,37 @@
 			}
 		},
 		methods: { //方法
-			addSession(){
-				this.showSess=true;
+			
+			startTime(date){
+				this.formData.startTime = date;
 			},
-			start(date){
-				this.formItem.startTime = date;
+			
+			finishTime(date){
+				this.formData.finishTime = date;
 			},
-			end(date){
-				this.formItem.expirationTime = date;
+			
+			addData(name){
+				if(this.postData.length <= 0){
+					this.$Message.info('必须选择岗位');
+				}else{
+					this.$refs[name].validate((valid) => {
+						if(valid){
+							this.$Message.success('添加成功');
+						}
+					});
+				}
 			},
-			add(){
-				console.log(this.formItem);
-				this.formItem.id=1;
-				let result = Object.assign({}, this.formItem);
-				this.tableData.push(result)
-				this.showSess=false;
-				this.formItem={}
+			
+			setAjax(){
+				$ax.getAjaxData('user.Organize/jieAdd', {
+					gw_id: '',
+					jie_name: '',
+					begin_time: '',
+					end_time: '',
+					fee: ''
+				}, res => {
+					
+				});
 			}
 			
 		},

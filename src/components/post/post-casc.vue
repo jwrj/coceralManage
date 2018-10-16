@@ -2,7 +2,7 @@
 	
 	<div>
 		
-		<!--<Cascader v-model="cascaderValue" @on-change="cascaderChange" change-on-select filterable placeholder="选择岗位" :data="postData" style="width: 240px;"></Cascader>-->
+		<!--<Cascader v-model="selected" @on-change="cascaderChange" change-on-select filterable placeholder="选择岗位" :data="postData" style="width: 240px;"></Cascader>-->
 		
 		<Poptip placement="bottom-start" class="abc">
 			
@@ -131,7 +131,7 @@ export default {
     			
     		}
     		
-    		//这里的代码相似，可以整合
+    		//这里的代码相似，可以整合（未合并）
     		this.selectedData.splice(index+1, this.selectedData.length-(index+1));
     		
     		this.selectedData.splice(index, 1, {label: item.label,value: item.value});
@@ -151,9 +151,7 @@ export default {
     		let newArr = [];
     	
 	    	this.postData.forEach(item => {
-	    		
 	    		newArr.push([item]);
-	    		
 	    	});
 	    	
 	    	this.newPostData = newArr;
@@ -196,6 +194,12 @@ export default {
     	
 	},
     mounted () {//模板被渲染完毕之后执行
+    	
+    	$ax.getAjaxData('manage.Organize/gangweiAll', {}, res => {
+    		
+    		console.log(res.data);
+    		
+    	})
     	
 	},
 		
