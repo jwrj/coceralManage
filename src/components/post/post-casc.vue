@@ -2,7 +2,7 @@
 	
 	<div>
 		
-		<!--<Cascader v-model="selected" @on-change="cascaderChange" change-on-select filterable placeholder="选择岗位" :data="postData" style="width: 240px;"></Cascader>-->
+		<Cascader v-if="false" v-model="selected" @on-change="cascaderChange" change-on-select filterable placeholder="选择岗位" :data="postData" style="width: 240px;"></Cascader>
 		
 		<Poptip placement="bottom-start" class="abc">
 			
@@ -15,9 +15,9 @@
 				<transition-group name="fade" tag="div" class="postCasc-box">
 					
 			    	<div
-			    		v-for="(item, index) in newPostData"
-			    		:key="index"
-			    		class="main-box">
+		    		v-for="(item, index) in newPostData"
+		    		:key="index"
+		    		class="main-box">
 			    		
 			    		<div
 			    			v-for="child in item"
@@ -66,48 +66,19 @@ export default {
         	
         	newPostData: [],//新的数据结构
         	
-        	postData: [//这个数据是从外部传入的
-    			{
-        			label: '会员大会',
-        			value: '1',
-        			children: [
-        				{
-        					label: '名誉会长',
-        					value: '2',
-        				},
-        				{
-        					label: '理事大会',
-        					value: '3',
-        					children: [
-        						{
-        							label: '秘书长',
-        							value: '4',
-        						},
-        						{
-        							label: '监事委员会',
-        							value: '5',
-        						},
-        						{
-        							label: '常委执委会',
-        							value: '6',
-        						},
-        						{
-        							label: '理事长',
-        							value: '7',
-        						},
-        					]
-        				},
-        				{
-        					label: '总顾问',
-        					value: '8',
-        				},
-        			]
-        		},
-        	],
+        	postData: [],//岗位数据
         	
         }
     },
     methods: {//方法
+    	
+    	init(){//初始化数据
+    		
+    		this.getPostData();
+    		
+	    	this.$emit('input', this.selected);
+    		
+    	},
     	
     	cascaderChange(value, selectedData){//点击cascader岗位时触发
     		
@@ -146,18 +117,28 @@ export default {
 	    	
     	},
     	
-    	init(){//初始化数据
+    	getPostData(){//获取岗位数据
     		
-    		let newArr = [];
-    	
-	    	this.postData.forEach(item => {
-	    		newArr.push([item]);
+    		$ax.getAjaxData('manage.Organize/gangweiAll', {}, res => {
+    			if(res.code == 0){
+    				let recursion = (ajaxData) => {//递归
+    					let newArr = [];
+	    				ajaxData.forEach(item => {
+	    					let obj = {
+		    					label: item.name,
+				    			value: Number(item.id),
+		    				}
+	    					if(item.son && item.son.length > 0){
+	    						obj.children = recursion(item.son);
+	    					}
+	    					newArr.push(obj);
+	    				});
+	    				return newArr
+    				}
+    				this.postData = recursion(res.data);
+    			}
 	    	});
 	    	
-	    	this.newPostData = newArr;
-	    	
-	    	this.$emit('input', this.selected);
-    		
     	},
     	
     },
@@ -184,6 +165,16 @@ export default {
     },
     watch: {//监测数据变化
     	
+    	postData(newVal){
+    		
+    		let newArr = [];
+    		
+	    	newArr.push([...newVal]);
+	    	
+	    	this.newPostData = newArr;
+	    	
+    	}
+    	
 	},
     
     //===================组件钩子===========================
@@ -194,12 +185,6 @@ export default {
     	
 	},
     mounted () {//模板被渲染完毕之后执行
-    	
-    	$ax.getAjaxData('manage.Organize/gangweiAll', {}, res => {
-    		
-    		console.log(res.data);
-    		
-    	})
     	
 	},
 		

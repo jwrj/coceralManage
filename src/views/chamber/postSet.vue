@@ -2,19 +2,10 @@
 	
 	<div>
 		
-		<div style="border: 1px solid red;height: 600px;">
-			
-			<Split v-model="split1">
-	            <div slot="left" style="overflow-y: auto;overflow-x: hidden;height: 100%;">
-	                <post-config @on-add="addPost"></post-config>
-	            </div>
-	            <div slot="right" style="margin-left: 8px;overflow-y: auto;overflow-x: hidden;height: 100%;">
-	            	<div>人员配置列表</div>
-	            	<div>届次配置列表</div>
-	            </div>
-	        </Split>
-	        
-		</div>
+		<Card>
+			<h1 slot="title">岗位配置</h1>
+			<post-config></post-config>
+		</Card>
 		
 	</div>
 	
@@ -43,20 +34,9 @@ export default {
     data () {//数据
         return {
         	
-        	split1: 0.5,
-        	
         }
     },
     methods: {//方法
-    	
-    	addPost(name, fid){
-    		$ax.getAjaxData('manage.Organize/gangweiAdd', {
-        		name: name,
-        		fid: fid
-        	}, res => {
-        		
-        	});
-    	},
     	
     },
     computed: {//计算属性

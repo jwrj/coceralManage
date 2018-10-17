@@ -4,8 +4,8 @@
 		
 		<Tree :data="treeData" :render="renderContent" empty-text=""></Tree>
 		
-		<div v-if="treeData.length <= 0" style="margin-top: 16px;text-align: center;">
-			<Button type="primary" @click="addMaxPost">添加岗位</Button>
+		<div style="margin-top: 16px;text-align: center;">
+			<Button type="primary" @click="addMaxPost">添加顶级岗位</Button>
 		</div>
 		
 		<Modal v-model="modalShow" width="360">
@@ -46,8 +46,6 @@ export default {
         	
         	modalShow: false,
         	
-        	currentData: {},
-        	
         	formInline: {
         		name: ''
         	},
@@ -55,6 +53,10 @@ export default {
         	ruleInline: { required: true, message: '请输入名称', trigger: 'blur' },
         	
         	type: 'add',
+        	
+        	currentData: {},
+        	
+        	modalTitle: '',
         	
         	treeData: [
 //      		{
@@ -140,7 +142,7 @@ export default {
     },
     methods: {//方法
     	
-    	renderContent (h, { root, node, data }) {
+    	renderContent (h, { root, node, data }) { //渲染方式
             return h('div',{
             	style: {
             		display: 'inline-block',
@@ -178,6 +180,7 @@ export default {
 	                        props: Object.assign({}, this.buttonProps, {
 	                            icon: 'md-create',
 	                            type: 'success',
+	                            disabled: true
 	                        }),
 	                        style: {
 	                            marginRight: '8px'
@@ -202,6 +205,7 @@ export default {
 	                        on: {
 	                            click: () => {
 	                            	this.type = 'add';
+	                            	this.modalTitle = data.title;
 	                            	this.formInline.name = '';
 	                            	this.modalShow = true;
 	                                this.currentData = data;
@@ -212,6 +216,7 @@ export default {
 	                        props: Object.assign({}, this.buttonProps, {
 	                            icon: 'md-remove',
 	                            type: 'error',
+	                            disabled: true
 	                        }),
 	                        on: {
 	                            click: () => {
@@ -233,11 +238,12 @@ export default {
         	data.title = title;
         },
         
-        append (data,title) {//添加方法
+        append (data, title, id) {//添加方法
             const children = data.children || [];
             children.push({
                 title: title,
-                expand: true
+                expand: true,
+                id: id
             });
             this.$set(data, 'children', children);
         },
@@ -255,25 +261,82 @@ export default {
         },
         
         submit(name){//添加岗位
+        	
         	this.$refs[name].validate((valid) => {
+        		
         		if(valid){
+        			
 		        	if(this.type === 'add'){
-		        		this.append(this.currentData, this.formInline.name);
-		        		this.$emit('on-add', this.formInline.name, this.currentData.nodeKey);
+		        		
+		        		$ax.getAjaxData('manage.Organize/gangweiAdd', {
+			        		name: this.formInline.name,
+			        		fid: this.currentData.id
+			        	}, res => {
+			        		if(res.code == 0){
+			        			this.append(this.currentData, this.formInline.name, res.data.id);
+			        			this.formInline.name = '';
+		        				this.modalShow = false;
+			        		}
+			        	});
+			        	
+			        	//this.$emit('on-add', this.formInline.name, this.currentData.nodeKey);
+			        	
 		        	}else if(this.type === 'edit'){
+		        		
 		        		this.edit(this.currentData, this.formInline.name);
+		        		this.modalShow = false;
+		        		
 		        	}else if(this.type === 'addMaxPost'){
-		        		this.treeData = [{
-			    			title: this.formInline.name,
-			                expand: true
-			    		}];
-			    		this.$emit('on-add', this.formInline.name, 0);
+		        		
+		        		$ax.getAjaxData('manage.Organize/gangweiAdd', {
+			        		name: this.formInline.name,
+			        		fid: 0
+			        	}, res => {
+			        		if(res.code == 0){
+			        			this.treeData.push({
+			        				title: this.formInline.name,
+					                expand: true,
+					                id: res.data.id
+			        			});
+					    		this.formInline.name = '';
+		        				this.modalShow = false;
+			        		}
+			        	});
+		        		
+			    		//this.$emit('on-add', this.formInline.name, 0);
+			    		
 		        	}
-		        	this.formInline.name = '';
-		        	this.modalShow = false;
+		        	
         		}
+        		
         	});
+        	
         },
+        
+        getTreeData(){//获取岗位树
+    		
+    		$ax.getAjaxData('manage.Organize/gangweiAll', {}, res => {
+    			if(res.code == 0){
+    				let recursion = (ajaxData) => {//递归
+    					let newArr = [];
+	    				ajaxData.forEach(item => {
+	    					let obj = {
+		    					title: item.name,
+		    					expand: true,
+				    			id: Number(item.id),
+		    				}
+	    					if(item.son && item.son.length > 0){
+	    						obj.children = recursion(item.son);
+	    					}
+	    					newArr.push(obj);
+	    				});
+	    				return newArr
+    				}
+    				this.treeData = recursion(res.data);
+    			}
+	    	});
+	    	
+    	},
     	
     },
     computed: {//计算属性
@@ -281,11 +344,11 @@ export default {
         text(){
         	let txt = '';
         	if(this.type === 'add'){
-        		txt = '添加岗位';
+        		txt = '给（' + this.modalTitle + '）添加岗位';
         	}else if(this.type === 'edit'){
         		txt = '编辑岗位';
         	}else if(this.type === 'addMaxPost'){
-        		txt = '顶级岗位';
+        		txt = '添加顶级岗位';
         	}
         	return txt;
         },
@@ -298,42 +361,9 @@ export default {
     //===================组件钩子===========================
     
     created () {//实例被创建完毕之后执行
-    	
+    	this.getTreeData();
 	},
     mounted () {//模板被渲染完毕之后执行
-	},
-	
-	//=================组件路由勾子==============================
-	
-	beforeRouteEnter (to, from, next) {//在组件创建之前调用（放置页面加载时请求的Ajax）
-		
-		(async() => {//执行异步函数
-			
-			//async、await错误处理
-			try {
-				
-				/*
-				 * 
-				 * ------串行执行---------
-				 * console.log(await getAjaxData());
-				 * ...
-				 * 
-				 * ---------并行：将多个promise直接发起请求（先执行async所在函数），然后再进行await操作。（执行效率高、快）----------
-				 * let abc = getAjaxData();//先执行promise函数
-				 * ...
-				 * console.log(await abc);
-				 * ...
-				*/
-				next(vm => {
-					
-				});
-				
-			} catch(err) {
-				console.log(err);
-			}
-			
-		})();
-		
 	},
 	
 }

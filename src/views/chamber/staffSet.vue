@@ -8,13 +8,10 @@
 				
 				<h1>给广西湖北商会的岗位配置人员</h1>
 				
-				<post-casc style="margin-left: 10px;"></post-casc>
+				<post-casc v-model="postId" @on-change="postChange" style="margin-left: 10px;"></post-casc>
 				
-				<Select v-model="jieCiData" placeholder="选择届次" style="width:100px;margin-left: 10px;">
-			        <Option value="1">第1届</Option>
-			        <Option value="2">第2届</Option>
-			        <Option value="3">第3届</Option>
-			        <Option value="4">第4届</Option>
+				<Select v-model="jieCiId" placeholder="选择届次" not-found-text="当前岗位还没有届次" style="width:100px;margin-left: 10px;">
+			        <Option v-for="item in jieCiData" :value="item.value" :key="item.value">{{item.label}}</Option>
 			    </Select>
 			    
 			</div>
@@ -85,7 +82,7 @@
 			:tableData="tableData"
 			@on-poptip-ok="poptipOk">
 			</table-list>
-			{{jieCiData}}
+			
 		</Card>
 		
 	</div>
@@ -115,9 +112,11 @@ export default {
     data () {//数据
         return {
         	
-        	postData: [],
+        	postId: [],//岗位id
         	
-        	jieCiData: null,
+        	jieCiId: null,//届次ID
+        	
+        	jieCiData: [],//届次数据
 				
 			formData: {
 				takeOfficeTime: ''
@@ -242,15 +241,15 @@ export default {
     },
     methods: {//方法
     	
-    	takeOfficeTime(date){
+    	takeOfficeTime(date){//任职时间
     		this.formData.takeOfficeTime = date;
     	},
     	
-		poptipOk(){
+		poptipOk(){//卸任
 			this.$Message.success('卸任成功');
 		},
 		
-		addPersonnel(name){
+		addPersonnel(name){//添加人员
 			if(this.postData.length <= 0 && !this.jieCiData){
 				this.$Message.info('必须选择岗位和届次');
 			}else{
@@ -261,6 +260,31 @@ export default {
 				});
 			}
 		},
+		
+		postChange(postId){//岗位选择改变时
+			this.getJieCiData(postId);
+		},
+		
+		getJieCiData(postId){//获取届次数据
+			$ax.getAjaxData('manage.Organize/jieList', {
+				gw_id: postId && postId.length > 0 ? postId[postId.length-1] : '',//岗位ID
+			}, res => {
+				if(res.code == 0){
+					let newArr = [];
+					res.data.forEach(item => {
+						newArr.push({
+							label: item.jie_name,
+							value: Number(item.id)
+						})
+					});
+					this.jieCiData = newArr;
+					this.jieCiId = null;
+					if(this.jieCiData.length > 0){
+						this.jieCiId = this.jieCiData[0].value;
+					}
+				}
+			});
+		}
 		
     },
     computed: {//计算属性
@@ -276,7 +300,10 @@ export default {
     	
 	},
     mounted () {//模板被渲染完毕之后执行
-    	
+    	if(this.postId && this.postId.length > 0){
+    		console.log(this.postId[postId.length-1]);
+    		
+    	}
 	},
 	
 	//=================组件路由勾子==============================

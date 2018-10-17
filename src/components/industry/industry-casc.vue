@@ -58,6 +58,7 @@ export default {
     
     created () {//实例被创建完毕之后执行
     	
+    	//获取行业数据
     	$ax.getAjaxData('http://192.168.2.200:802/cdn/hangye.js',{
     		
     	},(response) => {

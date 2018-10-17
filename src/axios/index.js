@@ -63,7 +63,26 @@ axios.interceptors.response.use(
 	_res => { //在这里对返回的数据进行处理
 		
 		console.log('<--返回了数据', _res.data);
-
+		
+		if(_res.data.code != 0){
+			vm.$Message.warning(_res.data.msg);
+		}
+		
+		
+		switch (_res.data.code){
+			case 81://用户未登录
+				sessionStorage.removeItem('userLogin');
+				sessionStorage.removeItem('identityType');
+				sessionStorage.removeItem('chamberId');
+				break;
+			case 83://管理员未登录
+				sessionStorage.removeItem('identityType');
+				sessionStorage.removeItem('chamberId');
+				break;
+			default:
+				break;
+		}
+		
 		return _res.data;
 
 	},

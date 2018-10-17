@@ -6,7 +6,7 @@
 			
 			<div slot="title" class="title">
 				<h1>给广西湖北商会配置届次</h1>
-				<post-casc v-model="postData" style="margin-left: 10px;"></post-casc>
+				<post-casc v-model="postId" @on-change="postChange" style="margin-left: 10px;"></post-casc>
 			</div>
 			
 			<div>
@@ -17,7 +17,7 @@
 						
 						<Col span="12">
 							<FormItem prop="name" label="届次名称">
-								<Input v-model="formData.name" placeholder="届次名称" style="width: 240px;"></Input>
+								<Input v-model="formData.name" clearable placeholder="届次名称" style="width: 240px;"></Input>
 							</FormItem>
 						</Col>
 						
@@ -28,14 +28,14 @@
 						</Col>
 						
 						<Col span="12">
-							<FormItem prop="finishTime" label="到期时间">
-								<DatePicker @on-change="finishTime" :value="formData.finishTime" placeholder="选择时间" type="date" style="width: 240px;"></DatePicker>
+							<FormItem prop="endTime" label="到期时间">
+								<DatePicker @on-change="endTime" :value="formData.endTime" placeholder="选择时间" type="date" style="width: 240px;"></DatePicker>
 							</FormItem>
 						</Col>
 						
 						<Col span="12">
 							<FormItem prop="standard" label="会费标准">
-								<Input v-model="formData.standard" placeholder="会费标准" style="width: 240px;"></Input>
+								<InputNumber v-model="formData.standard" :max="10000000" :min="0" style="width: 240px;"></InputNumber>
 							</FormItem>
 						</Col>
 						
@@ -44,7 +44,7 @@
 				</Form>
 				
 				<div style="text-align: center;padding-bottom: 16px;">
-					<Button type="primary" @click="addData('formInstance')">添加届次</Button>
+					<Button type="primary" @click="addJieCi('formInstance')">添加届次</Button>
 				</div>
 				
 			</div>
@@ -64,7 +64,7 @@
 			<table-list
 			:headerShow="false"
 			:tableColumns="tableColumns"
-			:tableData="tableData">
+			:tableData="JieCiDataList">
 			</table-list>
 			
 		</Card>
@@ -94,13 +94,13 @@
 		data() { //数据
 			return {
 				
-				postData: [],
+				postId: [],//岗位ID
 				
 				formData: {
 					name: '',
 					startTime: '',
-					finishTime: '',
-					standard: '',
+					endTime: '',
+					standard: null,
 				},
 				
 				formRules: {
@@ -110,34 +110,35 @@
 					startTime: [
 						{ required: true, message: '请选择开始时间', trigger: 'change' }
 					],
-					finishTime: [
+					endTime: [
 						{ required: true, message: '请选择到期时间', trigger: 'change' }
 					],
 					standard: [
-						{ required: true, message: '请输入会费标准', trigger: 'blur' }
+						{ type: 'number', required: true, message: '请输入会费标准', trigger: 'blur' }
 					],
 				},
 				
 				tableColumns: [
 					{
+						width: 60,
 						title: 'ID',
 						key: 'id'
 					},
 					{
 						title: '届次',
-						key: 'jc'
+						key: 'jie_name'
 					},
 					{
 						title: '开始时间',
-						key: 'startTime'
+						key: 'begin_time'
 					},
 					{
 						title: '到期时间',
-						key: 'expirationTime'
+						key: 'end_time'
 					},
 					{
 						title: '会费标准',
-						key: 'criterion'
+						key: 'fee'//这里要除回100才是正确的数
 					},
 					{
 	    				align: 'center',
@@ -154,65 +155,56 @@
 	    			}
 				],
 				
-				tableData: [
-	    			{
-	    				id: 1,
-	    				jc: '第一届',
-	    				mobilePhone: '13800138000',
-	    				startTime: '2018-10-09',
-	    				expirationTime: '2018-10-09',
-	    				criterion: '200'
-	    			},
-	    			{
-	    				id: 1,
-	    				jc: '第一届',
-	    				mobilePhone: '13800138000',
-	    				startTime: '2018-10-09',
-	    				expirationTime: '2018-10-09',
-	    				criterion: '200'
-	    			},
-	    			{
-	    				id: 1,
-	    				jc: '第一届',
-	    				mobilePhone: '13800138000',
-	    				startTime: '2018-10-09',
-	    				expirationTime: '2018-10-09',
-	    				criterion: '200'
-	    			},
-	    		],
+				JieCiDataList: [],
 			}
 		},
 		methods: { //方法
 			
-			startTime(date){
+			startTime(date){//开始时间
 				this.formData.startTime = date;
 			},
 			
-			finishTime(date){
-				this.formData.finishTime = date;
+			endTime(date){//到期时间
+				this.formData.endTime = date;
 			},
 			
-			addData(name){
-				if(this.postData.length <= 0){
+			addJieCi(name){//添加届次
+				if(this.postId.length <= 0){
 					this.$Message.info('必须选择岗位');
 				}else{
 					this.$refs[name].validate((valid) => {
 						if(valid){
-							this.$Message.success('添加成功');
+							this.addJieCiAjax();
 						}
 					});
 				}
 			},
 			
-			setAjax(){
-				$ax.getAjaxData('user.Organize/jieAdd', {
-					gw_id: '',
-					jie_name: '',
-					begin_time: '',
-					end_time: '',
-					fee: ''
+			addJieCiAjax(){//提交数据接口
+				$ax.getAjaxData('manage.Organize/jieAdd', {
+					gw_id: this.postId && this.postId.length > 0 ? this.postId[this.postId.length-1] : '',//岗位ID
+					jie_name: this.formData.name,//届次名
+					begin_time: this.formData.startTime,//开始时间
+					end_time: this.formData.endTime,//结束时间
+					fee: this.formData.standard*100 //会费,单位分 整数提交需要转化数据,乘100
 				}, res => {
-					
+					if(res.code == 0){
+						this.$Message.success('添加成功');
+					}
+				});
+			},
+			
+			postChange(postId){//岗位选择改变时
+				this.getJieCiData(postId);
+			},
+			
+			getJieCiData(postId){//获取届次数据
+				$ax.getAjaxData('manage.Organize/jieList', {
+					gw_id: postId && postId.length > 0 ? postId[postId.length-1] : '',//岗位ID
+				}, res => {
+					if(res.code == 0){
+						this.JieCiDataList = res.data;
+					}
 				});
 			}
 			

@@ -12,22 +12,22 @@ export const router = new Router({
 router.beforeEach((to, from, next) => {//路由跳转前
 	
 	//检测用户中心登录
-	if(!sessionStorage.login && to.name !== 'mainLogin'){//未登录
+	if(!sessionStorage.userLogin && to.name !== 'mainLogin'){//用户中心未登录
 		
 		next({
 			name: 'mainLogin'
 		});
 		
-	}else if(sessionStorage.login){//已未登录
+	}else if(sessionStorage.userLogin){//用户中心已登录
 		
 		//检测系统内部登录
-		if(!sessionStorage.identityType && to.name !== 'login'){//未登录
+		if(!sessionStorage.identityType && to.name !== 'login'){//系统身份未登录
 			
 			next({
 				name: 'login'
 			});
 			
-		}else if(sessionStorage.identityType){//已未登录
+		}else if(sessionStorage.identityType){//系统身份已登录
 			
 			if(to.name === 'login'){
 				
