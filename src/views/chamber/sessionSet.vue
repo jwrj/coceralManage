@@ -76,6 +76,11 @@
 <script>
 	import postCasc from '@/components/post/post-casc.vue'; //岗位级联
 	import tableList from '@/components/tableList/table-list.vue';//表格列表组件
+	
+	const getLocalTime = (nS) => {
+		return new Date(parseInt(nS) * 1000).toLocaleString().replace(/\//g, "-").replace(/上午([\d\:]*)/g, "");
+    }
+	
 	export default {
 		name: 'sessionSet',
 		components: { //组件模板,
@@ -130,15 +135,23 @@
 					},
 					{
 						title: '开始时间',
-						key: 'begin_time'
+						render: (h, params) => {
+							return h('span', getLocalTime(params.row.begin_time))
+						}
 					},
 					{
 						title: '到期时间',
-						key: 'end_time'
+						render: (h, params) => {
+							return h('span', getLocalTime(params.row.end_time))
+						}
 					},
 					{
-						title: '会费标准',
-						key: 'fee'//这里要除回100才是正确的数
+						title: '会费标准(元)',
+						render: (h, params) => {//这里要除回100才是正确的数
+							let feeNum = Number(params.row.fee);
+							let newFeeNum = feeNum/100;
+							return h('span', newFeeNum)
+						}
 					},
 					{
 	    				align: 'center',
@@ -189,6 +202,7 @@
 					fee: this.formData.standard*100 //会费,单位分 整数提交需要转化数据,乘100
 				}, res => {
 					if(res.code == 0){
+						this.getJieCiData(this.postId);
 						this.$Message.success('添加成功');
 					}
 				});

@@ -78,7 +78,7 @@ export default {
     		if(response.code === 0){//已登录
     			sessionStorage.userLogin = 0;
     			next({name: 'login'});
-    		}else if(response.code === 81){//未登录跳转到用户中心
+    		}else if(response.code === 2081){//未登录跳转到用户中心
     			$ax.getAjaxData('Oauth/getLoginUrl', {}, (response) => {
 		    		window.location.href = response.data.url;
 		    	}, {}, error => {

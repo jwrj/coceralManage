@@ -18,13 +18,19 @@
 			
 			<div>
 				
-			    <Form ref="formInstance" :model="formData" :rules="formRules" :label-width="80">
+			    <Form ref="formInstance" :model="formData" :rules="formRules" :label-width="100">
 					
 					<Row>
 						
 						<Col span="12">
-							<FormItem prop="takeOfficeTime" label="任职时间">
-								<DatePicker @on-change="takeOfficeTime" :value="formData.takeOfficeTime" placeholder="选择时间" type="date" style="width: 240px;"></DatePicker>
+							<FormItem prop="startTime" label="任职开始时间">
+								<DatePicker @on-change="startTime" :value="formData.startTime" placeholder="选择时间" type="date" style="width: 240px;"></DatePicker>
+							</FormItem>
+						</Col>
+						
+						<Col span="12">
+							<FormItem prop="endTime" label="任职结束时间">
+								<DatePicker @on-change="endTime" :value="formData.endTime" placeholder="选择时间" type="date" style="width: 240px;"></DatePicker>
 							</FormItem>
 						</Col>
 						
@@ -37,18 +43,10 @@
 						<Col span="24">
 							<FormItem label="已选会员">
 								<div style="width: 240px;">
-									<Poptip placement="bottom-start">
-										<Button type="primary" size="small">从会员列表选择</Button>
-										<userList slot="content"></userList>
-									</Poptip>
+									<Button @click="memberListShow = true" type="primary" size="small">从会员列表选择</Button>
 								</div>
 								<div>
-									<Tag closable>张三</Tag>
-									<Tag closable>李四</Tag>
-									<Tag closable>王五</Tag>
-									<Tag closable>张三</Tag>
-									<Tag closable>李四</Tag>
-									<Tag closable>王五</Tag>
+									<Tag v-for="item in checkedMembers" :color="item.color" :name="item.id" closable @on-close="tagClose">{{item.name}}</Tag>
 								</div>
 							</FormItem>
 						</Col>
@@ -85,14 +83,30 @@
 			
 		</Card>
 		
+		<Drawer
+            title="会员列表"
+            v-model="memberListShow"
+            width="50%"
+        >
+        	<userList
+        	ref="userListInstance"
+        	:titleShow="false"
+        	:selectShow="true"
+        	:styleShow="false"
+        	@on-select-change="memberSelect"
+        	></userList>
+		</Drawer>
+		
 	</div>
 	
 </template>
 
 <script>
-	import tableList from '@/components/tableList/table-list.vue'
-	import postCasc from '@/components/post/post-casc.vue';
-	import userList from '@/views/user/userList.vue';
+import tableList from '@/components/tableList/table-list.vue'
+import postCasc from '@/components/post/post-casc.vue';
+import userList from '@/views/user/userList.vue';
+import qs from 'qs';
+//const qs = require('qs'); axios自带qs插件
 export default {
 	name: 'staffSet',
 	components:{//组件模板,
@@ -112,19 +126,27 @@ export default {
     data () {//数据
         return {
         	
+        	memberListShow: false,
+        	
         	postId: [],//岗位id
         	
         	jieCiId: null,//届次ID
         	
         	jieCiData: [],//届次数据
-				
+        	
+        	checkedMembers: [],//选中的会员
+        	
 			formData: {
-				takeOfficeTime: ''
+				startTime: '',
+				endTime: '',
 			},
 			
 			formRules: {
-				takeOfficeTime: [
-					{ required: true, message: '请选择任职时间', trigger: 'change' }
+				startTime: [
+					{ required: true, message: '请选择开始时间', trigger: 'change' }
+				],
+				endTime: [
+					{ required: true, message: '请选择结束时间', trigger: 'change' }
 				],
 			},
         	
@@ -241,24 +263,109 @@ export default {
     },
     methods: {//方法
     	
-    	takeOfficeTime(date){//任职时间
-    		this.formData.takeOfficeTime = date;
+    	memberSelect(data){//选择会员时触发
+    		let newArr = [];
+    		data.forEach(item => {
+    			newArr.push({
+    				name: item.person_info.truest_name,
+    				id: item.id,
+    				color: 'default'
+    			});
+    		});
+    		this.checkedMembers = newArr;
     	},
+    	
+    	startTime(date){//开始时间
+			this.formData.startTime = date;
+		},
+		
+		endTime(date){//结束时间
+			this.formData.endTime = date;
+		},
+		
+		tagClose(ev, id){//删除已选会员
+			let oldMemberList = this.$refs.userListInstance.memberList;
+			oldMemberList.forEach(item => {
+				if(item.id == id){
+					item._checked = false;
+				}
+			});
+			this.checkedMembers.forEach((item, index, oldArr) => {
+				if(item.id == id){
+					oldArr.splice(index, 1);
+				}
+			});
+		},
     	
 		poptipOk(){//卸任
 			this.$Message.success('卸任成功');
 		},
 		
 		addPersonnel(name){//添加人员
-			if(this.postData.length <= 0 && !this.jieCiData){
-				this.$Message.info('必须选择岗位和届次');
+			if(this.postId.length <= 0){
+				this.$Message.info('必须选择岗位!');
+			}else if(!this.jieCiId){
+				this.$Message.info('必须选择届次!');
 			}else{
 				this.$refs[name].validate((valid) => {
-					if(valid){
-						this.$Message.success('添加成功');
+					if(valid && this.checkedMembers.length > 0){
+						this.setSubmitAjax();
+					}
+					if(this.checkedMembers.length <= 0){
+						this.$Message.info('请选择会员!');
 					}
 				});
 			}
+		},
+		
+		setSubmitAjax(){//设置提交数据
+			
+			let obj = {
+				gw_id: this.postId[this.postId.length-1],//岗位ID
+				jie_id: this.jieCiId,//届的ID
+				begin_time: this.formData.startTime,//开始时间
+				end_time: this.formData.endTime//结束时间
+			}
+			
+			let membersIds = [];
+			
+			this.checkedMembers.forEach(item => {
+				membersIds.push(Number(item.id));
+			});
+			
+			let member = this.QSStringify({mid: membersIds});
+			
+			$ax.getAjaxData('manage.Organize/gangweiPersonMore', Object.assign({}, obj, member), res => {
+				if(res.code == 0){
+					let tf1 = false;
+					let tf2 = false;
+					res.data.forEach(item => {
+						if(item.result == 0){//有重复人员
+							tf1 = true;
+							this.checkedMembers.forEach(item2 => {
+								if(item2.id == item.mid){
+									item2.color = 'error';
+								}
+							});
+						}else{
+							tf2 = true;
+							this.checkedMembers.forEach(item2 => {
+								if(item2.id == item.mid){
+									item2.color = 'success';
+								}
+							});
+						}
+					});
+					if(!tf1 && tf2){
+						this.$Message.success('已选人员添加成功');
+					}else if(tf1 && !tf2){
+						this.$Message.error('已选人员重复添加！');
+					}else{
+						this.$Message.info('部分人员添加成功');
+					}
+				}
+			});
+			
 		},
 		
 		postChange(postId){//岗位选择改变时
@@ -266,6 +373,7 @@ export default {
 		},
 		
 		getJieCiData(postId){//获取届次数据
+			this.jieCiId = null;
 			$ax.getAjaxData('manage.Organize/jieList', {
 				gw_id: postId && postId.length > 0 ? postId[postId.length-1] : '',//岗位ID
 			}, res => {
@@ -278,13 +386,30 @@ export default {
 						})
 					});
 					this.jieCiData = newArr;
-					this.jieCiId = null;
 					if(this.jieCiData.length > 0){
 						this.jieCiId = this.jieCiData[0].value;
 					}
 				}
 			});
-		}
+		},
+		
+		QSStringify(params={}){//qs提交数组到后台
+			
+			let str = '{'+qs.stringify(params, {encoder: function(str){
+	    		if(typeof(str) === 'string' && typeof(str) !== 'number'){
+	    			return '"'+ str +'"'
+	    		}else{
+	    			return str
+	    		}
+	    	}})+'}';
+	    	
+	    	let jsonStr = str.replace(/\=/g, ':').replace(/\&/g, ',');
+	    	
+	      	let jsonData = JSON.parse(jsonStr);
+	      	
+	      	return jsonData;
+	      	
+		},
 		
     },
     computed: {//计算属性
@@ -300,10 +425,7 @@ export default {
     	
 	},
     mounted () {//模板被渲染完毕之后执行
-    	if(this.postId && this.postId.length > 0){
-    		console.log(this.postId[postId.length-1]);
-    		
-    	}
+    	
 	},
 	
 	//=================组件路由勾子==============================

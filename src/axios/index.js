@@ -70,14 +70,14 @@ axios.interceptors.response.use(
 		
 		
 		switch (_res.data.code){
-			case 81://用户未登录
+			case 2081://用户未登录
 				sessionStorage.removeItem('userLogin');
 				sessionStorage.removeItem('identityType');
 				sessionStorage.removeItem('chamberId');
 				break;
-			case 83://管理员未登录
-				sessionStorage.removeItem('identityType');
-				sessionStorage.removeItem('chamberId');
+			case 2083://管理员未登录
+//				sessionStorage.removeItem('identityType');
+//				sessionStorage.removeItem('chamberId');
 				break;
 			default:
 				break;
