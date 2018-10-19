@@ -2,17 +2,34 @@
 	
 	<div>
 		
-		<div>首页</div>
+		<Row :gutter="16" type="flex">
+			<Col span="12">
+				<Card>
+					<h1 slot="title">申请加入商协会</h1>
+					<join-chamber :isModule="true"></join-chamber>
+				</Card>
+			</Col>
+			<Col span="12">
+				<Card style="height: 100%;">
+					<h1 slot="title">我的申请记录</h1>
+					<apply-record></apply-record>
+				</Card>
+			</Col>
+		</Row>
+		
 		
 	</div>
 	
 </template>
 
 <script>
-
+import joinChamber from '@/views/user/joinChamber.vue';
+import applyRecord from '@/views/user/applyRecord.vue';
 export default {
 	name: 'home',
 	components:{//组件模板
+		joinChamber,
+		applyRecord
 	},
 	props:{//组件道具（参数）
 		/* ****属性用法*****

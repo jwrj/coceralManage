@@ -64,23 +64,26 @@ axios.interceptors.response.use(
 		
 		console.log('<--返回了数据', _res.data);
 		
-		if(_res.data.code != 0){
-			vm.$Message.warning(_res.data.msg);
-		}
+		if(_res.data.code){
+			
+			if(_res.data.code != 0){
+				vm.$Message.warning(_res.data.msg);
+			}
 		
-		
-		switch (_res.data.code){
-			case 2081://用户未登录
-				sessionStorage.removeItem('userLogin');
-				sessionStorage.removeItem('identityType');
-				sessionStorage.removeItem('chamberId');
-				break;
-			case 2083://管理员未登录
-//				sessionStorage.removeItem('identityType');
-//				sessionStorage.removeItem('chamberId');
-				break;
-			default:
-				break;
+			switch (_res.data.code){
+				case 2081://用户未登录
+					sessionStorage.removeItem('userLogin');
+					sessionStorage.removeItem('identityType');
+					sessionStorage.removeItem('chamberId');
+					break;
+				case 2083://管理员未登录
+					//sessionStorage.removeItem('identityType');
+					//sessionStorage.removeItem('chamberId');
+					break;
+				default:
+					break;
+			}
+			
 		}
 		
 		return _res.data;
@@ -143,8 +146,8 @@ export const getAjaxData = (url = '', data = {}, fn, config = {}, errorCallBack)
 	axios.post(url, data, config).then(response => {
 		fn && fn(response);
 	}).catch(error => {
-		console.log('!!!发生了错误!!!：' + error);
 		errorCallBack && errorCallBack(error);
+		console.log('!!!发生了错误!!!：' + error);
 	});
 }
 

@@ -29,9 +29,12 @@
 				<Button type="primary" long @click="login('formInline')">确定</Button>
 			</div>
 			
-			<div style="margin-top: 16px;text-align: center;">
-				没有商会
-				<a @click="modalOpen">{{text}}</a>
+			<div class="bottomNav">
+				<div>
+					<span>没有商会</span>
+					<a @click="openChamberList = true">{{text}}</a>
+				</div>
+				<Button @click="record = true" type="text" size="small">查看我的申请记录</Button>
 			</div>
 				
 		</Card>
@@ -45,21 +48,8 @@
 	       	
 	       	<Button slot="close">关闭</Button>
 	        
-	        <Button v-if="formInline.identity === 1" @click="record = true" type="primary" size="small" style="margin-bottom: 16px;">查看我的申请记录</Button>
+	        <join-chamber v-if="formInline.identity === 1" :isModule="true"></join-chamber>
 	        
-	        <table-list v-if="formInline.identity === 1" :tableColumns="tableColumns" :tableData="tableData" @on-btn-click="tabBtnClick">
-	        	<div slot="header" style="width: 100%;display: flex;align-items: center;">
-					<div style="border: 1px solid #dcdee2;margin-right: 10px;padding: 5px 7px;border-radius: 4px;">
-						<RadioGroup v-model="type">
-					        <Radio label="1">全部</Radio>
-					        <Radio label="2">商会</Radio>
-					        <Radio label="3">协会</Radio>
-					    </RadioGroup>
-					</div>
-				    <al-cascader v-model="res_c" placeholder="选择地区" style="width: 260px;" />
-				</div>
-			</table-list>
-			
 			<create-chamber v-if="formInline.identity === 2"></create-chamber>
 	        
 	    </Modal>
@@ -70,7 +60,7 @@
 	        width="60%"
 	        :footer-hide="true"
 	       	>
-	       	<Table :columns="columns1" :data="data1"></Table>
+	       	<apply-record v-if="record"></apply-record>
 	    </Modal>
 		
 	</div>
@@ -79,15 +69,18 @@
 
 <script>
 
-import tableList from '@/components/tableList/table-list.vue'
-
 import createChamber from '@/views/chamber/createChamber.vue';
+
+import joinChamber from '@/views/user/joinChamber.vue';
+
+import applyRecord from '@/views/user/applyRecord.vue';
 
 export default {
 	name: 'login',
 	components:{//组件模板
-		tableList,
-		createChamber
+		createChamber,
+		joinChamber,
+		applyRecord
 	},
 	props:{//组件道具（参数）
 		/* ****属性用法*****
@@ -125,116 +118,23 @@ export default {
         	
         	chamberList: [],//商会列表
         	
-        	tableColumns: [
-				{
-			        title: 'ID',
-			        key: 'id'
-			    },
-			    {
-			        title: '名称',
-			        key: 'name'
-			    },
-			    {
-			        title: '会长',
-			        key: 'president'
-			    },
-			    {
-			        title: '秘书长',
-			        key: 'secretary'
-			    },
-			    {
-			        title: '日期',
-			        key: 'date'
-			    },
-			    {
-			    	align: 'center',
-			    	width: 130,
-			        title: '操作',
-			        handle: [
-			        	{
-			        		name: '申请加入',
-			        		key: 0,
-			        		button_props: {
-			        			loading: false
-			        		}
-			        	}
-			        ],
-			    }
-			],
-			
-			tableData: [
-    			{
-    				id: 1,
-    				name: '广西湖北商会1',
-    				president: '张三',
-    				secretary: '李四',
-    				date: '2018-10-08'
-    			},
-    			{
-    				id: 2,
-    				name: '广西湖北商会2',
-    				president: '张三',
-    				secretary: '李四',
-    				date: '2018-10-08'
-    			},
-    			{
-    				id: 3,
-    				name: '广西湖北商会3',
-    				president: '张三',
-    				secretary: '李四',
-    				date: '2018-10-08'
-    			},
-    		],
-    		
-    		columns1: [
-			    {
-			        title: '名称',
-			        key: 'name'
-			    },
-			    {
-			        title: '会长',
-			        key: 'president'
-			    },
-			    {
-			        title: '秘书长',
-			        key: 'secretary'
-			    },
-			    {
-			        title: '审核状态',
-			        key: 'state'
-			    },
-			    {
-			        title: '申请日期',
-			        key: 'date'
-			    },
-            ],
-            data1: [
-                {
-    				name: '广西湖北商会1',
-    				president: '张三',
-    				secretary: '李四',
-    				state: '已通过',
-    				date: '2018-10-08'
-    			},
-                {
-    				name: '广西湖北商会2',
-    				president: '张三',
-    				secretary: '李四',
-    				state: '审核中',
-    				date: '2018-10-08'
-    			},
-                {
-    				name: '广西湖北商会3',
-    				president: '张三',
-    				secretary: '李四',
-    				state: '已拒绝',
-    				date: '2018-10-08'
-    			},
-            ]
-        	
         }
     },
     methods: {//方法
+    	
+    	radioGroupChange(val){ //商会类型切换
+    		
+    		if(val === 1){//我加入的商会
+    			
+    			this.setSelectData('user.Comm/myJoinOrganize', {company_id: -1}, {label: 'org_name', value: 'mid'});
+    			
+    		}else if(val === 2){//我加创建的商会
+    			
+    			this.setSelectData('user.Comm/myCreateOrganize', {}, {label: 'name', value: 'id'});
+    			
+    		}
+    		
+    	},
     	
     	setSelectData(url, param, type){ //设置下拉列表数据切换
     		
@@ -254,59 +154,19 @@ export default {
     		
     	},
     	
-    	radioGroupChange(val){ //商会类型切换
-    		
-    		if(val === 1){//我加入的商会
-    			
-    			this.setSelectData('user.Comm/myJoinOrganize', {company_id: -1}, {label: 'org_name', value: 'mid'});
-    			
-    		}else if(val === 2){//我加创建的商会
-    			
-    			this.setSelectData('user.Comm/myCreateOrganize', {}, {label: 'name', value: 'id'});
-    			
-    		}
-    		
-    	},
-    	
-    	modalOpen(){
-    		
-    		this.openChamberList = true;
-    		
-    	},
-    	
-    	tabBtnClick(params){
-    		
-    		this.tableColumns.forEach(item => {
-    			
-    			if(item.handle){
-    				item.handle.forEach(item2 => {
-    					if(item2.key === 0){
-    						item2.button_props.loading = true;
-    						setTimeout(() => {
-    							item2.button_props.loading = false;
-    							this.$Message.success('申请成功');
-    						},2000);
-    					}
-    				})
-    			}
-    			
-    		});
-    		
-    	},
-    	
     	login(name){//提交数据
     		
     		this.$refs[name].validate((valid) => {
     			
                 if (valid) {
                     
-                    if(this.formInline.identity === 1){//普通会员
+                    if(this.formInline.identity === 1){//会员
 	                    $ax.getAjaxData('user.Comm/loginMember', {
 	                    	mid: this.formInline.chamberId
 	                    }, (res)=> {
 	                    	if(res.code == 0){
-	                    		sessionStorage.identityType = this.formInline.identity;
-	                    		sessionStorage.chamberId = this.formInline.chamberId;
+	                    		sessionStorage.identityType = this.formInline.identity;//身份类型
+	                    		sessionStorage.chamberId = this.formInline.chamberId;//身份类型
 					    		this.$router.replace({name: 'home'});
 								this.$Message.success('普通会员进入成功');
 	                    	}
@@ -316,8 +176,8 @@ export default {
 	                    	oid: this.formInline.chamberId
 	                    }, (res)=> {
 	                    	if(res.code == 0){
-	                    		sessionStorage.identityType = this.formInline.identity;
-	                    		sessionStorage.chamberId = this.formInline.chamberId;
+	                    		sessionStorage.identityType = this.formInline.identity;//身份类型
+	                    		sessionStorage.chamberId = this.formInline.chamberId;//商会ID
 					    		this.$router.replace({name: 'home'});
 								this.$Message.success('管理者进入成功');
 	                    	}
@@ -383,7 +243,7 @@ export default {
 		
 		let newArr = [];
 		
-		$ax.getAjaxData('user.Comm/myJoinOrganize', {
+		$ax.getAjaxData('user.Comm/myJoinOrganize', {//我加入的商会数据列表
 			company_id: -1
 		}, (res)=> {
 			res.data.forEach(item => {
@@ -406,5 +266,10 @@ export default {
 </script>
 
 <style scoped lang="less">
-
+	.bottomNav{
+		margin-top: 16px;
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+	}
 </style>

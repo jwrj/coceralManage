@@ -14,7 +14,7 @@
 						<FormItem label="性质" prop="nature">
 							<RadioGroup v-model="formData.nature" @on-change="RadioGroupChange">
 								<Radio :label="1">商会</Radio>
-								<Radio :label="2">协会</Radio>
+								<Radio :label="0">协会</Radio>
 							</RadioGroup>
 						</FormItem>
 					</Col>
@@ -46,13 +46,13 @@
 					<!--商会-->
 						
 					<!--协会-->
-					<Col v-if="formData.nature === 2" :xs="24" :sm="24" :md="12" :lg="12">
+					<Col v-if="formData.nature === 0" :xs="24" :sm="24" :md="12" :lg="12">
 						<FormItem label="行业" prop="industry">
 							<industry-casc v-model="formData.industry" style="width: 300px;"></industry-casc>
 						</FormItem>
 					</Col>
 					
-					<Col v-if="formData.nature === 2" :xs="24" :sm="24" :md="12" :lg="12">
+					<Col v-if="formData.nature === 0" :xs="24" :sm="24" :md="12" :lg="12">
 						<FormItem label="成立时间" prop="establishTime">
 				       		<DatePicker type="date" 
 							@on-change="timeChange" 
@@ -90,15 +90,14 @@
 					
 					<Col :xs="24" :sm="24" :md="12" :lg="12">
 						<FormItem :label="title+'标志'">
-							<Icon type="md-image" @click.native="logoClick" size="60"/>
+							<Icon type="md-image" @click.native="logoClick" size="40"/>
 						</FormItem>
 					</Col>
 					
-					<Col :xs="24" :sm="24" :md="12" :lg="12">
+					<Col span="24">
 						<FormItem :label="title+'介绍'">
 							<Input v-model="formData.introduce" 
-							type="textarea" placeholder="请输入介绍..." 
-							style="max-width: 300px;"/>
+							type="textarea" placeholder="请输入介绍..." />
 						</FormItem>
 					</Col>
 						
@@ -117,8 +116,6 @@
 	        <file-yun v-model="selectFile"></file-yun>
 	    </Modal>
 	    
-	    {{selectFile}}
-		
 	</div>
 
 </template>
@@ -199,71 +196,72 @@ export default {
 	methods: { //方法
 		
 		RadioGroupChange(val){
-			
 			if(val === 1){
-				
 				this.title = '商会';
-				
 			}else if(val === 2){
-				
 				this.title = '协会';
-				
+			}
+		},
+		
+		timeChange(date){//成立时间
+			this.formData.establishTime = date;
+		},
+		
+		logoClick(){//图标选择
+			this.modalShow = true;
+		},
+		
+		submit(name){//提交数据
+			
+			let publicData = {//公共数据
+				isshang: this.formData.nature,//商会还是协会
+				name: this.formData.name, //名称
+				nation: 86, //注册地国家
+				provice: this.formData.domicile[0], //注册地省
+				city: this.formData.domicile[1], //注册地市
+				county: this.formData.domicile[2], //注册地县
+				town: this.formData.domicile[3], //注册地镇
+				contact: this.formData.linkman, //联系人
+				mobile: this.formData.linkmanPhone, //电话
+				website: this.formData.website, //网址
+				gzh: this.formData.vipcn, //公众号
+				introduce: this.formData.introduce, //介绍
+				nation2: 86, //所属地国家
+				fid: 0, //上级商协会ID
+				//icon: '', //标志
 			}
 			
-		},
-		
-		timeChange(date){
+			let coceralData = {//商会数据
+				provice2: this.formData.originPlace[0], //所属地省
+				city2: this.formData.originPlace[1], //所属地城市
+				county2: this.formData.originPlace[2], //所属地县
+				town2: this.formData.originPlace[3], //所属地镇
+			}
 			
-			this.formData.establishTime = date;
-			
-		},
-		
-		logoClick(){
-			
-			this.modalShow = true;
-			
-		},
-		
-		submit(name){
+			let associationData = {//协会数据
+				hx1: this.formData.industry[0], //协会一级行业
+				hx2: this.formData.industry[1], //协会二级行业
+				setup_time: this.formData.establishTime, //协会成立时间
+			}
 			
 			this.$refs[name].validate((valid) => {
 				
                 if (valid) {
                 	
-                	$ax.getAjaxData('user.Comm/addOrganize', {
-				
-						isshang: this.formData.nature,//商会还是协会
-						name: this.formData.name, //名称
-						fid: 0, //上级商协会ID
-						nation: 86, //国家
-						provice: this.formData.domicile[0], //省
-						city: this.formData.domicile[1], //市
-						county: this.formData.domicile[2], //县
-						town: this.formData.domicile[3], //镇
-						contact: this.formData.linkman, //联系人
-						mobile: this.formData.linkmanPhone, //电话
-						website: this.formData.website, //网址
-						gzh: this.formData.vipcn, //公众号
-						introduce: this.formData.introduce, //介绍
-						nation2: 86, //所属地国家
-						provice2: this.formData.originPlace[0], //省
-						city2: this.formData.originPlace[1], //城市
-						county2: this.formData.originPlace[2], //县
-						town2: this.formData.originPlace[3], //镇
-						hx1: this.formData.industry[0], //一级行业
-						hx2: this.formData.industry[1], //二级行业
-						setup_time: this.formData.establishTime, //成立时间
-						icon: '', //图标
-						
-					}, res => {
-						
+                	let Datatype = () => {
+                		if(this.formData.nature === 1){//商会
+                			return coceralData;
+	                	}else if(this.formData.nature === 0){//协会
+	                		return associationData;
+	                	}
+	                	return {};
+                	}
+                	
+                	$ax.getAjaxData('user.Comm/addOrganize', Object.assign({}, publicData, Datatype()), res => {
+						if(res.code == 0){
+							this.$Message.success('创建成功!');
+						}
 					});
-                	
-                    //this.$Message.success('创建成功!');
-                    
-                } else {
-                	
-                    //this.$Message.error('创建失败!');
                     
                 }
                 

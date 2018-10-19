@@ -59,36 +59,26 @@ export default {
     created () {//实例被创建完毕之后执行
     	
     	//获取行业数据
-    	$ax.getAjaxData('http://192.168.2.200:802/cdn/hangye.js',{
-    		
-    	},(response) => {
-    		
+    	$ax.getAjaxData('cdn/hangye.js', {}, res => {
     		let newArr = [];
-    		
-    		response.forEach(item => {
-    			
-    			let newChildren = [];
-    			
-				item.children.forEach(item => {
-					newChildren.push({
-						label: item.name,
-    					value: item.code,
+    		if(res){
+	    		res.forEach(item => {
+	    			let newChildren = [];
+					item.children.forEach(item => {
+						newChildren.push({
+							label: item.name,
+	    					value: item.code,
+						})
 					})
-				})
-				
-				newArr.push({
-    				label: item.name,
-        			value: item.code,
-        			children: newChildren
-    			});
-    			
-    		});
-    		
+					newArr.push({
+	    				label: item.name,
+	        			value: item.code,
+	        			children: newChildren
+	    			});
+	    		});
+    		}
     		this.industryData = newArr;
-    		
-    	},{
-    		baseURL: ''
-    	});
+    	}, {baseURL: 'http://192.168.2.200:802/'});
     	
 	},
     mounted () {//模板被渲染完毕之后执行

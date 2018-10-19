@@ -74,11 +74,12 @@ export default {
 	
 	beforeRouteEnter (to, from, next) {//在组件创建之前调用（放置页面加载时请求的Ajax）
 		
-		$ax.getAjaxData('user.Comm/myInfo', {}, (response) => {
-    		if(response.code === 0){//已登录
+		$ax.getAjaxData('user.Comm/myInfo', {}, (response) => {//我的资料
+    		if(response.code === 0){//用户中心已登录
     			sessionStorage.userLogin = 0;
+    			sessionStorage.myCompanyList = JSON.stringify(response.data.company);
     			next({name: 'login'});
-    		}else if(response.code === 2081){//未登录跳转到用户中心
+    		}else if(response.code === 2081){//用户中心未登录跳转到用户中心
     			$ax.getAjaxData('Oauth/getLoginUrl', {}, (response) => {
 		    		window.location.href = response.data.url;
 		    	}, {}, error => {

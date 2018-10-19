@@ -50,6 +50,26 @@ export default [
 		    }
 		]
 	},
+	{
+		path: '/user',
+		name: 'user',
+		meta: {
+			title: '申请加入商会',
+			icon: 'md-alarm',
+		},
+		component: Main,
+		children: [
+			{
+				path: 'joinChamber',
+				name: 'joinChamber',
+				meta: {
+					title: '申请加入商会',
+					icon: 'md-alarm',
+				},
+				component: () => import('@/views/user/joinChamber.vue')
+			},
+		]
+	},
 //	{
 //		path: '/user',
 //		name: 'user',

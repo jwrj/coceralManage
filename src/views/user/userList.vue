@@ -2,13 +2,13 @@
 	
 	<div>
 		
-		<Card :dis-hover="!styleShow" :bordered="styleShow" :class="{'no-padding': !styleShow}">
+		<Card :dis-hover="!styleShow" :bordered="styleShow" :padding="styleShow ? 16 : 0">
 			
 			<h1 v-if="titleShow" slot="title">会员列表</h1>
 			
 			<table-list :tableColumns="tableColumns" :tableData="memberList" @select-change="tabSelectChange">
-				 <div slot="header" style="width: 100%;display: flex;align-items: center;">
-				    <post-casc></post-casc>
+				<div slot="header" style="width: 100%;display: flex;align-items: center;">
+					<post-casc></post-casc>
 				</div>
 			</table-list>
 			
@@ -176,10 +176,4 @@ export default {
 
 <style scoped lang="less">
 
-</style>
-
-<style lang="less">
-	.no-padding .ivu-card-body{
-		padding: 0 !important;
-	}
 </style>

@@ -10,7 +10,7 @@
 				
 				<post-casc v-model="postId" @on-change="postChange" style="margin-left: 10px;"></post-casc>
 				
-				<Select v-model="jieCiId" placeholder="选择届次" not-found-text="当前岗位还没有届次" style="width:100px;margin-left: 10px;">
+				<Select v-model="jieCiId" @on-change="jieCiChange" @on-clear="jieCiclear" clearable placeholder="选择届次" not-found-text="当前岗位还没有届次" style="width:100px;margin-left: 10px;">
 			        <Option v-for="item in jieCiData" :value="item.value" :key="item.value">{{item.label}}</Option>
 			    </Select>
 			    
@@ -64,20 +64,21 @@
 			
 			<Divider orientation="left">
 				<Tag color="geekblue">
-					会员大会
-					<Icon type="md-arrow-forward" />
-					理事大会
-					<Icon type="md-arrow-forward" />
-					秘书长
+					<span v-for="(item, i) in postTextArr" style="display: inline-block;">
+						<Icon v-if="i != 0" type="md-arrow-forward" />
+						<span :style="{color: i == postTextArr.length-1 ? '#ed4014' : ''}">{{item}}</span>
+					</span>
 				</Tag>
-				<Tag color="geekblue">第1届</Tag>
+				<Tag color="geekblue">
+					第<span style="color: #ed4014;">{{jieCiId}}</span>届
+				</Tag>
 				<span>人员列表（根据上面选择的岗位和届次列出对应数据，默认列出全部数据）</span>
 			</Divider>
 			
 			<table-list
 			:headerShow="false"
 			:tableColumns="tableColumns"
-			:tableData="tableData"
+			:tableData="personnelList"
 			@on-poptip-ok="poptipOk">
 			</table-list>
 			
@@ -106,6 +107,9 @@ import tableList from '@/components/tableList/table-list.vue'
 import postCasc from '@/components/post/post-casc.vue';
 import userList from '@/views/user/userList.vue';
 import qs from 'qs';
+const getLocalTime = (nS) => {
+	return new Date(parseInt(nS) * 1000).toLocaleString().replace(/\//g, "-").replace(/上午([\d\:]*)/g, "");
+}
 //const qs = require('qs'); axios自带qs插件
 export default {
 	name: 'staffSet',
@@ -130,11 +134,13 @@ export default {
         	
         	postId: [],//岗位id
         	
-        	jieCiId: null,//届次ID
+        	jieCiId: 0,//届次ID
         	
         	jieCiData: [],//届次数据
         	
         	checkedMembers: [],//选中的会员
+        	
+        	postTextArr: ['未选择岗位'],//当前岗位文本
         	
 			formData: {
 				startTime: '',
@@ -152,28 +158,27 @@ export default {
         	
         	tableColumns: [
     			{
+    				width: 60,
     				title: 'ID',
     				key: 'id'
     			},
     			{
     				title: '姓名',
-    				key: 'name'
+    				render: (h, params) => {
+    					return h('span', params.row.memberInfo.person_name)
+    				}
     			},
     			{
-    				title: '手机号',
-    				key: 'mobilePhone'
+    				title: '任职开始时间',
+    				render: (h, params) => {
+						return h('span', getLocalTime(params.row.begin_time))
+					}
     			},
     			{
-    				title: '任职时间',
-    				key: 'takeOfficeTime'
-    			},
-    			{
-    				title: '交接时间',
-    				key: 'connectTime'
-    			},
-    			{
-    				title: '相关链接',
-    				key: 'link'
+    				title: '任职结束时间',
+    				render: (h, params) => {
+						return h('span', getLocalTime(params.row.end_time))
+					}
     			},
     			{
     				align: 'center',
@@ -191,74 +196,8 @@ export default {
     			}
     		],
     		
-    		tableData: [
-    			{
-    				id: 1,
-    				name: '张三',
-    				mobilePhone: '13800138000',
-    				takeOfficeTime: '2018-10-09',
-    				connectTime: '2018-10-09',
-    				link: '查看'
-    			},
-    			{
-    				id: 1,
-    				name: '张三',
-    				mobilePhone: '13800138000',
-    				takeOfficeTime: '2018-10-09',
-    				connectTime: '2018-10-09',
-    				link: '查看'
-    			},
-    			{
-    				id: 1,
-    				name: '张三',
-    				mobilePhone: '13800138000',
-    				takeOfficeTime: '2018-10-09',
-    				connectTime: '2018-10-09',
-    				link: '查看'
-    			},
-    		],
+    		personnelList: [],
     		
-			columns1: [
-                {
-                    title: 'Name',
-                    key: 'name'
-                },
-                {
-                    title: 'Age',
-                    key: 'age'
-                },
-                {
-                    title: 'Address',
-                    key: 'address'
-                }
-            ],
-            data1: [
-                {
-                    name: 'John Brown',
-                    age: 18,
-                    address: 'New York No. 1 Lake Park',
-                    date: '2016-10-03'
-                },
-                {
-                    name: 'Jim Green',
-                    age: 24,
-                    address: 'London No. 1 Lake Park',
-                    date: '2016-10-01'
-                },
-                {
-                    name: 'Joe Black',
-                    age: 30,
-                    address: 'Sydney No. 1 Lake Park',
-                    date: '2016-10-02'
-                },
-                {
-                    name: 'Jon Snow',
-                    age: 26,
-                    address: 'Ottawa No. 2 Lake Park',
-                    date: '2016-10-04'
-                }
-            ]
-        	
         }
     },
     methods: {//方法
@@ -368,12 +307,30 @@ export default {
 			
 		},
 		
-		postChange(postId){//岗位选择改变时
+		postChange(postId, postData){//岗位选择改变时
 			this.getJieCiData(postId);
+			this.getPersonnelData(postId, 0);
+			let newArr = [];
+			postData.forEach(item => {
+				newArr.push(item.label);
+			});
+			this.postTextArr = newArr;
+		},
+		
+		jieCiChange(jieId){//选择届次时触发
+			if(jieId != undefined){
+				this.getPersonnelData(this.postId, jieId);
+			}else{
+				this.jieCiId = 0;
+			}
+		},
+		
+		jieCiclear(){//清空届次时触发
+			this.getPersonnelData(this.postId, 0);
 		},
 		
 		getJieCiData(postId){//获取届次数据
-			this.jieCiId = null;
+			this.jieCiId = 0;
 			$ax.getAjaxData('manage.Organize/jieList', {
 				gw_id: postId && postId.length > 0 ? postId[postId.length-1] : '',//岗位ID
 			}, res => {
@@ -386,14 +343,22 @@ export default {
 						})
 					});
 					this.jieCiData = newArr;
-					if(this.jieCiData.length > 0){
-						this.jieCiId = this.jieCiData[0].value;
-					}
 				}
 			});
 		},
 		
-		QSStringify(params={}){//qs提交数组到后台
+		getPersonnelData(postId, jieId){//获取人员列表数据
+			$ax.getAjaxData('manage.Organize/gangweiMemberList', {
+				gw_id: postId && postId.length > 0 ? postId[postId.length-1] : '',//岗位ID
+				jie_id: jieId//届次ID
+			}, res => {
+				if(res.code == 0){
+					this.personnelList = res.data;
+				}
+			});
+		},
+		
+		QSStringify(params={}){//qs序列化提交数组到后台
 			
 			let str = '{'+qs.stringify(params, {encoder: function(str){
 	    		if(typeof(str) === 'string' && typeof(str) !== 'number'){

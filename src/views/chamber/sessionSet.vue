@@ -52,11 +52,10 @@
 			
 			<Divider orientation="left">
 				<Tag color="geekblue">
-					会员大会
-					<Icon type="md-arrow-forward" />
-					理事大会
-					<Icon type="md-arrow-forward" />
-					秘书长
+					<span v-for="(item, i) in postTextArr" style="display: inline-block;">
+						<Icon v-if="i != 0" type="md-arrow-forward" />
+						<span :style="{color: i == postTextArr.length-1 ? '#ed4014' : ''}">{{item}}</span>
+					</span>
 				</Tag>
 				<span>届次列表</span>
 			</Divider>
@@ -100,6 +99,8 @@
 			return {
 				
 				postId: [],//岗位ID
+				
+				postTextArr: ['未选择岗位'],//当前岗位文本
 				
 				formData: {
 					name: '',
@@ -208,8 +209,13 @@
 				});
 			},
 			
-			postChange(postId){//岗位选择改变时
+			postChange(postId, postData){//岗位选择改变时
 				this.getJieCiData(postId);
+				let newArr = [];
+				postData.forEach(item => {
+					newArr.push(item.label);
+				});
+				this.postTextArr = newArr;
 			},
 			
 			getJieCiData(postId){//获取届次数据

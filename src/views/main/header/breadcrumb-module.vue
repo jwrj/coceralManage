@@ -81,27 +81,36 @@ export default {
 			this.$emit('clickIcon');
 		},
 		
-		chamberSele(val){
+		chamberSele(val){//切换商会
 			
-			if(this.identityType === 1){//会员身份
-				$ax.getAjaxData('user.Comm/loginMember', {
-					mid: val
-				}, res => {
+			if(this.identityType === 1){//会员身份登录
+				$ax.getAjaxData('user.Comm/logoutMember', {}, res => {
 					if(res.code == 0){
-						this.$Message.success('商会更换成功');
+						$ax.getAjaxData('user.Comm/loginMember', {
+							mid: val
+						}, res => {
+							if(res.code == 0){
+								sessionStorage.chamberId = val;
+								this.$Message.success('商会更换成功');
+							}
+						});
 					}
 				});
-			}else if(this.identityType === 2){//管理者身份
-				$ax.getAjaxData('user.Comm/loginManage', {
-					oid: val
-				}, res => {
+			}else if(this.identityType === 2){//管理者身份登录
+				$ax.getAjaxData('user.Comm/logoutManage', {}, res => {
 					if(res.code == 0){
-						this.$Message.success('商会更换成功');
+						$ax.getAjaxData('user.Comm/loginManage', {
+							oid: val
+						}, res => {
+							if(res.code == 0){
+								sessionStorage.chamberId = val;
+								this.$Message.success('商会更换成功');
+							}
+						});
 					}
 				});
 			}
 			
-			sessionStorage.chamberId = val;
 		},
 		
 		getChamberData(){//商会列表数据
@@ -135,7 +144,7 @@ export default {
 		},
 		
 		dropdownClick(name){
-			if(name === 'identity'){
+			if(name === 'identity'){//切换身份
 				
 				if(this.identityType === 1){//退出会员登录
 					$ax.getAjaxData('user.Comm/logoutMember', {}, res => {
@@ -156,8 +165,8 @@ export default {
 						}
 					});
 				}
-			}else if(name === 'logOut'){
-				console.log('点击了退出登录');
+			}else if(name === 'logOut'){//退出登录
+				
 			}
 		},
 		
