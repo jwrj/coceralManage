@@ -7,13 +7,15 @@
 				<h1>会费情况-查看岗位的缴费情况</h1>
 			</div>
 			
-			<table-list :tableColumns="tableColumns" :seekShow="false" :tableData="tableData">
+			<table-list :tableColumns="tableColumns" :seekShow="false" :tableData="personnelList">
 				
 				<div slot="header" style="display: flex;">
 					
-					<div>
-						<post-casc style="margin-right: 10px;"></post-casc>
-					</div>
+					<post-casc v-model="postId" @on-change="postChange" style="margin-right: 10px;"></post-casc>
+					
+					<Select v-model="jieCiId" @on-change="jieCiChange" @on-clear="jieCiclear" clearable placeholder="选择届次" not-found-text="当前岗位还没有届次" style="width:100px;margin-right: 10px;">
+				        <Option v-for="item in jieCiData" :value="item.value" :key="item.value">{{item.label}}</Option>
+				    </Select>
 					
         			<Select v-model="statescreen" placeholder="会费情况" style="width: 150px;margin-right: 10px;">
 						<Option value="全部">全部</Option>
@@ -62,16 +64,29 @@
 		},
 		data() { //数据
 			return {
+				
+				postId: [],//岗位id
+        	
+	        	jieCiId: 0,//届次ID
+	        	
+	        	jieCiData: [],//届次数据
+				
 				modescreen: '',
+				
 				statescreen: '',
-				tableColumns: [{
-						title: 'ID',
-						key: 'id'
-					},
+				
+				tableColumns: [
 					{
-						title: '姓名',
-						key: 'name'
-					},
+	    				width: 60,
+	    				title: 'ID',
+	    				key: 'id'
+	    			},
+					{
+	    				title: '姓名',
+	    				render: (h, params) => {
+	    					return h('span', params.row.memberInfo.person_name)
+	    				}
+	    			},
 					{
 						title: '手机号',
 						key: 'mobilePhone'
@@ -113,45 +128,64 @@
 						],
 					}
 				],
-				tableData: [
-					{
-						id: 1,
-						name: '张三',
-						mobilePhone: '13800138000',
-						duty: '普通会员',
-						state: '全部缴纳',
-						PayWay: '现金缴纳',
-						payableMoney: '100',
-						paidMoney: '100',
-						expirationTime: '2018-10-09'
-					},
-					{
-						id: 1,
-						name: '张三',
-						mobilePhone: '13800138000',
-						duty: '普通会员',
-						state: '全部缴纳',
-						PayWay: '现金缴纳',
-						payableMoney: '100',
-						paidMoney: '100',
-						expirationTime: '2018-10-09'
-					},
-					{
-						id: 1,
-						name: '张三',
-						mobilePhone: '13800138000',
-						duty: '普通会员',
-						state: '全部缴纳',
-						PayWay: '现金缴纳',
-						payableMoney: '100',
-						paidMoney: '100',
-						expirationTime: '2018-10-09'
-					},
-				],
+				
+				personnelList: [],
+				
 			}
 		},
 		methods: { //方法
-
+			
+			postChange(postId, postData){//岗位选择改变时
+				this.getJieCiData(postId);
+				this.getPersonnelData(postId, 0);
+				let newArr = [];
+				postData.forEach(item => {
+					newArr.push(item.label);
+				});
+				this.postTextArr = newArr;
+			},
+			
+			jieCiChange(jieId){//选择届次时触发
+				if(jieId != undefined){
+					this.getPersonnelData(this.postId, jieId);
+				}else{
+					this.jieCiId = 0;
+				}
+			},
+			
+			jieCiclear(){//清空届次时触发
+				this.getPersonnelData(this.postId, 0);
+			},
+			
+			getJieCiData(postId){//获取届次数据
+				this.jieCiId = 0;
+				$ax.getAjaxData('manage.Organize/jieList', {
+					gw_id: postId && postId.length > 0 ? postId[postId.length-1] : '',//岗位ID
+				}, res => {
+					if(res.code == 0){
+						let newArr = [];
+						res.data.forEach(item => {
+							newArr.push({
+								label: item.jie_name,
+								value: Number(item.id)
+							})
+						});
+						this.jieCiData = newArr;
+					}
+				});
+			},
+			
+			getPersonnelData(postId, jieId){//获取人员列表数据
+				$ax.getAjaxData('manage.Organize/gangweiMemberList', {
+					gw_id: postId && postId.length > 0 ? postId[postId.length-1] : '',//岗位ID
+					jie_id: jieId//届次ID
+				}, res => {
+					if(res.code == 0){
+						this.personnelList = res.data;
+					}
+				});
+			},
+			
 		},
 		computed: { //计算属性
 
