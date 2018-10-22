@@ -17,3 +17,12 @@ new Vue({
   store,
   render: h => h(App)
 }).$mount('#app')
+
+//全局方法
+global.getLocalTime = (nS) => {//时间戳转字符到日期
+	return new Date(parseInt(nS) * 1000).toLocaleString().replace(/\//g, "-").replace(/[上午|下午]([\d\:]*)/g, "");
+}
+
+global.getTimeMinute = (nS) => {//时间戳转字符到分
+	return new Date(parseInt(nS) * 1000).toLocaleString().replace(/\//g, "-").replace(/(\:\d*)$/, "");
+}

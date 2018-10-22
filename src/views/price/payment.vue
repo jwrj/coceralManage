@@ -1,37 +1,48 @@
 <template>
 
-	<div id="payment">
+	<div>
+		{{info}}
 		<Card>
+			
 			<h1 slot="title">会员信息</h1>
+			
 			<Row>
-				<Col span="4" style="text-align: right;">
-					<p>姓名：</p>
-					<p>岗位：</p>
-					<p>届次：</p>
+				<Col span="8" offset="4" class="showForm">
+					<label>姓名：</label>
+					<span>{{info.memberInfo ? info.memberInfo.person_name : ''}}</span>
 				</Col>
-				<Col span="6">
-					<p>{{username}}</p>
-					<p>{{work}}</p>
-					<p style="color: red;">{{post_num}}</p>
+				<Col span="8" offset="4" class="showForm">
+					<label>岗位：</label>
+					<span>普通会员</span>
 				</Col>
-				<Col span="4" style="text-align: right;">
-					<p>届次时间：</p>
-					<p>截至时间：</p>
-					<p>岗位会费：</p>
+				<Col span="8" offset="4" class="showForm">
+					<label>届次：</label>
+					<span>5</span>
 				</Col>
-				<Col span="6">
-					<p>{{post_from}}</p>
-					<p>{{post_to}}</p>
-					<p>{{price}}</p>
+				<Col span="8" offset="4" class="showForm">
+					<label>届次时间：</label>
+					<span>2018-1-1</span>
+				</Col>
+				<Col span="8" offset="4" class="showForm">
+					<label>截至时间：</label>
+					<span>2018-1-1</span>
+				</Col>
+				<Col span="8" offset="4" class="showForm">
+					<label>岗位会费：</label>
+					<span>100元</span>
 				</Col>
 			</Row>
+				
 		</Card>
+		
 		<Card style="margin-top: 16px;">
-			<div slot="title" class="title">
+			
+			<div slot="title" class="cardTitle">
 				<h1>缴费记录</h1>
-				<Button style="margin-left: 10px;" size="small" type="primary" @click="addRecord">添加缴费记录</Button>
+				<Button style="margin-left: 10px;" size="small" type="primary" @click="modalShow = true">添加缴费记录</Button>
 			</div>
-			<table-list :tableColumns="tableColumns" :tableData="tableData">
+			
+			<table-list :tableColumns="tableColumns" :tableData="recordData">
 
 				<div slot="header" style="width: 100%;display: flex;align-items: center;">
 					<p>
@@ -45,43 +56,39 @@
 				</div>
 
 			</table-list>
+			
 			<Modal v-model="modalShow">
+				
 				<p slot="header">添加一条记录</p>
+				
 				<div>
-					<Form :model="paying" ref="paying" :rules="ruleValidate" :label-width="80">
+					<Form :model="paying" ref="paying" :rules="ruleValidate" :label-width="100">
 
-						<FormItem label="缴费类别:" prop="kind">
-    <RadioGroup v-model="paying.kind" type="button">
-        <Radio :label="item" v-for="item of list" ></Radio>
-    </RadioGroup>
-						</FormItem>
-						<FormItem label="届次:" prop="jc">
-							<Input v-model="paying.jc" style="width: 237px;"></Input>
-						</FormItem>
-						<FormItem label="金额:" prop="price">
-							<Input style="width: 237px;" v-model="paying.price">
-							<span slot="append">元</span>
-							</Input>
+						<FormItem label="缴费名称:" prop="name">
+						    <Input v-model="paying.name" style="width: 240px;"></Input>
 						</FormItem>
 						
-						<FormItem label="时间:" prop="time">
-							<DatePicker type="date" @on-change="dateChange" :value="paying.time"style="width: 237px;"></DatePicker>
+						<FormItem label="缴费金额(元)" prop="price">
+							<InputNumber :max="100000" :min="0" v-model="paying.price" style="width: 240px;"></InputNumber>
 						</FormItem>
 						
-						<FormItem label="缴纳方式:" prop="way">
-							<Select v-model="paying.way" placeholder="请选择方式" style="width: 237px;">
-								<Option value="wayOne">现金缴纳</Option>
-								<Option value="wayTwo">对公转账</Option>
-								<Option value="wayThree">基金冲减</Option>
-							</Select>
+						<FormItem label="缴费时间:" prop="time">
+							<DatePicker type="date" @on-change="dateChange" :value="paying.time" style="width: 240px;"></DatePicker>
 						</FormItem>
-						</Form>
+						
+						<FormItem label="缴费方式:" prop="way">
+							<Input v-model="paying.way" style="width: 240px;"></Input>
+						</FormItem>
+					</Form>
 				</div>
+				
 				<div slot="footer">
 					<Button @click="modalShow = false">取消</Button>
-					<Button type="primary" @click="handleSubmit('paying')">确定</Button>
+					<Button type="primary" @click="handleSubmit('paying')">提交</Button>
 				</div>
+				
 			</Modal>
+			
 		</Card>
 
 	</div>
@@ -89,228 +96,196 @@
 </template>
 
 <script>
-	import tableList from '@/components/tableList/table-list.vue'; //表格列表组件
-	export default {
-		name: 'payMent',
-		components: { //组件模板,
-			tableList
-		},
-		props: { //组件道具（参数）
-			/* ****属性用法*****
-			 * 
-			 * 传递类型 type: Array | Number | String | Object
-			 * 为必传 required: true
-			 * 默认值 default: ''
-			 * 
-			 */
-		},
-		data() { //数据
-			return {
-				username: '张三',
-				work: '普通会员',
-				post_num: '5',
-				post_from: '2018-1-1',
-				post_to: '2019-1-1',
-				price: '100元',
-				pay: 'both',
-				list:['特殊会费','岗位会费','基金会费'],
-				paying: {
-					price: '',
-					kind: '特殊会费',
-					way: '',
-					time: '',
-					jc:''
+import tableList from '@/components/tableList/table-list.vue'; //表格列表组件
+const getLocalTime = (nS) => {
+	return new Date(parseInt(nS) * 1000).toLocaleString().replace(/\//g, "-").replace(/上午([\d\:]*)/g, "");
+}
+export default {
+	name: 'payMent',
+	components: { //组件模板,
+		tableList
+	},
+	props: { //组件道具（参数）
+		/* ****属性用法*****
+		 * 
+		 * 传递类型 type: Array | Number | String | Object
+		 * 为必传 required: true
+		 * 默认值 default: ''
+		 * 
+		 */
+		info: {//数据信息
+			type: Object,
+			default: () => {}
+		}
+	},
+	data() { //数据
+		
+		return {
+			
+			pay: '',
+			
+			paying: {
+				name: '',
+				price: null,
+				way: '',
+				time: '',
+			},
+			
+			modalShow: false,
+			
+			tableColumns: [
+				{
+					title: 'ID',
+					key: 'id'
 				},
-				modalShow: false,
-				tableColumns: [{
-						title: 'ID',
-						key: 'id'
-					},
-					{
-						title: '缴费条目',
-						key: 'clauses'
-					},
-					{
-						title: '实缴金额',
-						key: 'paidMoney'
-					},
-					{
-						title: '时间',
-						key: 'time'
-					},
-					{
-						align: 'center',
-						width: 130,
-						title: '操作',
-						handle: [
-							{
-								name: '修改',
-								key: 0,
-							},
-							{
-								name: '删除',
-								key: 1,
-							}
-						],
+				{
+					title: '缴费条目',
+					key: 'name'
+				},
+				{
+					title: '实缴金额(元)',
+					render: (h, params) => {//这里要除回100才是正确的数
+						let payedNum = Number(params.row.payed);
+						let newPayedNum = payedNum/100;
+						return h('span', newPayedNum)
 					}
-				],
-				tableData: [
-					{
-						id: 1,
-						clauses: '会费',
-						paidMoney: '100',
-						time: '2018-10-09'
-					},
-					{
-						id: 1,
-						clauses: '特殊会费1',
-						paidMoney: '100',
-						time: '2018-10-09'
-					},
-					{
-						id: 1,
-						clauses: '基金会费',
-						paidMoney: '100',
-						time: '2018-10-09'
-					},
-				],
-				ruleValidate: {
-					time: [{
-						required: true,
-						message: '请选择日期',
-						trigger: 'change'
-					}],
-					price: [{
-						required: true,
-						message: '请填写金额',
-						trigger: 'blur'
-					}],
-					kind: [{
-						required: true,
-						message: '请选择类别',
-						trigger: 'blur'
-					}],
-					way: [{
-						required: true,
-						message: '请选择方式',
-						trigger: 'blur'
-					}],
-					jc: [{ 
-						required: true, 
-						message: '请输入届次', 
-						trigger: 'blur' ,
-						},
-					{ 
-						type: 'number', 
-						message: '请输入数字格式', 
-						trigger: 'blur', 
-						transform(value) {
-							return Number(value);
-						}}
-					]
 				},
-			}
-		},
-		methods: { //方法
-			
-			dateChange(date){
-				
-				this.paying.time = date;
-				
-			},
-			
-			addRecord() {
-				
-				this.modalShow = true;
-				
-			},
-      		handleSubmit(name) {
-      			
-				this.$refs[name].validate((valid) => {
-					
-					if (valid) {
-						
-						this.$Message.success('添加成功!');
-						
-					    this.modalShow=false;
-					    
-					    this.tableData.push({
-							id: 1,
-							clauses: '会费',
-							paidMoney: '100',
-							time: '2018-10-09'
-						})
-					    
-					} else {
-						
-						//this.$Message.error('添加失败!');
-						
-					}	
-				})
-			}
-      		
-		},
-		computed: { //计算属性
-　　pokerHistory() {
-　　　　return this.paying.kind
-　　}
-		},
-		watch: { //监测数据变化
-        pokerHistory(newValue, oldValue) {
-　　　　console.log(newValue)
-　　}
-		},
-
-		//===================组件钩子===========================
-
-		created() { //实例被创建完毕之后执行
-
-		},
-		mounted() { //模板被渲染完毕之后执行
-		},
-
-		//=================组件路由勾子==============================
-
-		beforeRouteEnter(to, from, next) { //在组件创建之前调用（放置页面加载时请求的Ajax）
-
-			(async () => { //执行异步函数
-
-				//async、await错误处理
-				try {
-
-					/*
-					 * 
-					 * ------串行执行---------
-					 * console.log(await getAjaxData());
-					 * ...
-					 * 
-					 * ---------并行：将多个promise直接发起请求（先执行async所在函数），然后再进行await操作。（执行效率高、快）----------
-					 * let abc = getAjaxData();//先执行promise函数
-					 * ...
-					 * console.log(await abc);
-					 * ...
-					 */
-					next(vm => {
-
-					});
-
-				} catch (err) {
-					console.log(err);
+				{
+					title: '缴费方式',
+					key: 'pay_type'
+				},
+				{
+					title: '时间',
+					render: (h, params) => {
+						return h('span', getLocalTime(params.row.pay_time))
+					}
+				},
+				{
+					align: 'center',
+					width: 130,
+					title: '操作',
+					handle: [
+						{
+							name: '修改',
+							key: 0,
+						},
+						{
+							name: '删除',
+							key: 1,
+						}
+					],
 				}
-
-			})();
-
+			],
+			
+			recordData: [],
+			
+			ruleValidate: {
+				time: [{
+					required: true,
+					message: '请选择缴费日期',
+					trigger: 'change'
+				}],
+				price: [{
+					type: 'number',
+					required: true,
+					message: '请填写缴费金额',
+					trigger: 'blur'
+				}],
+				name: [{
+					required: true,
+					message: '请输入缴费名称',
+					trigger: 'blur'
+				}],
+				way: [{
+					required: true,
+					message: '请填写缴费方式',
+					trigger: 'blur'
+				}],
+			},
+			
+		}
+	},
+	methods: { //方法
+		
+		dateChange(date){
+			this.paying.time = date;
 		},
+		
+		setSubmitData(){//设置提交数据
+			$ax.getAjaxData('manage.Fee/addFee', {
+				gw_id: this.info.gw_id,//岗位ID
+				mid: this.info.memberInfo.id,//会员ID
+				jie: this.info.jie_id,//届ID
+				name: this.paying.name,//费用名
+				should_pay: 1,//应交，单位分
+				pay_time: this.paying.time,//最近交费时间
+				end_time: -1,//到期时间
+				payed: this.paying.price*100,//已交，单位分
+				pay_type: this.paying.way,//交费方式
+			}, res => {
+				if(res.code == 0){
+					this.modalShow = false;
+					this.$Message.success('添加成功!');
+				}
+			});
+		},
+		
+  		handleSubmit(name) {//提交数据
+			this.$refs[name].validate((valid) => {
+				if (valid) {
+					this.setSubmitData();
+				}
+			});
+		},
+		
+		getRecordList(){//获取缴费记录列表
+			$ax.getAjaxData('manage.Fee/feeList', {
+				gw_id: this.info.gw_id,
+				jie: this.info.jie_id,
+				mid: this.info.memberInfo.id
+			}, res => {
+				if(res.code == 0){
+					this.recordData = res.data;
+				}
+			});
+		},
+		
+	},
+	
+	computed: { //计算属性
+		
+	},
+	
+	watch: { //监测数据变化
+		
+	},
 
-	}
+	//===================组件钩子===========================
+
+	created() { //实例被创建完毕之后执行
+		
+		this.getRecordList();
+		
+	},
+	mounted() { //模板被渲染完毕之后执行
+	},
+
+	//=================组件路由勾子==============================
+
+	beforeRouteEnter(to, from, next) { //在组件创建之前调用（放置页面加载时请求的Ajax）
+		
+	},
+
+}
 </script>
 
 <style scoped lang="less">
-	.btnSmall {
-		margin-left: auto;
-	}
-	.title {
-		display: flex;
-		align-items: center;
+	.showForm{
+		margin-bottom: 10px;
+		label{
+			display: inline-block;
+			width: 80px;
+			text-align: right;
+		}
 	}
 </style>

@@ -166,7 +166,8 @@ export default {
 	                    }, (res)=> {
 	                    	if(res.code == 0){
 	                    		sessionStorage.identityType = this.formInline.identity;//身份类型
-	                    		sessionStorage.chamberId = this.formInline.chamberId;//身份类型
+	                    		sessionStorage.chamberId = this.formInline.chamberId;////商会ID
+	                    		sessionStorage.userAccess = ['member'];//权限
 					    		this.$router.replace({name: 'home'});
 								this.$Message.success('普通会员进入成功');
 	                    	}
@@ -178,6 +179,7 @@ export default {
 	                    	if(res.code == 0){
 	                    		sessionStorage.identityType = this.formInline.identity;//身份类型
 	                    		sessionStorage.chamberId = this.formInline.chamberId;//商会ID
+	                    		sessionStorage.userAccess = ['admin'];//权限
 					    		this.$router.replace({name: 'home'});
 								this.$Message.success('管理者进入成功');
 	                    	}

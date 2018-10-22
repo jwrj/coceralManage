@@ -42,12 +42,12 @@
 		>
 	    	<div slot="header" style="position: relative;">
 	    		<h1>{{modalTitle}}</h1>
-		    	<div style="position: absolute;top: -8px;right: 0;">
-		    		<Button icon="md-close" type="success" @click="modalShow = false">关闭</Button>
-		    		<Button type="primary" icon="md-refresh" style="margin-left: 6px;">刷新</Button>
+		    	<div style="position: absolute;top: -4px;right: 0;">
+		    		<Button icon="md-close" size="small" @click="modalShow = false">关闭</Button>
+		    		<Button type="success" size="small" icon="md-refresh" style="margin-left: 6px;">刷新</Button>
 		    	</div>
 	    	</div>
-	        <slot name="modalContent"></slot>
+	        <slot name="modalContent" v-if="modalShow"></slot>
 	        <div slot="footer">
 	        	<Button @click="modalShow = false">取消</Button>
 	        	<Button type="primary" @click="modalShow = false">确定</Button>
@@ -242,7 +242,7 @@ export default {
 <style lang="less">
 	.my-ivu-modal-wrap{
 		position: flex !important;
-		top: 93px !important;
+		top: 92px !important;
 		transition: left 0.2s ease-in-out;
 	}
 	.leftmax{

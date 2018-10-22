@@ -1,66 +1,37 @@
 <template>
 
 	<div>
-		<Card>
-			<div slot="title" class="title">
-				<h1>活动/会议列表</h1>
-			</div>
-			<div class="content">
-           <Row>
-			   <Col span="4" style="text-align: right;">
-				   <p>类型：</p>
-				   <p>开始时间：</p>
-				   <p>结束时间：</p>
-				   <p>是否住宿：</p>
-			   </Col>
-			   <Col span="6">
-				   <p>会议</p>
-				   <p>2018-01-01</p>
-				   <p>2018-02-02</p>
-				   <p>是</p>
-			   </Col>
-			   <Col span="4" style="text-align: right;">
-				   <p>标题：</p>
-				   <p>会议地址：</p>
-				   <p>住宿地址：</p>
-				   <p>会议说明：</p>
-			   </Col>
-			   <Col span="6">
-				   <p>广西湖北商会2018迎新春抽奖晚会</p>
-				   <p>广西南宁市民族大道123号</p>
-				   <p>广西南宁市民族大道123号</p>
-				   <p>我是会议说明噢噢噢噢</p>
-			   </Col>
-		   </Row>
-			</div>
-
-		</Card>
-
-		<Card style="margin-top:16px ;">
-			<div slot="title" class="title">
-				<h1>回忆描述</h1>
-			</div>
-			<Img :src="photo"></Img>
-		</Card>
-		<Card style="margin-top: 16px;height: 600px;">
-
-			<h1 slot="title">附件</h1>
-
-			<file-manage currentRouteName="activityDetails"></file-manage>
-
-		</Card>
-		<Card style="margin-top: 16px;">
-			<div slot="title" class="title">
-				<h1>邀请人员</h1>
-			</div>
-			<table-list @on-btn-click="btnClick" @on-poptip-ok="poptipOk" :tableColumns="tableColumns" :tableData="tableData">
-
-				<div slot="modalContent">
-					邀请成功
-				</div>
-
-			</table-list>
-		</Card>
+		
+		<h1 style="text-align: center;margin-bottom: 16px;">广西湖北商会2018迎新春抽奖晚会</h1>
+		<div style="text-align: center;">
+			<Tag color="default">类型：会议</Tag>
+			<Tag color="default">会议地址：广西南宁市青秀区</Tag>
+			<Tag color="default">开始时间：2018-10-22</Tag>
+			<Tag color="default">结束时间：2018-10-23</Tag>
+			<Tag color="default">是否住宿：是</Tag>
+			<Tag color="default">住宿地址：广西南宁市国际大酒店</Tag>
+		</div>
+		
+		<!--<Row>
+			<Col span="8" offset="4" class="showForm">
+				<label></label>
+				<span></span>
+			</Col>
+		</Row>-->
+		
+		<Divider orientation="left">会议说明</Divider>
+		
+		<Img :src="photo"></Img>
+		
+		<Divider orientation="left">附件</Divider>
+		
+		<file-manage currentRouteName="activityDetails"></file-manage>
+		
+		<Divider orientation="left">邀请人员</Divider>
+		
+		<table-list @on-btn-click="btnClick" @on-poptip-ok="poptipOk" :tableColumns="tableColumns" :tableData="tableData">
+		</table-list>
+		
 	</div>
 
 </template>

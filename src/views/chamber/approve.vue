@@ -2,16 +2,19 @@
 	
 	<div>
 		
-				<Card>
-					<div slot="title" class="title">
-						<h1>会员审批</h1>
-					</div>
-					<table-list
-					@on-poptip-ok="poptipOk"
-					:tableColumns="tableColumns"
-					:tableData="approveList">
-					</table-list>
-				</Card>
+		<Card>
+			
+			<div slot="title" class="title">
+				<h1>会员审批</h1>
+			</div>
+			
+			<table-list
+			@on-poptip-ok="poptipOk"
+			:tableColumns="tableColumns"
+			:tableData="approveList">
+			</table-list>
+			
+		</Card>
 		
 	</div>
 	
@@ -25,7 +28,7 @@ const getApproveData = (fn) => {//获取审批数据列表
 	});
 }
 export default {
-	name: '',
+	name: 'approve',
 	components:{//组件模板,
 	tableList
 	},

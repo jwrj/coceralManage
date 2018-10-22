@@ -106,11 +106,7 @@
 import tableList from '@/components/tableList/table-list.vue'
 import postCasc from '@/components/post/post-casc.vue';
 import userList from '@/views/user/userList.vue';
-import qs from 'qs';
-const getLocalTime = (nS) => {
-	return new Date(parseInt(nS) * 1000).toLocaleString().replace(/\//g, "-").replace(/上午([\d\:]*)/g, "");
-}
-//const qs = require('qs'); axios自带qs插件
+const qs = require('qs');//axios自带qs插件
 export default {
 	name: 'staffSet',
 	components:{//组件模板,
@@ -358,8 +354,7 @@ export default {
 			});
 		},
 		
-		QSStringify(params={}){//qs序列化提交数组到后台
-			
+		QSStringify(params={}){//使用qs插件序列化数组提交到后台
 			let str = '{'+qs.stringify(params, {encoder: function(str){
 	    		if(typeof(str) === 'string' && typeof(str) !== 'number'){
 	    			return '"'+ str +'"'
@@ -367,13 +362,9 @@ export default {
 	    			return str
 	    		}
 	    	}})+'}';
-	    	
 	    	let jsonStr = str.replace(/\=/g, ':').replace(/\&/g, ',');
-	    	
 	      	let jsonData = JSON.parse(jsonStr);
-	      	
 	      	return jsonData;
-	      	
 		},
 		
     },
@@ -390,7 +381,7 @@ export default {
     	
 	},
     mounted () {//模板被渲染完毕之后执行
-    	
+    	console.log(qs);
 	},
 	
 	//=================组件路由勾子==============================

@@ -7,7 +7,7 @@
 				<h1>会费情况-查看岗位的缴费情况</h1>
 			</div>
 			
-			<table-list :tableColumns="tableColumns" :seekShow="false" :tableData="personnelList">
+			<table-list :tableColumns="tableColumns" :seekShow="false" :tableData="personnelList" @on-btn-click="btnClick">
 				
 				<div slot="header" style="display: flex;">
 					
@@ -32,7 +32,7 @@
 					
 				</div>
 				
-  				<pay-ment slot="modalContent"></pay-ment>
+  				<pay-ment slot="modalContent" :info="payInfo"></pay-ment>
   				
 			</table-list>
 			
@@ -47,7 +47,7 @@
 	import tableList from '@/components/tableList/table-list.vue'; //表格列表组件
     import payMent from '@/views/price/payment.vue'
 	export default {
-		name: '',
+		name: 'dues',
 		components: { //组件模板,
 			postCasc,
 			tableList,
@@ -64,6 +64,8 @@
 		},
 		data() { //数据
 			return {
+				
+				payInfo: {},//详情数据信息
 				
 				postId: [],//岗位id
         	
@@ -134,6 +136,14 @@
 			}
 		},
 		methods: { //方法
+			
+			btnClick(val){//表格按钮事件
+				this.payInfo = {
+					gw_id: Number(val.params.row.gw_id),
+					jie_id: Number(val.params.row.jie_id),
+					memberInfo: val.params.row.memberInfo
+				}
+			},
 			
 			postChange(postId, postData){//岗位选择改变时
 				this.getJieCiData(postId);

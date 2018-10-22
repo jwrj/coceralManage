@@ -191,7 +191,7 @@ export const routeHasExist = (tagNavList, routeItem) => {
 
 
 /**
- * 权鉴
+ * 权限
  * @param {*} routeName 即将跳转的路由name
  * @param {*} userAccess 用户权限数组
  * @param {*} routeList 路由列表

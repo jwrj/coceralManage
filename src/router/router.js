@@ -70,61 +70,64 @@ export default [
 			},
 		]
 	},
-//	{
-//		path: '/user',
-//		name: 'user',
-//		meta: {
-//			title: '会员管理',
-//			icon: 'md-alarm',
-//			showAlways: true
-//		},
-//		component: Main,
-//		children: [
-//			{
-//				path: 'joinChamber',
-//				name: 'joinChamber',
-//				meta: {
-//					title: '申请加入商会',
-//					icon: 'md-alarm',
-//				},
-//				component: () => import('@/views/user/joinChamber.vue')
-//			},
-//			{
-//				path: 'userList',
-//				name: 'userList',
-//				meta: {
-//					title: '会员列表',
-//					icon: 'md-alarm',
-//				},
-//				component: () => import('@/views/user/userList.vue')
-//			}
-//		]
-//	},
+	{
+		path: '/member1',
+		name: 'member1',
+		meta: {
+			access: ['member']
+		},
+		component: Main,
+		children: [
+			{
+				path: 'memberList',
+				name: 'memberList',
+				meta: {
+					title: '会员列表',
+					icon: 'md-alarm',
+					access: ['member']
+				},
+				component: () => import('@/views/member/memberList.vue')
+			},
+		]
+	},
+	{
+		path: '/member2',
+		name: 'member2',
+		meta: {
+			access: ['member']
+		},
+		component: Main,
+		children: [
+			{
+				path: 'myActivityList',
+				name: 'myActivityList',
+				meta: {
+					title: '我的活动列表',
+					icon: 'md-alarm',
+					access: ['member']
+				},
+				component: () => import('@/views/member/myActivityList.vue')
+			},
+		]
+	},
 	{
 		path: '/chamber',
 		name: 'chamber',
 		meta: {
 			title: '商会管理',
 			icon: 'md-alarm',
-			showAlways: true
+			showAlways: true,
+			access: ['admin']
 		},
 		component: Main,
 		children: [
-//			{
-//				path: 'chamberList',
-//				name: 'chamberList',
-//				meta: {
-//					title: '商协会列表',
-//					icon: 'md-alarm',
-//				},
-//				component: () => import('@/views/chamber/chamberList.vue')
-//			},
 			{
 				path: 'createChamber',
 				name: 'createChamber',
 				meta: {
 					title: '创建商会',
 					icon: 'md-alarm',
+					access: ['admin']
 				},
 				component: () => import('@/views/chamber/createChamber.vue')
 			},
@@ -134,6 +137,7 @@ export default [
 				meta: {
 					title: '岗位配置',
 					icon: 'md-alarm',
+					access: ['admin']
 				},
 				component: () => import('@/views/chamber/postSet.vue')
 			},
@@ -143,6 +147,7 @@ export default [
 				meta: {
 					title: '届次配置',
 					icon: 'md-alarm',
+					access: ['admin']
 				},
 				component: () => import('@/views/chamber/sessionSet.vue')
 			},
@@ -152,6 +157,7 @@ export default [
 				meta: {
 					title: '人员配置',
 					icon: 'md-alarm',
+					access: ['admin']
 				},
 				component: () => import('@/views/chamber/staffSet.vue')
 		  	},
@@ -161,6 +167,7 @@ export default [
 				meta: {
 					title: '会员审批',
 					icon: 'md-alarm',
+					access: ['admin']
 				},
 				component: () => import('@/views/chamber/approve.vue')
 			},
@@ -170,6 +177,7 @@ export default [
 				meta: {
 					title: '会员列表',
 					icon: 'md-alarm',
+					access: ['admin']
 				},
 				component: () => import('@/views/user/userList.vue')
 			}
@@ -181,7 +189,8 @@ export default [
 		meta: {
 			title: '活动/会议管理',
 			icon: 'md-alarm',
-			showAlways: true
+			showAlways: true,
+			access: ['admin']
 		},
 		component: Main,
 		children: [
@@ -191,6 +200,7 @@ export default [
 				meta: {
 					title: '活动/会议列表',
 					icon: 'md-alarm',
+					access: ['admin']
 				},
 				component: () => import('@/views/activity/activityList.vue')
 			},
@@ -200,6 +210,7 @@ export default [
 				meta: {
 					title: '创建活动/会议',
 					icon: 'md-alarm',
+					access: ['admin']
 				},
 				component: () => import('@/views/activity/createActivity.vue')
 			},
@@ -212,7 +223,7 @@ export default [
 		meta: {
 			title: '会费管理',
 			icon: 'md-alarm',
-			showAlways: true
+			access: ['admin']
 		},
 		component: Main,
 		children: [
@@ -222,6 +233,7 @@ export default [
 				meta: {
 					title: '会费情况',
 					icon: 'md-alarm',
+					access: ['admin']
 				},
 				component: () => import('@/views/price/dues.vue')
 			}
@@ -232,7 +244,8 @@ export default [
 		name: 'testPages',
 		meta: {
 			icon: 'md-alarm',
-			hideBreadcrumb: true
+			hideBreadcrumb: true,
+			access: ['admin']
 		},
 		component: Main,
 		children: [
@@ -242,6 +255,7 @@ export default [
 				meta: {
 					title: '组件',
 					icon: 'md-alarm',
+					access: ['admin']
 				},
 				component: () => import('@/views/testPages/comPage.vue')
 			},

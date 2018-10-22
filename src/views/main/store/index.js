@@ -13,6 +13,8 @@ const mainFrame = {
 		
 		breadCrumbList: [],//面包屑导航列表
 		
+		menuList: [],//菜单列表
+		
 	},
 	
 	mutations: { //事件集,mutation是同步的
@@ -67,11 +69,17 @@ const mainFrame = {
 			
 		},
 		
+		getMenuList(state){//获取菜单列表
+			state.menuList = getMenuByRouter(routers, sessionStorage.userAccess.split(','));
+		},
+		
 	},
 	
 	getters: {//计算属性
 		
-		menuList: (state, getters) => getMenuByRouter(routers, window.USE_RACCESS),//获取菜单列表
+//		menuList: (state, getters) => {//获取菜单列表
+//			return getMenuByRouter(routers, sessionStorage.userAccess.split(','));
+//		},
 		
 	},
 	

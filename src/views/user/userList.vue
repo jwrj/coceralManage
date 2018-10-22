@@ -85,7 +85,9 @@ export default {
     			},
     			{
     				title: '任职时间',
-    				key: 'addtime_str'
+    				render: (h, params) => {
+						return h('span', getLocalTime(params.row.addtime))
+					}
     			},
     			{
     				align: 'center',

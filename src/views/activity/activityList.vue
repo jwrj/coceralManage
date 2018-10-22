@@ -1,196 +1,154 @@
 <template>
 
 	<div>
+		
 		<Card>
-			<div slot="title" class="title">
-				<h1>
-					活动/会议列表
-					<Button style="margin-left: 10px;" type="primary" size="small" @click="createactivity">创建活动/会议</Button>
-				</h1>
-				
+			
+			<div slot="title" class="cardTitle">
+				<h1>活动/会议列表</h1>
+				<Button style="margin-left: 10px;" type="primary" size="small" to="/activity/createActivity">创建活动/会议</Button>
 			</div>
-			<table-list @on-btn-click="btnClick" :tableColumns="tableColumns" :tableData="tableData" :modalTitle="modalTitle">
-				
+			
+			<table-list @on-btn-click="btnClick" :tableColumns="tableColumns" :tableData="ActivityDataList" :modalTitle="modalTitle">
 				<div slot="modalContent">
-					
-					<activity-details></activity-details>
-					
+					<activity-details v-if="openType === 'details' || openType === 'edit'"></activity-details>
+					<invitation v-if="openType === 'invite'"></invitation>
 				</div>
-				
 			</table-list>
+			
 		</Card>
-
 
 	</div>
 
 </template>
 
 <script>
-	import tableList from '@/components/tableList/table-list.vue'
-	import activityDetails from '@/views/activity/activityDetails.vue'
-	export default {
-		name: '',
-		components: { //组件模板,
-			tableList,
-			activityDetails
-		},
-		props: { //组件道具（参数）
-			/* ****属性用法*****
-			 * 
-			 * 传递类型 type: Array | Number | String | Object
-			 * 为必传 required: true
-			 * 默认值 default: ''
-			 * 
-			 */
-		},
-		data() { //数据
-			return {
-				
-				modalTitle: '标题',
-				
-				tableColumns: [{
-						title: 'ID',
-						key: 'id'
-					},
-					{
-						title: '名称',
-						key: 'name'
-					},
-					{
-						title: '开始时间',
-						key: 'startTime'
-					},
-					{
-						title: '结束时间',
-						key: 'endTime'
-					},
-					{
-						title: '报名人数',
-						key: 'num'
-					},
-					{
-						align: 'center',
-						width: 130,
-						title: '操作',
-						handle: [
-							{
-								name: '详情',
-								key: 'details',
-								modalShow: true,
-							},
-							{
-								name: '编辑',
-								key: 'edit',
-								modalShow: true,
-							},
-						],
+import tableList from '@/components/tableList/table-list.vue'
+import activityDetails from '@/views/activity/activityDetails.vue'
+import invitation from '@/views/activity/invitation.vue'
+export default {
+	name: 'activityList',
+	components: { //组件模板,
+		tableList,
+		activityDetails,
+		invitation
+	},
+	props: { //组件道具（参数）
+		/* ****属性用法*****
+		 * 
+		 * 传递类型 type: Array | Number | String | Object
+		 * 为必传 required: true
+		 * 默认值 default: ''
+		 * 
+		 */
+	},
+	data() { //数据
+		return {
+			
+			modalTitle: '标题',
+			
+			openType: '',
+			
+			tableColumns: [
+				{
+					align: 'center',
+					width: 60,
+					title: 'ID',
+					key: 'id'
+				},
+				{
+					title: '名称',
+					key: 'title'
+				},
+				{
+					title: '开始时间',
+					render: (h, params) => {
+						return h('span', getTimeMinute(params.row.begin_time))
 					}
-				],
-				
-				tableData: [
-					{
-						id: 1,
-						name: '广西湖北商会2018迎新春晚会',
-						startTime: '2018-10-09',
-						endTime: '2018-11-09',
-						num: 100
-					},
-					{
-						id: 1,
-						name: '广西湖北商会2018迎新春晚会',
-						startTime: '2018-10-09',
-						endTime: '2018-11-09',
-						num: 100
-					},
-					{
-						id: 1,
-						name: '广西湖北商会2018迎新春晚会',
-						startTime: '2018-10-09',
-						endTime: '2018-11-09',
-						num: 100
-					},
-					{
-						id: 1,
-						name: '广西湖北商会2018迎新春晚会',
-						startTime: '2018-10-09',
-						endTime: '2018-11-09',
-						num: 100
-					},
-				]
-			}
-		},
-		methods: { //方法
-			
-			createactivity() {
-				this.$router.push('/activity/createActivity');
-			},
-			
-			btnClick(val){
-				
-				this.modalTitle = val.name;
-				
-			},
-			
-		},
-		computed: { //计算属性
-
-		},
-		watch: { //监测数据变化
-
-		},
-
-		//===================组件钩子===========================
-
-		created() { //实例被创建完毕之后执行
-
-		},
-		mounted() { //模板被渲染完毕之后执行
-
-		},
-
-		//=================组件路由勾子==============================
-
-		beforeRouteEnter(to, from, next) { //在组件创建之前调用（放置页面加载时请求的Ajax）
-
-			(async () => { //执行异步函数
-
-				//async、await错误处理
-				try {
-
-					/*
-					 * 
-					 * ------串行执行---------
-					 * console.log(await getAjaxData());
-					 * ...
-					 * 
-					 * ---------并行：将多个promise直接发起请求（先执行async所在函数），然后再进行await操作。（执行效率高、快）----------
-					 * let abc = getAjaxData();//先执行promise函数
-					 * ...
-					 * console.log(await abc);
-					 * ...
-					 */
-					next(vm => {
-
-					});
-
-				} catch (err) {
-					console.log(err);
+				},
+				{
+					title: '结束时间',
+					render: (h, params) => {
+						return h('span', getTimeMinute(params.row.end_time))
+					}
+				},
+				{
+					align: 'center',
+					title: '报名人数',
+					render: (h, params) => {
+						return h('span', '100')
+					}
+				},
+				{
+					align: 'center',
+					width: 200,
+					title: '操作',
+					handle: [
+						{
+							name: '详情',
+							key: 'details',
+							modalShow: true,
+						},
+						{
+							name: '编辑',
+							key: 'edit',
+							modalShow: true,
+						},
+						{
+							name: '邀请人员',
+							key: 'invite',
+							modalShow: true,
+						},
+					],
 				}
-
-			})();
-
+			],
+			
+			ActivityDataList: [],
+			
+		}
+	},
+	methods: { //方法
+		
+		btnClick(val){
+			this.openType = val.key;
+			this.modalTitle = val.params.row.title + '（'+ val.name +'）';
 		},
+		
+	},
+	computed: { //计算属性
 
-	}
+	},
+	watch: { //监测数据变化
+
+	},
+
+	//===================组件钩子===========================
+
+	created() { //实例被创建完毕之后执行
+
+	},
+	mounted() { //模板被渲染完毕之后执行
+
+	},
+
+	//=================组件路由勾子==============================
+
+	beforeRouteEnter(to, from, next) { //在组件创建之前调用（放置页面加载时请求的Ajax）
+
+		$ax.getAjaxData('manage.Action/actionList', {}, res => {//获取活动列表
+			if(res.code == 0){
+				next(vm => {
+					vm.ActivityDataList = res.data;
+				});
+			}else{
+				next();
+			}
+		});
+
+	},
+
+}
 </script>
 
 <style scoped lang="less">
-	.btnSmall {
-		margin-left: auto;
-	}
-
-	.title {
-		display: flex;
-		align-items: center;
-	}
 </style>

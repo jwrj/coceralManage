@@ -151,6 +151,8 @@ export default {
 						if(res.code == 0){
 							sessionStorage.removeItem('identityType');
 							sessionStorage.removeItem('chamberId');
+							sessionStorage.removeItem('userAccess');
+							localStorage.clear();// 从localStorage删除所有保存的数据
 							this.$router.replace({name: 'login'});
 							this.$Message.success('退出会员登录成功');
 						}
@@ -160,6 +162,8 @@ export default {
 						if(res.code == 0){
 							sessionStorage.removeItem('identityType');
 							sessionStorage.removeItem('chamberId');
+							sessionStorage.removeItem('userAccess');
+							localStorage.clear();// 从localStorage删除所有保存的数据
 							this.$router.replace({name: 'login'});
 							this.$Message.success('退出管理者登录成功');
 						}
