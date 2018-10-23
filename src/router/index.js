@@ -9,7 +9,9 @@ export const router = new Router({
 	routes: routers
 });
 
-router.beforeEach((to, from, next) => {//路由跳转前
+router.beforeEach((to, from, next) => {//会在任意路由跳转前执行，next一定要记着执行，不然路由不能跳转了
+	
+	router.app.$Loading.start();//加载进度条
 	
 	//检测用户中心登录
 	if(!sessionStorage.userLogin && to.name !== 'mainLogin'){//用户中心未登录
@@ -72,4 +74,8 @@ router.beforeEach((to, from, next) => {//路由跳转前
 		
 	}
 	
+});
+
+router.afterEach((to, from) => {//会在任意路由跳转后执行
+	router.app.$Loading.finish();//加载进度条
 });

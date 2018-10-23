@@ -2,17 +2,26 @@
 	
 	<div>
 		
-		会员列表
+		<Card>
+			
+			<h1 slot="title">会员列表</h1>
+			
+			<table-list :tableColumns="tableColumns" :tableData="memberDataList">
+			</table-list>
+			
+		</Card>
 		
 	</div>
 	
 </template>
 
 <script>
-
+import tableList from '@/components/tableList/table-list.vue';
+let isCarryOutHook = false;
 export default {
-	name: '',
+	name: 'memberList',
 	components:{//组件模板
+		tableList
 	},
 	props:{//组件道具（参数）
 		/* ****属性用法*****
@@ -26,9 +35,66 @@ export default {
     data () {//数据
         return {
         	
+        	tableColumns: [
+    			{
+    				width: 60,
+    				type: 'selection'
+    			},
+    			{
+    				width: 60,
+    				title: 'ID',
+    				key: 'id'
+    			},
+    			{
+    				title: '姓名',
+    				render: (h, params) => {
+    					return h('span', params.row.person_info.truest_name)
+    				}
+    			},
+    			{
+    				width: 60,
+    				title: '性别',
+    				render: (h, params) => {
+    					return h('span', params.row.person_info.sex)
+    				}
+    			},
+    			{
+    				title: '公司',
+    				render: (h, params) => {
+    					return h('span', params.row.company_info ? params.row.company_info.company_name : '')
+    				}
+    			},
+    			{
+    				title: '任职时间',
+    				render: (h, params) => {
+						return h('span', getLocalTime(params.row.addtime))
+					}
+    			},
+    			{
+    				align: 'center',
+    				width: 100,
+    				title: '操作',
+    				handle: [
+    					{
+    						name: '详细资料',
+    					},
+    				],
+    			}
+    		],
+        	
+        	memberDataList: [],
+        	
         }
     },
     methods: {//方法
+    	
+    	getMemberData(){//获取会员列表
+    		$ax.getAjaxData('member.Do/memberList', {}, res => {
+    			if(res.code == 0){
+    				this.memberDataList = res.data;
+    			}
+    		});
+    	},
     	
     },
     computed: {//计算属性
@@ -41,41 +107,42 @@ export default {
     //===================组件钩子===========================
     
     created () {//实例被创建完毕之后执行
-    	
+    	if(!isCarryOutHook){
+    		this.getMemberData();
+    	}
 	},
     mounted () {//模板被渲染完毕之后执行
     	
+	},
+	destroyed(){//Vue 实例销毁后调用
+		isCarryOutHook = false;
 	},
 	
 	//=================组件路由勾子==============================
 	
 	beforeRouteEnter (to, from, next) {//在组件创建之前调用（放置页面加载时请求的Ajax）
 		
-		(async() => {//执行异步函数
+		isCarryOutHook = true;
+		
+		(async () => { //执行异步函数
 			
-			//async、await错误处理
-			try {
+			try{
 				
-				/*
-				 * 
-				 * ------串行执行---------
-				 * console.log(await getAjaxData());
-				 * ...
-				 * 
-				 * ---------并行：将多个promise直接发起请求（先执行async所在函数），然后再进行await操作。（执行效率高、快）----------
-				 * let abc = getAjaxData();//先执行promise函数
-				 * ...
-				 * console.log(await abc);
-				 * ...
-				*/
+				//获取会员列表
+				let memberData = await $ax.getAsyncAjaxData('member.Do/memberList', {});
+				
 				next(vm => {
-					
+					if(memberData.code == 0){
+						vm.memberDataList = memberData.data;
+					}
 				});
-				
-			} catch(err) {
+
+			}catch (err) {
 				console.log(err);
 			}
 			
+			next();
+
 		})();
 		
 	},

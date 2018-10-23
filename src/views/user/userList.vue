@@ -20,7 +20,8 @@
 
 <script>
 import postCasc from '@/components/post/post-casc.vue';
-import tableList from '@/components/tableList/table-list.vue'
+import tableList from '@/components/tableList/table-list.vue';
+let isCarryOutHook = false;
 export default {
 	name: 'userList',
 	components:{//组件模板,
@@ -130,7 +131,9 @@ export default {
     //===================组件钩子===========================
     
     created () {//实例被创建完毕之后执行
-      	this.getMemberDataList();
+    	if(!isCarryOutHook){
+    		this.getMemberDataList();
+    	}
 	},
     mounted () {//模板被渲染完毕之后执行
     	
@@ -139,36 +142,35 @@ export default {
     	}
     	
 	},
+	destroyed(){//Vue 实例销毁后调用
+		isCarryOutHook = false;
+	},
 	
 	//=================组件路由勾子==============================
 	
 	beforeRouteEnter (to, from, next) {//在组件创建之前调用（放置页面加载时请求的Ajax）
 		
-		(async() => {//执行异步函数
+		isCarryOutHook = true;
+		
+		(async () => { //执行异步函数
 			
-			//async、await错误处理
-			try {
+			try{
 				
-				/*
-				 * 
-				 * ------串行执行---------
-				 * console.log(await getAjaxData());
-				 * ...
-				 * 
-				 * ---------并行：将多个promise直接发起请求（先执行async所在函数），然后再进行await操作。（执行效率高、快）----------
-				 * let abc = getAjaxData();//先执行promise函数
-				 * ...
-				 * console.log(await abc);
-				 * ...
-				*/
+				//获取会员列表数据
+				let getMemberData = await $ax.getAsyncAjaxData('manage.Member/memberList', {});
+				
 				next(vm => {
-					
+					if(getMemberData.code == 0){
+						vm.memberList = getMemberData.data;
+					}
 				});
-				
-			} catch(err) {
+
+			}catch (err) {
 				console.log(err);
 			}
 			
+			next();
+
 		})();
 		
 	},

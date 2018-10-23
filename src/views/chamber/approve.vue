@@ -22,11 +22,8 @@
 
 <script>
 import tableList from '@/components/tableList/table-list.vue';
-const getApproveData = (fn) => {//获取审批数据列表
-	$ax.getAjaxData('manage.Member/applyList', {}, res => {
-		fn && fn(res);
-	});
-}
+let isCarryOutHook = false;
+
 export default {
 	name: 'approve',
 	components:{//组件模板,
@@ -103,6 +100,14 @@ export default {
     },
     methods: {//方法
     	
+    	getApproveData(){//获取审批数据列表
+    		$ax.getAjaxData('manage.Member/applyList', {}, res => {
+    			if(res.code == 0){
+    				this.approveList = res.data;
+    			}
+			});
+    	},
+    	
     	poptipOk(val){//拒绝或通过
     		if(val.key === 'pass'){//成功通过
       			this.setApplyDo(Number(val.params.row.id), 1);
@@ -142,25 +147,43 @@ export default {
     //===================组件钩子===========================
     
     created () {//实例被创建完毕之后执行
-    	
+    	if(!isCarryOutHook){
+    		this.getApproveData();
+    	}
 	},
     mounted () {//模板被渲染完毕之后执行
     	
+	},
+	destroyed(){//Vue 实例销毁后调用
+		isCarryOutHook = false;
 	},
 	
 	//=================组件路由勾子==============================
 	
 	beforeRouteEnter (to, from, next) {//在组件创建之前调用（放置页面加载时请求的Ajax）
 		
-		getApproveData((res) => {//获取审批数据列表
-			if(res.code == 0){
+		isCarryOutHook = true;
+		
+		(async () => { //执行异步函数
+			
+			try{
+				
+				//获取审批数据列表
+				let approveData = await $ax.getAsyncAjaxData('manage.Member/applyList', {});
+				
 				next(vm => {
-					vm.approveList = res.data;
+					if(approveData.code == 0){
+						vm.approveList = approveData.data;
+					}
 				});
-			}else{
-				next();
+
+			}catch (err) {
+				console.log(err);
 			}
-		});
+			
+			next();
+
+		})();
 		
 	},
 	

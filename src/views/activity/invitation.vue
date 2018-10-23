@@ -10,10 +10,8 @@
     	@on-select-change="memberSelect"
     	></user-list>
 		
-		{{checkedMembers}}
-		
 		<div style="text-align: center;margin-top: 16px;">
-			<Button type="primary">发送邀请</Button>
+			<Button type="primary" @click="submitInvite">发送邀请</Button>
 		</div>
 		
 	</div>
@@ -35,6 +33,9 @@ export default {
 		 * 默认值 default: ''
 		 * 
 		 */
+		dataInfo: {
+			type: Object,
+		}
 	},
     data () {//数据
         return {
@@ -47,6 +48,25 @@ export default {
     	
     	memberSelect(data){//选择会员时触发
     		this.checkedMembers = data;
+    	},
+    	
+    	submitInvite(){//提交邀请
+    		if(this.checkedMembers && this.checkedMembers.length > 0){
+    			let newIds = [];
+    			this.checkedMembers.forEach(item => {
+    				newIds.push(item.id);
+    			});
+    			$ax.getAjaxQsStringify('manage.Action/addMember', {
+    				mid: newIds,//会员ID。（多个，数组形式）
+    				action_id: this.dataInfo.id,//活动id
+    			}, res => {
+    				if(res.code == 0){
+    					this.$Message.success('邀请成功');
+    				}
+    			});
+    		}else{
+    			this.$Message.info('请选择需要邀请的人员');
+    		}
     	},
     	
     },

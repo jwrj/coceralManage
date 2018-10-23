@@ -17,31 +17,16 @@
 		
 		<Img :src="photo"></Img>
 		
-		<Divider orientation="left">附件</Divider>
-		
-		<file-manage currentRouteName="activityDetails"></file-manage>
-		
-		<Divider orientation="left">已邀请人员</Divider>
-		
-		<table-list
-		@on-btn-click="btnClick"
-		@on-poptip-ok="poptipOk"
-		:tableColumns="tableColumns"
-		:tableData="inviteList">
-		</table-list>
-		
 	</div>
 
 </template>
 
 <script>
-	import fileManage from '@/components/fileManage/file-manage.vue'; //文件管理
 	import tableList from '@/components/tableList/table-list.vue'; //表格列表组件
 	import image from "@/assets/img/default-img/detail.png"
 	export default {
 		name: '',
 		components: { //组件模板,
-			fileManage,
 			tableList
 		},
 		props: { //组件道具（参数）
@@ -58,86 +43,12 @@
 		},
 		data() { //数据
 			return {
-				photo: image,
-				tableColumns: [
-					{
-						title: 'ID',
-						key: 'id'
-					},
-					{
-						title: '姓名',
-						render: (h, params) => {
-							return h('span', params.row.member_info.person_name)
-						}
-					},
-					{
-						title: '性别',
-						render: (h, params) => {
-							return h('span', '男')
-						}
-					},
-					{
-						title: '公司',
-						render: (h, params) => {
-							return h('span', params.row.member_info.company_name)
-						}
-					},
-					{
-						title: '手机号',
-						render: (h, params) => {
-							return h('span', 13800138000)
-						}
-					},
-					{
-						title: '身份证号码',
-						render: (h, params) => {
-							return h('span', '450803********123')
-						}
-					},
-					{
-						align: 'center',
-						width: 180,
-						title: '操作',
-						handle: [
-							{
-								name: '再次通知',
-								key: 'inform',
-							},
-							{
-								name: '删除名额',
-								key: 'del',
-								poptipOpen: true,
-								poptip_props: {
-									title: '您确定要删除该名额？'
-								}
-							},
-						],
-					}
-				],
 				
-				inviteList: [],
+				photo: image,
 				
 			}
 		},
 		methods: { //方法
-			
-			btnClick(){
-				this.$Message.success('通知成功');
-			},
-			
-			poptipOk(){
-				this.$Message.success('删除成功');
-			},
-			
-			getInviteData(){//获取已邀请人员列表
-				$ax.getAjaxData('manage.Action/actionMemberList', {
-					action_id: this.dataInfo.id,//活动ID
-				}, res => {
-					if(res.code == 0){
-						this.inviteList = res.data;
-					}
-				});
-			},
 			
 		},
 		computed: { //计算属性
@@ -150,7 +61,7 @@
 		//===================组件钩子===========================
 
 		created() { //实例被创建完毕之后执行
-			this.getInviteData();
+			
 		},
 		mounted() { //模板被渲染完毕之后执行
 

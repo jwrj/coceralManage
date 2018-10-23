@@ -106,7 +106,7 @@
 import tableList from '@/components/tableList/table-list.vue'
 import postCasc from '@/components/post/post-casc.vue';
 import userList from '@/views/user/userList.vue';
-const qs = require('qs');//axios自带qs插件
+
 export default {
 	name: 'staffSet',
 	components:{//组件模板,
@@ -255,22 +255,21 @@ export default {
 		
 		setSubmitAjax(){//设置提交数据
 			
-			let obj = {
-				gw_id: this.postId[this.postId.length-1],//岗位ID
-				jie_id: this.jieCiId,//届的ID
-				begin_time: this.formData.startTime,//开始时间
-				end_time: this.formData.endTime//结束时间
-			}
-			
 			let membersIds = [];
 			
 			this.checkedMembers.forEach(item => {
 				membersIds.push(Number(item.id));
 			});
 			
-			let member = this.QSStringify({mid: membersIds});
+			let obj = {
+				gw_id: this.postId[this.postId.length-1],//岗位ID
+				jie_id: this.jieCiId,//届的ID
+				mid: membersIds,//会员ID
+				begin_time: this.formData.startTime,//开始时间
+				end_time: this.formData.endTime//结束时间
+			}
 			
-			$ax.getAjaxData('manage.Organize/gangweiPersonMore', Object.assign({}, obj, member), res => {
+			$ax.getAjaxQsStringify('manage.Organize/gangweiPersonMore', obj, res => {
 				if(res.code == 0){
 					let tf1 = false;
 					let tf2 = false;
@@ -354,19 +353,6 @@ export default {
 			});
 		},
 		
-		QSStringify(params={}){//使用qs插件序列化数组提交到后台
-			let str = '{'+qs.stringify(params, {encoder: function(str){
-	    		if(typeof(str) === 'string' && typeof(str) !== 'number'){
-	    			return '"'+ str +'"'
-	    		}else{
-	    			return str
-	    		}
-	    	}})+'}';
-	    	let jsonStr = str.replace(/\=/g, ':').replace(/\&/g, ',');
-	      	let jsonData = JSON.parse(jsonStr);
-	      	return jsonData;
-		},
-		
     },
     computed: {//计算属性
         
@@ -381,7 +367,7 @@ export default {
     	
 	},
     mounted () {//模板被渲染完毕之后执行
-    	console.log(qs);
+    	
 	},
 	
 	//=================组件路由勾子==============================

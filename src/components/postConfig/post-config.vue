@@ -27,7 +27,7 @@
 </template>
 
 <script>
-
+let isCarryOutHook = false;
 export default {
 	name: 'postConfig',
 	components:{//组件模板
@@ -58,81 +58,8 @@ export default {
         	
         	modalTitle: '',
         	
-        	treeData: [
-//      		{
-//      			title: '未配置',
-//                  expand: true,
-//                  render: (h, { root, node, data }) => {
-//                      return h('div',{
-//                      	style: {
-//	                    		display: 'inline-block',
-//          					width: '100%',
-//          					paddingRight: '16px',
-//	                        },
-//                      },[
-//	                        h('span', {
-//	                            style: {
-//	                            },
-//	                            class: 'ivu-tree-title my-tree-node'
-//	                        }, [
-//	                            h('span', {
-//	                            	class: 'my-tree-title'
-//	                            }, [
-//	                                h('Icon', {
-//	                                    props: {
-//	                                        type: 'md-cube'
-//	                                    },
-//	                                    style: {
-//	                                        marginRight: '8px'
-//										
-//	                                    }
-//	                                }),
-//	                                h('span', data.title)
-//	                            ]),
-//	                            h('span', {
-//	                                style: {
-//	                                	marginLeft: 'auto'
-//	                                }
-//	                            }, [
-//		                            h('Button', {
-//				                        props: Object.assign({}, this.buttonProps, {
-//				                            icon: 'md-create',
-//				                            type: 'success',
-//				                        }),
-//				                        style: {
-//				                            marginRight: '8px'
-//				                        },
-//				                        on: {
-//				                            click: () => {
-//				                            	this.type = 'edit';
-//				                            	this.formInline.name = data.title;
-//				                            	this.modalShow = true;
-//				                                this.currentData = data;
-//				                            }
-//				                        }
-//				                    }),
-//	                                h('Button', {
-//	                                    props: Object.assign({}, this.buttonProps, {
-//	                                        icon: 'md-add',
-//	                                        type: 'primary',
-//	                                    }),
-//	                                    style: {
-//	                                    	
-//	                                    },
-//	                                    on: {
-//	                                        click: () => {
-//	                                        	this.type = 'add';
-//	                                        	this.modalShow = true;
-//	                                        	this.currentData = data;
-//	                                        }
-//	                                    }
-//	                                })
-//	                            ])
-//	                        ])
-//                      ]);
-//      			}
-//              }
-        	],
+        	treeData: [],
+        	
             buttonProps: {
                 type: 'default',
                 size: 'small',
@@ -361,9 +288,56 @@ export default {
     //===================组件钩子===========================
     
     created () {//实例被创建完毕之后执行
-    	this.getTreeData();
+    	if(!isCarryOutHook){
+    		this.getTreeData();
+    	}
 	},
     mounted () {//模板被渲染完毕之后执行
+    	
+	},
+	
+	//=================组件路由勾子==============================
+	
+	beforeRouteEnter (to, from, next) {//在组件创建之前调用（放置页面加载时请求的Ajax）
+		
+		isCarryOutHook = true;
+		
+		(async () => { //执行异步函数
+			
+			try{
+				
+				//获取岗位树
+				let getTreeData = await $ax.getAsyncAjaxData('manage.Organize/gangweiAll', {});
+				
+				next(vm => {
+					if(getTreeData.code == 0){
+						let recursion = (ajaxData) => {//递归
+    						let newArr = [];
+	    					ajaxData.forEach(item => {
+		    					let obj = {
+			    					title: item.name,
+			    					expand: true,
+					    			id: Number(item.id),
+			    				}
+		    					if(item.son && item.son.length > 0){
+		    						obj.children = recursion(item.son);
+		    					}
+		    					newArr.push(obj);
+		    				});
+		    				return newArr
+	    				}
+	    				vm.treeData = recursion(getTreeData.data);
+					}
+				});
+
+			}catch (err) {
+				console.log(err);
+			}
+			
+			next();
+
+		})();
+		
 	},
 	
 }

@@ -11,13 +11,13 @@
 			
 			<table-list @on-btn-click="btnClick" :tableColumns="tableColumns" :tableData="ActivityDataList" :modalTitle="modalTitle">
 				<div slot="modalContent">
-					<activity-details v-if="openType === 'details' || openType === 'edit'"></activity-details>
-					<invitation v-if="openType === 'invite'"></invitation>
+					<activity-details v-if="openType === 'details' || openType === 'edit'" :dataInfo="dataInfo"></activity-details>
+					<invitation v-if="openType === 'invite'" :dataInfo="dataInfo"></invitation>
 				</div>
 			</table-list>
 			
 		</Card>
-
+		
 	</div>
 
 </template>
@@ -26,6 +26,7 @@
 import tableList from '@/components/tableList/table-list.vue'
 import activityDetails from '@/views/activity/activityDetails.vue'
 import invitation from '@/views/activity/invitation.vue'
+let isCarryOutHook = false;
 export default {
 	name: 'activityList',
 	components: { //组件模板,
@@ -48,6 +49,8 @@ export default {
 			modalTitle: '标题',
 			
 			openType: '',
+			
+			dataInfo: {},
 			
 			tableColumns: [
 				{
@@ -109,9 +112,18 @@ export default {
 	},
 	methods: { //方法
 		
-		btnClick(val){
+		btnClick(val){//表格按钮点击触发
+			this.dataInfo = val.params.row;
 			this.openType = val.key;
 			this.modalTitle = val.params.row.title + '（'+ val.name +'）';
+		},
+		
+		getActivityData(){//获取活动会议列表
+			$ax.getAjaxData('manage.Action/actionList', {}, res => {
+				if(res.code == 0){
+					this.ActivityDataList = res.data;
+				}
+			});
 		},
 		
 	},
@@ -125,25 +137,44 @@ export default {
 	//===================组件钩子===========================
 
 	created() { //实例被创建完毕之后执行
-
+		if(!isCarryOutHook){
+			this.getActivityData();
+		}
 	},
 	mounted() { //模板被渲染完毕之后执行
 
+	},
+	destroyed(){//Vue 实例销毁后调用
+		isCarryOutHook = false;
 	},
 
 	//=================组件路由勾子==============================
 
 	beforeRouteEnter(to, from, next) { //在组件创建之前调用（放置页面加载时请求的Ajax）
+		
+		isCarryOutHook = true;
+		
+		(async () => { //执行异步函数
 
-		$ax.getAjaxData('manage.Action/actionList', {}, res => {//获取活动列表
-			if(res.code == 0){
+			//async、await错误处理
+			try{
+				
+				//获取活动会议列表
+				let activityData = await $ax.getAsyncAjaxData('manage.Action/actionList', {});
+				
 				next(vm => {
-					vm.ActivityDataList = res.data;
+					if(activityData.code == 0){
+						vm.ActivityDataList = activityData.data;
+					}
 				});
-			}else{
-				next();
+
+			}catch (err) {
+				console.log(err);
 			}
-		});
+			
+			next();
+
+		})();
 
 	},
 

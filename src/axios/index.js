@@ -4,6 +4,7 @@
 
 import Vue from 'vue'
 import axios from 'axios';
+const qs = require('qs');//axios自带qs插件
 const vm = new Vue();
 
 //--------------------------------------------全局设置-------------------------------
@@ -163,4 +164,28 @@ export const getAllAjaxData = (paramArr = [], fn) => {
 		newArr.push(axios.post(item.url || '',item.data || {}));
 	});
 	axios.all(newArr).then(axios.spread(fn)).catch(error => console.log('发生了错误：'+error));
+}
+
+//使用qs插件序列化数据
+export const QSStringify = (params={}) => {
+	let str = '{'+qs.stringify(params, {encoder: function(str){
+		if(typeof(str) === 'string' && typeof(str) !== 'number'){
+			return '"'+ str +'"'
+		}else{
+			return str
+		}
+	}})+'}';
+	let jsonStr = str.replace(/\=/g, ':').replace(/\&/g, ',');
+  	let jsonData = JSON.parse(jsonStr);
+  	return jsonData;
+}
+
+//使用qs插件的Ajax提交数据
+export const getAjaxQsStringify = (url = '', data = {}, fn, config = {}, errorCallBack) => {
+	axios.post(url, QSStringify(data), config).then(response => {
+		fn && fn(response);
+	}).catch(error => {
+		errorCallBack && errorCallBack(error);
+		console.log('!!!发生了错误!!!：' + error);
+	});
 }

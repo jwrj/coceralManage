@@ -43,7 +43,7 @@
 				<Header class="layout-header-bar">
 					<div style="height: 100%;">
 						<!--面包屑导航-->
-						<breadcrumb-module :breadCrumbList="breadCrumbList" :isCollapsed="isCollapsed" @clickIcon="collapsedSider"></breadcrumb-module>
+						<breadcrumb-module :breadCrumbList="breadCrumbList" :isCollapsed="isCollapsed" @clickIcon="collapsedSider" @on-coceral-change="coceralChange"></breadcrumb-module>
 						<!--tag标签导航-->
 						<tag-module :tagList="tagNavList"></tag-module>
 					</div>
@@ -52,7 +52,7 @@
 				<!--内容-->
 				<Content style="position: relative;">
 					<div class="main-content-box">
-						<router-view/>
+						<router-view v-if="isRouterAlive" />
 					</div>
 				</Content>
 				
@@ -97,6 +97,8 @@ export default {
 			
 			isCollapsed: false,
 			
+			isRouterAlive: true
+			
 		}
 	},
 	methods: { //方法
@@ -111,6 +113,15 @@ export default {
 		collapsedSider() {//展开或收起左侧菜单
 			this.$refs.siderInstance.toggleCollapse();
 		},
+		
+		reload(){//重载路由
+	    	this.isRouterAlive = false
+	    	this.$nextTick(() => (this.isRouterAlive = true));
+	   	},
+	   	
+	   	coceralChange(){//切换商会时触发
+	   		this.reload();
+	   	},
 		
 	},
 	computed: { //计算属性
@@ -162,6 +173,7 @@ export default {
 		
 	},
 	mounted() { //模板被渲染完毕之后执行
+		
 	},
 
 }

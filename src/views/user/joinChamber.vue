@@ -6,7 +6,7 @@
 			
 			<div slot="title" class="cardTitle" v-if="!isModule">
 				<h1>申请加入商会</h1>
-				<Button style="margin-left: 10px;">查看个人资料（这里会跳到用户中心）</Button>
+				<Button disabled style="margin-left: 10px;">查看个人资料（这里会跳到用户中心）</Button>
 			</div>
 			
 			<div>
@@ -61,7 +61,9 @@
 
 <script>
 
-import tableList from '@/components/tableList/table-list.vue'
+import tableList from '@/components/tableList/table-list.vue';
+
+let isCarryOutHook = false;
 
 export default {
 	name: 'joinChamber',
@@ -160,6 +162,18 @@ export default {
     		
     	},
     	
+    	getCompanyData(){//获取公司数据
+    		let sessionCompanyList = JSON.parse(sessionStorage.myCompanyList);
+	    	let newArr = [];
+	    	sessionCompanyList.forEach(item => {
+	    		newArr.push({
+	    			label: item.name,
+	    			value: Number(item.id),
+	    		});
+	    	});
+	      	this.myCompanyList = newArr;
+    	},
+    	
     	getCoceralData(){//获取商协会列表
     		$ax.getAjaxData('user.Comm/allOrgList', {
 				cur_page: 1,//当前页
@@ -183,45 +197,49 @@ export default {
     
     created () {//实例被创建完毕之后执行
     	
-    	if(this.isModule){
+    	if(this.isModule || !isCarryOutHook){
     		this.getCoceralData();
     	}
     	
-    	let sessionCompanyList = JSON.parse(sessionStorage.myCompanyList);
+    	this.getCompanyData();
     	
-    	let newArr = [];
-    	
-    	sessionCompanyList.forEach(item => {
-    		newArr.push({
-    			label: item.name,
-    			value: Number(item.id),
-    		});
-    	});
-    	
-      	this.myCompanyList = newArr;
-      	
 	},
     mounted () {//模板被渲染完毕之后执行
     	
+	},
+	destroyed(){//Vue 实例销毁后调用
+		isCarryOutHook = false;
 	},
 	
 	//=================组件路由勾子==============================
 	
 	beforeRouteEnter (to, from, next) {//在组件创建之前调用（放置页面加载时请求的Ajax）
 		
-		//获取商协会列表
-		$ax.getAjaxData('user.Comm/allOrgList', {
-			cur_page: 1,//当前页
-			page_size: 10//显示条数
-		}, res => {
-			if(res.code == 0){
-				next(vm => {
-					vm.coceralList = res.data;
+		isCarryOutHook = true;
+		
+		(async () => { //执行异步函数
+			
+			try{
+				
+				//获取商协会列表
+				let coceralData = await $ax.getAsyncAjaxData('user.Comm/allOrgList', {
+					cur_page: 1,//当前页
+					page_size: 10//显示条数
 				});
-			}else{
-				next();
+				
+				next(vm => {
+					if(coceralData.code == 0){
+						vm.coceralList = coceralData.data;
+					}
+				});
+
+			}catch (err) {
+				console.log(err);
 			}
-		});
+			
+			next();
+
+		})();
 		
 	},
 	

@@ -77,46 +77,44 @@ export default {
 	},
 	methods: { //方法
 		
-		collapsedSider() {
+		collapsedSider() {//收起或展开菜单列表
 			this.$emit('clickIcon');
 		},
 		
 		chamberSele(val){//切换商会
-			
-			if(this.identityType === 1){//会员身份登录
-				$ax.getAjaxData('user.Comm/logoutMember', {}, res => {
+			if(this.identityType === 1){//会员
+				$ax.getAjaxData('user.Comm/logoutMember', {}, res => {//会员身份退出登录
 					if(res.code == 0){
-						$ax.getAjaxData('user.Comm/loginMember', {
+						$ax.getAjaxData('user.Comm/loginMember', {//会员身份登录
 							mid: val
 						}, res => {
 							if(res.code == 0){
 								sessionStorage.chamberId = val;
+								this.$emit('on-coceral-change');
 								this.$Message.success('商会更换成功');
 							}
 						});
 					}
 				});
-			}else if(this.identityType === 2){//管理者身份登录
-				$ax.getAjaxData('user.Comm/logoutManage', {}, res => {
+			}else if(this.identityType === 2){//管理者
+				$ax.getAjaxData('user.Comm/logoutManage', {}, res => {//管理者身份退出登录
 					if(res.code == 0){
-						$ax.getAjaxData('user.Comm/loginManage', {
+						$ax.getAjaxData('user.Comm/loginManage', {//管理者身份登录
 							oid: val
 						}, res => {
 							if(res.code == 0){
 								sessionStorage.chamberId = val;
+								this.$emit('on-coceral-change');
 								this.$Message.success('商会更换成功');
 							}
 						});
 					}
 				});
 			}
-			
 		},
 		
 		getChamberData(){//商会列表数据
-			
 			let newArr = [];
-			
 			if(this.identityType === 1){//我加入的商会列表
 				$ax.getAjaxData('user.Comm/myJoinOrganize', {
 					company_id: -1
@@ -138,14 +136,11 @@ export default {
 					});
 				});
 			}
-			
 			this.chamberData = newArr;
-			
 		},
 		
-		dropdownClick(name){
+		dropdownClick(name){//用户菜单下拉
 			if(name === 'identity'){//切换身份
-				
 				if(this.identityType === 1){//退出会员登录
 					$ax.getAjaxData('user.Comm/logoutMember', {}, res => {
 						if(res.code == 0){
