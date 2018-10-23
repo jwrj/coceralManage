@@ -26,7 +26,7 @@
 			</div>
 			
 			<div style="flex-shrink: 0;">
-				<Dropdown @on-click="dropdownClick" placement="bottom-end">
+				<Dropdown :transfer="true" @on-click="dropdownClick" placement="bottom-end">
 			        <a class="user-menu">
 		           		<Avatar icon="ios-person" />
 		           		<span style="padding-left: 2px;">{{identityTxt}}</span>

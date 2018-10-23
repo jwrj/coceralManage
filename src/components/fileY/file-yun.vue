@@ -2,7 +2,7 @@
 	
 	<div>
 		
-		<!--<iframe src="http://192.168.2.200:8080/#/fileSelect/" frameborder="0" width="100%" height="400"></iframe>-->
+		<iframe src="http://192.168.2.200:8080/#/fileSelect/" frameborder="0" width="100%" height="400"></iframe>
 		
 	</div>
 	
@@ -55,7 +55,7 @@ export default {
 	},
     mounted () {//模板被渲染完毕之后执行
     	
-    	//window.addEventListener("message", this.receiveMessage);//侦听别的窗口发来的消息
+      	window.addEventListener("message", this.receiveMessage);//侦听别的窗口发来的消息
     	
 	},
 	

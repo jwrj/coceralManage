@@ -30,8 +30,8 @@
 			</div>
 			
 			<div class="bottomNav">
-				<div>
-					<span>没有商会</span>
+				<div style="font-size: 12px;">
+					<span>没有商会</span>&nbsp;
 					<a @click="openChamberList = true">{{text}}</a>
 				</div>
 				<Button @click="record = true" type="text" size="small">查看我的申请记录</Button>

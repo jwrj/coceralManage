@@ -68,7 +68,7 @@
 			</Form>
 			
 			<Divider orientation="left">会议说明</Divider>
-			
+			{{editor_content}}
 			<UEditor :configs='editor_config' @up_editor_content="upEditorContent"></UEditor>
 			
 			<div style="text-align: center;margin-top: 16px;">

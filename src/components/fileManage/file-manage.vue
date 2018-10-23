@@ -2,7 +2,7 @@
 	
 	<div>
 		
-		<Button type="primary" @click="open">新建文件夹</Button>
+		<Button type="primary" size="small" icon="md-add" @click="open">新建文件夹</Button>
 		
 		<div style="padding: 10px 0;display: flex;align-items: center;">
 			
