@@ -79,7 +79,7 @@ export default {
 			try{
 				
 				//获取我的信息
-				let myInfo = await $ax.getAsyncAjaxData('user.Comm/myInfoAAA', {}, error => {
+				let myInfo = await $ax.getAsyncAjaxData('user.Comm/myInfo', {}, error => {
 					next(vm => {
 						vm.spinShow = false;
 					});
@@ -96,6 +96,7 @@ export default {
 			    		next(vm => {
 			    			vm.spinShow = false;
 			    		});
+			    		return false
 			    	});
 				}
 
