@@ -74,29 +74,69 @@ export default {
 	
 	beforeRouteEnter (to, from, next) {//在组件创建之前调用（放置页面加载时请求的Ajax）
 		
-		$ax.getAjaxData('user.Comm/myInfo', {}, (response) => {//我的资料
-    		if(response.code === 0){//用户中心已登录
-    			sessionStorage.userLogin = 0;
-    			sessionStorage.myCompanyList = JSON.stringify(response.data.company);
-    			next({name: 'login'});
-    		}else if(response.code === 2081){//用户中心未登录跳转到用户中心
-    			$ax.getAjaxData('Oauth/getLoginUrl', {}, (response) => {
-		    		window.location.href = response.data.url;
-		    	}, {}, error => {
-		    		next(vm => {
-		    			vm.spinShow = false;
-		    		});
-		    	});
-    		}
-    	}, {}, error => {
-    		next(vm => {
-    			vm.spinShow = false;
-    		});
-    	});
-    	
-    	next();
-    	
+		(async () => { //执行异步函数
+			
+			try{
+				
+				//获取我的信息
+				let myInfo = await $ax.getAsyncAjaxData('user.Comm/myInfoAAA', {}, error => {
+					next(vm => {
+						vm.spinShow = false;
+					});
+				});
+				
+				if(myInfo.code === 0){//用户中心已登录
+					sessionStorage.userLogin = 0;
+	    			sessionStorage.myCompanyList = JSON.stringify(myInfo.data.company);
+	    			next({name: 'login'});
+				}else if(myInfo.code === 2081){//用户中心未登录跳转到用户中心
+					$ax.getAjaxData('Oauth/getLoginUrl', {}, res => {
+			    		window.location.href = res.data.url;
+			    	}, {}, error => {
+			    		next(vm => {
+			    			vm.spinShow = false;
+			    		});
+			    	});
+				}
+
+			}catch (err) {
+				next(vm => {
+	    			vm.spinShow = false;
+	    		});
+	    		console.log(err);
+			}
+			
+			next();
+
+		})();
+		
 	},
+	
+	//=================组件路由勾子==============================
+	
+//	beforeRouteEnter (to, from, next) {//在组件创建之前调用（放置页面加载时请求的Ajax）
+//		
+//		$ax.getAjaxData('user.Comm/myInfoABCD', {}, (response) => {//获取我的信息
+//  		if(response.code === 0){//用户中心已登录
+//  			sessionStorage.userLogin = 0;
+//  			sessionStorage.myCompanyList = JSON.stringify(response.data.company);
+//  			next({name: 'login'});
+//  		}else if(response.code === 2081){//用户中心未登录跳转到用户中心
+//  			$ax.getAjaxData('Oauth/getLoginUrl', {}, (response) => {
+//		    		window.location.href = response.data.url;
+//		    	}, {}, error => {
+//		    		next(vm => {
+//		    			vm.spinShow = false;
+//		    		});
+//		    	});
+//  		}
+//  	}, {}, error => {
+//  		next(vm => {
+//  			vm.spinShow = false;
+//  		});
+//  	});
+//  	
+//	},
 	
 }
 </script>

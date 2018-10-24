@@ -39,8 +39,9 @@ router.beforeEach((to, from, next) => {//会在任意路由跳转前执行，nex
 				
 			}else{
 				
+				let userAccess = sessionStorage.userAccess;
 				//检测页面权限
-				if(canTurnTo(routers, sessionStorage.userAccess.split(','), to.name)){//用户权限判断
+				if(canTurnTo(routers, (userAccess ? userAccess.split(',') : false), to.name)){//用户权限判断
 		
 					if(pathImperfect(routers, to.name)){
 						next({

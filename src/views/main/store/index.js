@@ -70,7 +70,8 @@ const mainFrame = {
 		},
 		
 		getMenuList(state){//获取菜单列表
-			state.menuList = getMenuByRouter(routers, sessionStorage.userAccess.split(','));
+			let userAccess = sessionStorage.userAccess;
+			state.menuList = getMenuByRouter(routers, (userAccess ? userAccess.split(',') : false));
 		},
 		
 	},

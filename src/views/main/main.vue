@@ -160,7 +160,7 @@ export default {
 
 	created() { //实例被创建完毕之后执行
 		
-		this.getMenuList();//菜单列表
+		this.getMenuList();//获取菜单列表
 		
 		/**
 	     * @description 初始化设置面包屑导航和标签导航

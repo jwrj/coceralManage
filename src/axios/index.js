@@ -76,6 +76,9 @@ axios.interceptors.response.use(
 					sessionStorage.removeItem('userLogin');
 					sessionStorage.removeItem('identityType');
 					sessionStorage.removeItem('chamberId');
+					sessionStorage.removeItem('tagNaveList');
+					sessionStorage.removeItem('userAccess');
+					sessionStorage.removeItem('myCompanyList');
 					break;
 				case 2083://管理员未登录
 					//sessionStorage.removeItem('identityType');
@@ -125,13 +128,16 @@ axios.interceptors.response.use(
 );
 
 /**
- * 异步获取axios中的数据
+ * 异步函数获取axios中的数据
  */
-export const getAsyncAjaxData = (url = '',data = {}) => {
+export const getAsyncAjaxData = (url = '', data = {}, errorCallBack) => {
 	return new Promise(resolve => {
 		axios.post(url, data).then(response => {
 			resolve(response);
-		}).catch(error => console.log('发生了错误：'+error));
+		}).catch(error => {
+			errorCallBack && errorCallBack(error);
+			console.log('!!!async发生了错误!!!：' + error);
+		});
 	});
 }
 
@@ -148,7 +154,7 @@ export const getAjaxData = (url = '', data = {}, fn, config = {}, errorCallBack)
 		fn && fn(response);
 	}).catch(error => {
 		errorCallBack && errorCallBack(error);
-		console.log('!!!发生了错误!!!：' + error);
+		console.log('!!!single发生了错误!!!：' + error);
 	});
 }
 

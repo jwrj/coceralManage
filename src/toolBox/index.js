@@ -4,7 +4,7 @@
  * @param routerAccess 路由权限
  * @param userAccess 用户权限
  */
-export const accessDecide = (routerAccess,userAccess) => {
+export const accessDecide = (routerAccess, userAccess) => {
 	if((routerAccess && routerAccess.length > 0) && (userAccess && userAccess.length > 0)){
 		return userAccess.some((item,index,rawArr) => routerAccess.indexOf(rawArr[index]) >= 0);
 	}else{
@@ -131,7 +131,7 @@ export const getHomeRoute = routerList => {
  * 设置本地存储的标签导航列表
  */
 export const setTagNavListInLocalstorage = list => {
-  localStorage.tagNaveList = JSON.stringify(list);
+  sessionStorage.tagNaveList = JSON.stringify(list);
 }
 
 /**
@@ -139,7 +139,7 @@ export const setTagNavListInLocalstorage = list => {
  * @returns {Array} 其中的每个元素只包含路由原信息中的name, path, meta三项
  */
 export const getTagNavListFromLocalstorage = () => {
-  const list = localStorage.tagNaveList;
+  const list = sessionStorage.tagNaveList;
   return list ? JSON.parse(list) : [];
 }
 
