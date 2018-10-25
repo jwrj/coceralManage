@@ -24,5 +24,5 @@ global.getLocalTime = (nS) => {//时间戳转字符到日期
 }
 
 global.getTimeMinute = (nS) => {//时间戳转字符到分
-	return new Date(parseInt(nS) * 1000).toLocaleString().replace(/\//g, "-").replace(/(\:\d*)$/, "");
+	return new Date(parseInt(nS) * 1000).toLocaleString('chinese', {hour12: false}).replace(/\//g, "-").replace(/(\:\d*)$/, "");
 }

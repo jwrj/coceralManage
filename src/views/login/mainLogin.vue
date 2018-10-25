@@ -91,12 +91,13 @@ export default {
 	    			next({name: 'login'});
 				}else if(myInfo.code === 2081){//用户中心未登录跳转到用户中心
 					$ax.getAjaxData('Oauth/getLoginUrl', {}, res => {
-			    		window.location.href = res.data.url;
+						if(res.code == 0){
+							window.location.href = res.data.url;
+						}
 			    	}, {}, error => {
 			    		next(vm => {
 			    			vm.spinShow = false;
 			    		});
-			    		return false
 			    	});
 				}
 
@@ -112,32 +113,6 @@ export default {
 		})();
 		
 	},
-	
-	//=================组件路由勾子==============================
-	
-//	beforeRouteEnter (to, from, next) {//在组件创建之前调用（放置页面加载时请求的Ajax）
-//		
-//		$ax.getAjaxData('user.Comm/myInfoABCD', {}, (response) => {//获取我的信息
-//  		if(response.code === 0){//用户中心已登录
-//  			sessionStorage.userLogin = 0;
-//  			sessionStorage.myCompanyList = JSON.stringify(response.data.company);
-//  			next({name: 'login'});
-//  		}else if(response.code === 2081){//用户中心未登录跳转到用户中心
-//  			$ax.getAjaxData('Oauth/getLoginUrl', {}, (response) => {
-//		    		window.location.href = response.data.url;
-//		    	}, {}, error => {
-//		    		next(vm => {
-//		    			vm.spinShow = false;
-//		    		});
-//		    	});
-//  		}
-//  	}, {}, error => {
-//  		next(vm => {
-//  			vm.spinShow = false;
-//  		});
-//  	});
-//  	
-//	},
 	
 }
 </script>

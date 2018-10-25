@@ -2,15 +2,15 @@
 
 	<div style="padding-bottom: 200px;">
 		
-		<h1 style="text-align: center;margin-bottom: 16px;">广西湖北商会2018迎新春抽奖晚会</h1>
+		<h1 style="text-align: center;margin-bottom: 16px;">{{dataInfo.title}}</h1>
 		
 		<div style="text-align: center;">
 			<Tag color="default">类型：会议</Tag>
-			<Tag color="default">会议地址：广西南宁市青秀区</Tag>
-			<Tag color="default">开始时间：2018-10-22</Tag>
-			<Tag color="default">结束时间：2018-10-23</Tag>
-			<Tag color="default">是否住宿：是</Tag>
-			<Tag color="default">住宿地址：广西南宁市国际大酒店</Tag>
+			<Tag color="default">会议地址：{{dataInfo.address}}</Tag>
+			<Tag color="default">开始时间：{{beginTime}}</Tag>
+			<Tag color="default">结束时间：{{endTime}}</Tag>
+			<Tag color="default">是否住宿：{{dataInfo.isz == 1 ? '是' : '否'}}</Tag>
+			<Tag color="default">住宿地址：{{dataInfo.zaddress}}</Tag>
 		</div>
 		
 		<Divider orientation="left" style="font-size: 16px;">详细说明</Divider>
@@ -38,7 +38,7 @@
 import fileManage from '@/components/fileManage/file-manage.vue'; //文件管理
 import tableList from '@/components/tableList/table-list.vue'; //表格列表组件
 export default {
-	name: '',
+	name: 'activityDetails',
 	components: { //组件模板,
 		fileManage,
 		tableList
@@ -140,7 +140,15 @@ export default {
 		
 	},
 	computed: { //计算属性
-
+		
+		beginTime(){
+			return getTimeMinute(this.dataInfo.begin_time);
+		},
+		
+		endTime(){
+			return getTimeMinute(this.dataInfo.end_time);
+		},
+		
 	},
 	watch: { //监测数据变化
 

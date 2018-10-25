@@ -111,7 +111,7 @@
 		data() { //数据
 			return {
 				
-				editor_content: '',
+				editor_content: '无内容',
 				
 				editor_config:{
 					width:'100%',
@@ -198,7 +198,11 @@
 			},
 			
 			upEditorContent(value){//富文本输入时
-	    		this.editor_content = value;
+				if(value){
+					this.editor_content = value;
+				}else{
+					this.editor_content = '无内容';
+				}
 	    	},
 	    	
 			endChange(date){ //日期转换
