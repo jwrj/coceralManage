@@ -23,7 +23,6 @@
 					        <Radio :label="2">公司</Radio>
 					    </RadioGroup>
 				    </FormItem>
-			    
 			    	
 			    	<FormItem prop="companyId" v-if="applyType === 2">
 						<Select v-model="formData.companyId" filterable placeholder="选择公司" style="width:300px;">

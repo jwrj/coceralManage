@@ -32,7 +32,8 @@
 			<div class="bottomNav">
 				<div style="font-size: 12px;">
 					<span>没有商会</span>&nbsp;
-					<a @click="openChamberList = true">{{text}}</a>
+					<a href="javascript:void(0)" @click="join">立即申请加入</a>&nbsp;&nbsp;
+					<a href="javascript:void(0)" @click="create">立即创建</a>
 				</div>
 				<Button @click="record = true" type="text" size="small">查看我的申请记录</Button>
 			</div>
@@ -48,9 +49,9 @@
 	       	
 	       	<Button slot="close">关闭</Button>
 	        
-	        <join-chamber v-if="formInline.identity === 1" :isModule="true"></join-chamber>
+	        <join-chamber v-if="openType === 1" :isModule="true"></join-chamber>
 	        
-			<create-chamber v-if="formInline.identity === 2"></create-chamber>
+			<create-chamber v-if="openType === 2" :cardStyle="false" @on-create-succeed="createSucceed"></create-chamber>
 	        
 	    </Modal>
 	    
@@ -94,9 +95,11 @@ export default {
     data () {//数据
         return {
         	
-        	openChamberList: false,
+        	openType: 1,//加入还是创建
         	
-        	record: false,
+        	openChamberList: false,//创建加入商会对话框
+        	
+        	record: false,//记录列表对话框
         	
         	formInline: {
         		identity: 1,
@@ -112,15 +115,21 @@ export default {
                 ],
             },
         	
-        	type: '0',
-        	
-        	res_c: [],
-        	
         	chamberList: [],//商会列表
         	
         }
     },
     methods: {//方法
+    	
+    	join(){//立即加入
+    		this.openType = 1;
+    		this.openChamberList = true;
+    	},
+    	
+    	create(){//立即创建
+    		this.openType = 2;
+    		this.openChamberList = true;
+    	},
     	
     	radioGroupChange(val){ //商会类型切换
     		
@@ -128,12 +137,19 @@ export default {
     			
     			this.setSelectData('user.Comm/myJoinOrganize', {company_id: -1}, {label: 'org_name', value: 'mid'});
     			
-    		}else if(val === 2){//我加创建的商会
+    		}else if(val === 2){//我创建的商会
     			
     			this.setSelectData('user.Comm/myCreateOrganize', {}, {label: 'name', value: 'id'});
     			
     		}
     		
+    	},
+    	
+    	createSucceed(){//创建商会成功执行
+    		if(this.formInline.identity === 2){
+    			this.setSelectData('user.Comm/myCreateOrganize', {}, {label: 'name', value: 'id'});
+    		}
+    		this.openChamberList = false;
     	},
     	
     	setSelectData(url, param, type){ //设置下拉列表数据切换
@@ -205,21 +221,11 @@ export default {
         	return txt;
         },
         
-        text(){
-        	let txt = '立即申请加入';
-        	if(this.formInline.identity === 1){
-        		txt = '立即申请加入';
-        	}else if(this.formInline.identity === 2){
-        		txt = '立即创建';
-        	}
-        	return txt;
-        },
-        
         titleTxt(){
         	let txt = '';
-        	if(this.formInline.identity === 1){
+        	if(this.openType === 1){
         		txt = '商协会列表';
-        	}else if(this.formInline.identity === 2){
+        	}else if(this.openType === 2){
         		txt = '创建商协会';
         	}
         	return txt;
