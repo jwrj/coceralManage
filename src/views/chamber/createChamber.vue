@@ -232,7 +232,7 @@ export default {
 				introduce: this.formData.introduce, //介绍
 				nation2: 86, //所属地国家
 				fid: 0, //上级商协会ID
-				//icon: '', //标志
+				icon: '', //标志
 			}
 			
 			let coceralData = {//商会数据

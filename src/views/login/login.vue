@@ -171,6 +171,7 @@ export default {
 				this.chamberList = newArr;
 				if(this.chamberList.length > 0){
 					this.formInline.chamberId = this.chamberList[0].value;
+					this.chamberName = this.chamberList[0].label;
 				}
 			});
     		
@@ -272,6 +273,7 @@ export default {
 				vm.chamberList = newArr;
 				if(vm.chamberList.length > 0){
 					vm.formInline.chamberId = vm.chamberList[0].value;
+					vm.chamberName = vm.chamberList[0].label;
 				}
 			});
 		});
