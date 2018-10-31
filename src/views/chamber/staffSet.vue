@@ -46,7 +46,16 @@
 							<FormItem label="已选会员">
 								<div class="cardTitle">
 									<Button @click="memberListShow = true" type="primary" size="small">从会员列表选择</Button>
-									<Alert show-icon style="margin-left: 10px;margin-bottom: 0;">标签为绿色表示添加成功，标签为红色表示添加失败(人员已重复)</Alert>
+									<Tooltip max-width="200" :transfer="true" placement="top" style="margin-left: 10px;">
+										<Icon type="ios-alert-outline" size="20" style="cursor: pointer;" />
+										<div slot="content">
+											<span>标签为</span>
+											<span style="color: #19be6b;">绿色</span>
+											<span>表示添加成功，标签为</span>
+											<span style="color: #ed4014;">红色</span>
+											<span>表示添加失败(人员已重复)</span>
+										</div>
+								    </Tooltip>
 								</div>
 								<div>
 									<Tag v-for="item in checkedMembers" :color="item.color" :name="item.id" closable @on-close="tagClose">{{item.name}}</Tag>
@@ -56,7 +65,7 @@
 						
 					</Row>
 					
-					<div style="text-align: center;padding-bottom: 16px;">
+					<div style="text-align: center;padding: 16px 0 16px;">
 						<Button type="primary" @click="addPersonnel('formInstance')">添加人员</Button>
 					</div>
 					
@@ -66,7 +75,10 @@
 			
 			
 			<Divider orientation="left" style="font-size: 16px;">
-				人员列表（根据上面选择的岗位和届次列出对应数据，默认列出全部数据）
+				<span>人员列表</span>
+				<Tooltip max-width="200" content="根据上面选择的岗位和届次列出对应数据，默认列出全部数据" :transfer="true" placement="top" style="margin-left: 6px;">
+					<Icon type="ios-alert-outline" size="20" style="cursor: pointer;" />
+			    </Tooltip>
 			</Divider>
 			
 			<div style="margin-bottom: 10px;">
@@ -85,6 +97,7 @@
 			:headerShow="false"
 			:tableColumns="tableColumns"
 			:tableData="personnelList"
+			no-data-text="当前岗位或届次暂无数据"
 			@on-poptip-ok="poptipOk">
 			</table-list>
 			
@@ -104,7 +117,7 @@
         	></userList>
         	
         	<div style="text-align: center;margin-top: 26px;">
-        		<Button type="primary" @click="memberListShow = false">返回</Button>
+        		<Button type="default" @click="memberListShow = false" icon="md-arrow-round-back">返回</Button>
         	</div>
         	
 		</Drawer>

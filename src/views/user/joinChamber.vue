@@ -36,7 +36,13 @@
 		    
 			<Divider v-if="!isModule" orientation="left"><span style="font-size: 16px;">商会列表</span></Divider>
 			
-			<table-list :tableColumns="tableColumns" :tableData="coceralList" @on-btn-click="tabApplyBtnClick">
+			<table-list
+			:tableColumns="tableColumns"
+			:tableData="coceralList"
+			:pagingData="pagingData"
+			@on-page-change="tabPageChange"
+			@on-page-size-change="pageSizeChange"
+			@on-btn-click="tabApplyBtnClick">
 				
 				<div slot="header" class="cardTitle">
 					
@@ -53,6 +59,19 @@
 			</table-list>
 			
 		</Card>
+		
+		<Modal v-model="applyModal" width="260" class="apply-modal">
+	        <p slot="header">申请确认</p>
+	        <div style="text-align:center">
+	       		{{`您确认要申请加入${coceralName}吗`}}
+	        </div>
+	        <div slot="footer">
+	        	<ButtonGroup>
+			        <Button type="default" @click="applyModal = false">取消</Button>
+			        <Button type="primary" @click="submitApply">确认</Button>
+			    </ButtonGroup>
+	        </div>
+	    </Modal>
 		
 	</div>
 	
@@ -85,6 +104,8 @@ export default {
     data () {//数据
         return {
         	
+        	applyModal: false,//申请确认弹窗
+        	
         	type: 0,//商会类型
         	
         	applyType: 1,//申请类型
@@ -92,6 +113,10 @@ export default {
         	res_c: [],//已选地区数据
         	
         	myCompanyList: [],//公司列表
+        	
+        	coceralId: null,//商会ID
+        	
+        	coceralName: '',//商会名称
         	
         	formData: {
         		companyId: null,//公司ID
@@ -121,44 +146,62 @@ export default {
 			        	{
 			        		name: '申请加入',
 			        		key: 'apply',
-			        		button_props: {
-			        			loading: false
-			        		}
 			        	}
 			        ],
 			    }
 			],
 			
-			coceralList: []
+			coceralList: [],//商协会数据列表
+			
+			pagingData: {},//页码数据
         	
         }
     },
     methods: {//方法
     	
     	tabApplyBtnClick(val){
-    		
-    		if(val.key === 'apply'){//提交申请
-    			let applyAjax = (companyId) => {
-    				val.button_props.loading = true;
-	    			$ax.getAjaxData('user.Comm/apply', {
-						oid: Number(val.params.row.id),//商会ID
-						company_id: companyId//公司ID
-					}, res => {
-						if(res.code == 0){
-							this.$Message.success('申请成功');
-						}
-						val.button_props.loading = false;
-					});
+    		if(val.key === 'apply'){//提交申请按钮
+    			
+    			let param = () => {
+    				this.coceralId = Number(val.params.row.id);//存储商会ID
+	    			this.coceralName = val.params.row.name;//存储商会名称
+	    			this.applyModal = true;//打开申请确认弹窗
     			}
+    			
     			if(this.applyType === 1){//个人申请
-    				applyAjax(0);
-    			}else if(this.applyType === 2){//公司申请
-    				this.$refs['formInstance'].validate((valid) => {
-    					if(valid) applyAjax(this.formData.companyId);
-    				});
-    			}
+    				param();
+				}else if(this.applyType === 2){//公司申请
+					this.$refs['formInstance'].validate((valid) => {
+						if(valid){
+							param();
+						}else{
+							this.$Message.error('请选择一个公司！');
+						}
+					});
+				}
+				
     		}
-    		
+    	},
+    	
+    	submitApply(){//提交申请
+    		let applyAjax = (companyId) => {
+    			$ax.getAjaxData('user.Comm/apply', {
+					oid: this.coceralId,//商会ID
+					company_id: companyId//公司ID
+				}, res => {
+					if(res.code == 0){
+						this.applyModal = false;
+						this.$Message.success('申请成功');
+					}
+				});
+			}
+			if(this.applyType === 1){//个人申请
+				applyAjax(0);
+			}else if(this.applyType === 2){//公司申请
+				this.$refs['formInstance'].validate((valid) => {
+					if(valid) applyAjax(this.formData.companyId);
+				});
+			}
     	},
     	
     	getCompanyData(){//获取公司数据
@@ -173,12 +216,25 @@ export default {
 	      	this.myCompanyList = newArr;
     	},
     	
-    	getCoceralData(){//获取商协会列表
+    	tabPageChange(page){//页码改变时触发
+    		this.getCoceralData(page, 10);
+    	},
+    	
+    	pageSizeChange(page_size){//切换每页条数时的回调
+    		//this.getCoceralData(1, page_size);
+    	},
+    	
+    	getCoceralData(current_page, page_size){//获取商协会列表
     		$ax.getAjaxData('user.Comm/allOrgList', {
-				cur_page: 1,//当前页
-				page_size: 10//显示条数
+				cur_page: current_page,//当前页
+				page_size: page_size//显示条数
 			}, res => {
 				if(res.code == 0){
+					this.pagingData = {
+						total: Number(res.page.total),
+						current_page: Number(res.page.cur_page),
+						page_size: Number(res.page.page_size),
+					};
 					this.coceralList = res.data;
 				}
 			});
@@ -197,7 +253,7 @@ export default {
     created () {//实例被创建完毕之后执行
     	
     	if(this.isModule || !isCarryOutHook){
-    		this.getCoceralData();
+    		this.getCoceralData(1, 10);
     	}
     	
     	this.getCompanyData();
@@ -228,6 +284,11 @@ export default {
 				
 				next(vm => {
 					if(coceralData.code == 0){
+						vm.pagingData = {
+							total: Number(coceralData.page.total),
+							current_page: Number(coceralData.page.cur_page),
+							page_size: Number(coceralData.page.page_size),
+						};
 						vm.coceralList = coceralData.data;
 					}
 				});
@@ -246,5 +307,32 @@ export default {
 </script>
 
 <style scoped lang="less">
+	.apply-modal{
+		.ivu-modal-footer{
+			.ivu-btn-group{
+				display: flex;
+				width: 100%;
+				.ivu-btn{
+					width: 100%;
+				}
+			}
+		}
+	}
+</style>
 
+<style lang="less">
+	.apply-modal{
+		.ivu-modal-footer{
+			border-top: none !important;
+			padding: 0 !important;
+			.ivu-btn-group{
+				.ivu-btn{
+					border-radius: initial !important;
+				}
+			}
+		}
+		.ivu-modal-content{
+			overflow: hidden;
+		}
+	}
 </style>

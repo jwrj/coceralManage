@@ -6,6 +6,8 @@
 	    	
 	    	<h1 slot="title">岗位选择器</h1>
 	    	
+    		<post-casc v-model="postValue" type="cascader"></post-casc>
+    		
     		<post-casc v-model="postValue"></post-casc>
 		    	
 	    </Card>

@@ -4,9 +4,9 @@
 		
 		<Card>
 			
-			<div slot="title" class="cardTitle">
+			<div slot="title">
 				<h1>{{`给${coceralName}配置届次`}}</h1>
-				<post-casc v-model="postId" @on-change="postChange" style="margin-left: 10px;"></post-casc>
+				<post-casc v-model="postId" @on-change="postChange" style="margin-top: 16px;width: 240px;"></post-casc>
 			</div>
 			
 			<div>
@@ -43,16 +43,17 @@
 					
 				</Form>
 				
-				<div style="text-align: center;padding-bottom: 16px;">
+				<div style="text-align: center;padding: 16px 0 16px;">
 					<Button type="primary" @click="addJieCi('formInstance')">添加届次</Button>
 				</div>
 				
 			</div>
 			
-			
 			<Divider orientation="left" style="font-size: 16px;">
-				
 				<span>届次列表</span>
+				<Tooltip max-width="200" content="根据上面选择的岗位列出对应数据" :transfer="true" placement="top" style="margin-left: 6px;">
+					<Icon type="ios-alert-outline" size="20" style="cursor: pointer;" />
+			    </Tooltip>
 			</Divider>
 			
 			<div style="margin-bottom: 10px;">
@@ -67,6 +68,7 @@
 			<table-list
 			:headerShow="false"
 			:tableColumns="tableColumns"
+			no-data-text="当前岗位暂无数据"
 			:tableData="JieCiDataList">
 			</table-list>
 			

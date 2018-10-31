@@ -57,34 +57,38 @@
 
 			</table-list>
 			
-			<Modal v-model="modalShow">
+			<Modal v-model="modalShow" :footer-hide="true" width="450" class="add-record-modal">
 				
-				<p slot="header">添加一条记录</p>
+				<p slot="header">添加缴费记录</p>
+				
+				<!--<Button  type="error" size="small" shape="circle" icon="md-close"></Button>-->
+				
+				<Icon slot="close" size="26" color="#ed4014" type="md-close-circle" />
 				
 				<div>
 					<Form :model="paying" ref="paying" :rules="ruleValidate" :label-width="100">
 
 						<FormItem label="缴费名称:" prop="name">
-						    <Input v-model="paying.name" style="width: 240px;"></Input>
+						    <Input v-model="paying.name"></Input>
 						</FormItem>
 						
 						<FormItem label="缴费金额(元)" prop="price">
-							<InputNumber :max="100000" :min="0" v-model="paying.price" style="width: 240px;"></InputNumber>
+							<InputNumber :max="100000" :min="0" v-model="paying.price" style="width: 100%;"></InputNumber>
 						</FormItem>
 						
 						<FormItem label="缴费时间:" prop="time">
-							<DatePicker type="date" @on-change="dateChange" :value="paying.time" style="width: 240px;"></DatePicker>
+							<DatePicker type="date" @on-change="dateChange" :value="paying.time" style="width: 100%;"></DatePicker>
 						</FormItem>
 						
 						<FormItem label="缴费方式:" prop="way">
-							<Input v-model="paying.way" style="width: 240px;"></Input>
+							<Input v-model="paying.way"></Input>
 						</FormItem>
 					</Form>
-				</div>
-				
-				<div slot="footer">
-					<Button @click="modalShow = false">取消</Button>
-					<Button type="primary" @click="handleSubmit('paying')">提交</Button>
+					
+					<div style="text-align: center;">
+						<Button type="primary" @click="handleSubmit('paying')">添加记录</Button>
+					</div>
+					
 				</div>
 				
 			</Modal>
@@ -189,7 +193,7 @@ export default {
 					type: 'number',
 					required: true,
 					message: '请填写缴费金额',
-					trigger: 'blur'
+					trigger: 'change'
 				}],
 				name: [{
 					required: true,
@@ -225,7 +229,14 @@ export default {
 			}, res => {
 				if(res.code == 0){
 					this.modalShow = false;
+					this.getRecordList();
 					this.$Message.success('添加成功!');
+					this.paying = {
+						name: '',
+						price: null,
+						way: '',
+						time: '',
+					};
 				}
 			});
 		},
@@ -286,6 +297,14 @@ export default {
 			display: inline-block;
 			width: 80px;
 			text-align: right;
+		}
+	}
+</style>
+
+<style lang="less">
+	.add-record-modal{
+		.ivu-modal-close{
+			top: 13px !important;
 		}
 	}
 </style>

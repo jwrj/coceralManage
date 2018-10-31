@@ -20,7 +20,7 @@
 		<div class="breadcrumb-box-right">
 			
 			<div style="margin-right: 16px;">
-				<Select v-model="chamberId" :label-in-value="true" @on-change="chamberSele" filterable size="small" placeholder="选择商会">
+				<Select v-model="chamberId" :label-in-value="true" @on-change="chamberSele" @on-open-change="coceralOpenChange" filterable size="small" placeholder="选择商会">
 	                <Option v-for="item in chamberData" :value="item.value" :key="item.value">{{ item.label }}</Option>
 	            </Select>
 			</div>
@@ -79,6 +79,10 @@ export default {
 		
 		collapsedSider() {//收起或展开菜单列表
 			this.$emit('clickIcon');
+		},
+		
+		coceralOpenChange(_boolean){//商会下拉框展开或收起时触发
+			console.log(_boolean);
 		},
 		
 		chamberSele(obj){//切换商会

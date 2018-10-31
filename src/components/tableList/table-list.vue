@@ -20,6 +20,7 @@
 		:columns="tableColumns"
 		:data="tableData"
 		:highlight-row="true"
+		:no-data-text="noDataText"
 		@on-select-all="tabSelectAll"
 		@on-select-all-cancel="tabSelectAllCancel"
 		@on-select="tabSelect"
@@ -31,7 +32,16 @@
 		<!--页脚-->
 		<footer v-if="footerShow" class="footer">
 			<slot name="footer"></slot>
-			<Page v-if="pageShow" :total="100" show-total show-sizer show-elevator style="margin-left: auto;" />
+			<Page
+			v-if="pageShow"
+			:total="pagingData.total"
+			:page-size="pagingData.page_size"
+			@on-change="pageChange"
+			@on-page-size-change="pageSizeChange"
+			show-total
+			show-sizer
+			show-elevator
+			style="margin-left: auto;" />
 		</footer>
 			
 		<!--弹窗-->
@@ -116,6 +126,22 @@ export default {
 			default: '对话框标题'
 		},
 		
+		noDataText: {//数据为空时显示的提示内容
+			type: String,
+			default: '暂无数据'
+		},
+		
+		pagingData: {//分页数据
+			type: Object,
+			default: () => {
+				return {
+					total: 0,
+					current_page: 1,
+					page_size: 10,
+				}
+			}
+		},
+		
 	},
     data () {//数据
         return {
@@ -155,6 +181,14 @@ export default {
 	    		
 	    	});
     		
+    	},
+    	
+    	pageChange(page){//页码改变时
+    		this.$emit('on-page-change', page);
+    	},
+    	
+    	pageSizeChange(page_size){//切换每页条数时的回调，返回切换后的每页条数
+    		this.$emit('on-page-size-change', page_size);
     	},
     	
     	tabSelectAll(selection){//全选

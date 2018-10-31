@@ -90,7 +90,7 @@
 					
 					<Col :xs="24" :sm="24" :md="12" :lg="12">
 						<FormItem :label="title+'标志'">
-							<Icon type="md-image" @click.native="logoClick" size="40"/>
+							<Icon style="cursor: pointer;" type="md-image" @click.native="logoClick" size="40"/>
 						</FormItem>
 					</Col>
 					

@@ -2,11 +2,11 @@
 	
 	<div>
 		
-		<Cascader v-if="false" v-model="selected" @on-change="cascaderChange" change-on-select filterable placeholder="选择岗位" :data="postData" style="width: 240px;"></Cascader>
+		<Cascader v-if="type === 'cascader'" v-model="selected" @on-change="cascaderChange" change-on-select filterable placeholder="选择岗位" :data="postData" style="width: 240px;"></Cascader>
 		
-		<Poptip placement="bottom-start">
+		<Poptip placement="bottom-start" v-if="type === 'poptip'" class="post-Poptip">
 			
-			<Button long :style="{color: checkedText ? '' : '#c5c8ce', textAlign: 'left', padding: '5px 7px 6px', overflow: 'hidden'}">
+			<Button long class="btn-txt" :style="{color: checkedText ? '' : '#c5c8ce'}">
 				{{checkedText ? checkedText : '选择岗位'}}
 			</Button>
 			
@@ -54,6 +54,10 @@ export default {
 		 * 默认值 default: ''
 		 * 
 		 */
+		type: {
+			type: String,
+			default: 'poptip'
+		}
 	},
     data () {//数据
         return {
@@ -237,9 +241,19 @@ export default {
 		}
 	}
 }
-
+.btn-txt{
+	text-align: left;
+	padding: 5px 7px 6px;
+	overflow: hidden;
+	text-overflow:ellipsis;
+}
 </style>
 
 <style lang="less">
-
+	.post-Poptip{
+		display: block;
+		.ivu-poptip-rel{
+			display: block;
+		}
+	}
 </style>
