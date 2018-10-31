@@ -20,13 +20,13 @@
 		<div class="breadcrumb-box-right">
 			
 			<div style="margin-right: 16px;">
-				<Select v-model="chamberId" @on-change="chamberSele" filterable size="small" placeholder="选择商会">
+				<Select v-model="chamberId" :label-in-value="true" @on-change="chamberSele" filterable size="small" placeholder="选择商会">
 	                <Option v-for="item in chamberData" :value="item.value" :key="item.value">{{ item.label }}</Option>
 	            </Select>
 			</div>
 			
 			<div style="flex-shrink: 0;">
-				<Dropdown :transfer="true" @on-click="dropdownClick" placement="bottom-end">
+				<Dropdown :transfer="true" trigger="click" @on-click="dropdownClick" placement="bottom-end">
 			        <a class="user-menu">
 		           		<Avatar icon="ios-person" />
 		           		<span style="padding-left: 2px;">{{identityTxt}}</span>
@@ -81,15 +81,16 @@ export default {
 			this.$emit('clickIcon');
 		},
 		
-		chamberSele(val){//切换商会
+		chamberSele(obj){//切换商会
 			if(this.identityType === 1){//会员
 				$ax.getAjaxData('user.Comm/logoutMember', {}, res => {//会员身份退出登录
 					if(res.code == 0){
 						$ax.getAjaxData('user.Comm/loginMember', {//会员身份登录
-							mid: val
+							mid: obj.value
 						}, res => {
 							if(res.code == 0){
-								sessionStorage.chamberId = val;
+								sessionStorage.chamberId = obj.value;
+								sessionStorage.chamberName = obj.label;
 								this.$emit('on-coceral-change');
 								this.$Message.success('商会更换成功');
 							}
@@ -100,10 +101,11 @@ export default {
 				$ax.getAjaxData('user.Comm/logoutManage', {}, res => {//管理者身份退出登录
 					if(res.code == 0){
 						$ax.getAjaxData('user.Comm/loginManage', {//管理者身份登录
-							oid: val
+							oid: obj.value
 						}, res => {
 							if(res.code == 0){
-								sessionStorage.chamberId = val;
+								sessionStorage.chamberId = obj.value;
+								sessionStorage.chamberName = obj.label;
 								this.$emit('on-coceral-change');
 								this.$Message.success('商会更换成功');
 							}
@@ -146,6 +148,7 @@ export default {
 						if(res.code == 0){
 							sessionStorage.removeItem('identityType');
 							sessionStorage.removeItem('chamberId');
+							sessionStorage.removeItem('chamberName');
 							sessionStorage.removeItem('userAccess');
 							sessionStorage.removeItem('tagNaveList');
 							this.$router.replace({name: 'login'});
@@ -157,6 +160,7 @@ export default {
 						if(res.code == 0){
 							sessionStorage.removeItem('identityType');
 							sessionStorage.removeItem('chamberId');
+							sessionStorage.removeItem('chamberName');
 							sessionStorage.removeItem('userAccess');
 							sessionStorage.removeItem('tagNaveList');
 							this.$router.replace({name: 'login'});
@@ -178,6 +182,8 @@ export default {
 				txt = '会员';
 			}else if(this.identityType === 2){
 				txt = '管理者';
+			}else{
+				txt = '未登录';
 			}
 			return txt;
 		},

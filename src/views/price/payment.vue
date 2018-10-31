@@ -215,7 +215,7 @@ export default {
 			$ax.getAjaxData('manage.Fee/addFee', {
 				gw_id: this.info.gw_id,//岗位ID
 				mid: this.info.memberInfo.id,//会员ID
-				jie: this.info.jie_id,//届ID
+				jie_id: this.info.jie_id,//届ID
 				name: this.paying.name,//费用名
 				should_pay: 1,//应交，单位分
 				pay_time: this.paying.time,//最近交费时间
@@ -241,7 +241,7 @@ export default {
 		getRecordList(){//获取缴费记录列表
 			$ax.getAjaxData('manage.Fee/feeList', {
 				gw_id: this.info.gw_id,
-				jie: this.info.jie_id,
+				jie_id: this.info.jie_id,
 				mid: this.info.memberInfo.id
 			}, res => {
 				if(res.code == 0){

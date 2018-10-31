@@ -15,16 +15,16 @@
 			    	温馨提示：如果您选择了公司将会以公司的名义加入商会，反之就以个人的名义加入商会。
 			    </Alert>
 			    
-			    <Form ref="formInstance" :model="formData" :rules="ruleData" inline>
+			    <Form ref="formInstance" :model="formData" :rules="ruleData" inline :label-width="70">
 			    
-				    <FormItem>
+				    <FormItem label="加入方式">
 					    <RadioGroup v-model="applyType">
 					        <Radio :label="1">个人</Radio>
 					        <Radio :label="2">公司</Radio>
 					    </RadioGroup>
 				    </FormItem>
 			    	
-			    	<FormItem prop="companyId" v-if="applyType === 2">
+			    	<FormItem prop="companyId" label="选择公司" v-if="applyType === 2">
 						<Select v-model="formData.companyId" filterable placeholder="选择公司" style="width:300px;">
 					        <Option v-for="item in myCompanyList" :value="item.value">{{item.label}}</Option>
 					    </Select>
@@ -38,7 +38,7 @@
 			
 			<table-list :tableColumns="tableColumns" :tableData="coceralList" @on-btn-click="tabApplyBtnClick">
 				
-				<div slot="header" style="width: 100%;display: flex;align-items: center;">
+				<div slot="header" class="cardTitle">
 					
 					<Select v-model="type" placeholder="选择类型" style="width:60px;margin-right: 10px;">
 				        <Option :value="0">全部</Option>

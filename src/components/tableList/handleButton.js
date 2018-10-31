@@ -12,6 +12,10 @@ let defaultPoptip = {
 
 export const buttonItem = (vm, h, params, btnParams={}) => {
 	
+	btnParams.callback && btnParams.callback(params, btnParams);
+	
+	if(btnParams.hideBtn && btnParams.hideBtn === true) return false;
+	
 	if(!btnParams.poptipOpen){
 		
 		return h('Button',{

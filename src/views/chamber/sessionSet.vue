@@ -5,7 +5,7 @@
 		<Card>
 			
 			<div slot="title" class="cardTitle">
-				<h1>给广西湖北商会配置届次</h1>
+				<h1>{{`给${coceralName}配置届次`}}</h1>
 				<post-casc v-model="postId" @on-change="postChange" style="margin-left: 10px;"></post-casc>
 			</div>
 			
@@ -50,15 +50,19 @@
 			</div>
 			
 			
-			<Divider orientation="left">
+			<Divider orientation="left" style="font-size: 16px;">
+				
+				<span>届次列表</span>
+			</Divider>
+			
+			<div style="margin-bottom: 10px;">
 				<Tag color="geekblue">
 					<span v-for="(item, i) in postTextArr" style="display: inline-block;">
 						<Icon v-if="i != 0" type="md-arrow-forward" />
-						<span :style="{color: i == postTextArr.length-1 ? '#ed4014' : ''}">{{item}}</span>
+						<span>{{item}}</span>
 					</span>
 				</Tag>
-				<span>届次列表</span>
-			</Divider>
+			</div>
 			
 			<table-list
 			:headerShow="false"
@@ -92,6 +96,8 @@ export default {
 	},
 	data() { //数据
 		return {
+			
+			coceralName: sessionStorage.chamberName || '',//商会名称
 			
 			postId: [],//岗位ID
 			

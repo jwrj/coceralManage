@@ -76,13 +76,17 @@ axios.interceptors.response.use(
 					sessionStorage.removeItem('userLogin');
 					sessionStorage.removeItem('identityType');
 					sessionStorage.removeItem('chamberId');
+					sessionStorage.removeItem('chamberName');
 					sessionStorage.removeItem('tagNaveList');
 					sessionStorage.removeItem('userAccess');
 					sessionStorage.removeItem('myCompanyList');
 					break;
 				case 2083://管理员未登录
-					//sessionStorage.removeItem('identityType');
-					//sessionStorage.removeItem('chamberId');
+					sessionStorage.removeItem('identityType');
+					sessionStorage.removeItem('chamberId');
+					sessionStorage.removeItem('chamberName');
+					sessionStorage.removeItem('userAccess');
+					sessionStorage.removeItem('tagNaveList');
 					break;
 				default:
 					break;

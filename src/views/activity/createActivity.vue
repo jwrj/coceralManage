@@ -185,6 +185,7 @@
 				}, res => {
 					if(res.code == 0){
 						this.$Message.success('创建成功');
+						this.$router.replace({name: 'activityList'});
 					}
 				});
 			},

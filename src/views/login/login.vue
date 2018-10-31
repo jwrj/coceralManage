@@ -17,7 +17,7 @@
 				
 				<FormItem prop="chamberId" label="选择商会">
 					
-					<Select v-model="formInline.chamberId" filterable clearable :placeholder="placeholder">
+					<Select v-model="formInline.chamberId" :label-in-value="true" @on-change="chamberChange" filterable clearable :placeholder="placeholder">
 				        <Option v-for="item in chamberList" :value="item.value" :key="item.value">{{ item.label }}</Option>
 				    </Select>
 				    
@@ -101,6 +101,8 @@ export default {
         	
         	record: false,//记录列表对话框
         	
+        	chamberName: '',//商会名称
+        	
         	formInline: {
         		identity: 1,
                 chamberId: '',
@@ -145,6 +147,10 @@ export default {
     		
     	},
     	
+    	chamberChange(obj){//选择商会时触发
+    		this.chamberName = obj.label;
+    	},
+    	
     	createSucceed(){//创建商会成功执行
     		if(this.formInline.identity === 2){
     			this.setSelectData('user.Comm/myCreateOrganize', {}, {label: 'name', value: 'id'});
@@ -183,6 +189,7 @@ export default {
 	                    	if(res.code == 0){
 	                    		sessionStorage.identityType = this.formInline.identity;//身份类型
 	                    		sessionStorage.chamberId = this.formInline.chamberId;////商会ID
+	                    		sessionStorage.chamberName = this.chamberName;//商会名称
 	                    		sessionStorage.userAccess = ['member'];//权限
 					    		this.$router.replace({name: 'home'});
 								this.$Message.success('普通会员进入成功');
@@ -195,6 +202,7 @@ export default {
 	                    	if(res.code == 0){
 	                    		sessionStorage.identityType = this.formInline.identity;//身份类型
 	                    		sessionStorage.chamberId = this.formInline.chamberId;//商会ID
+	                    		sessionStorage.chamberName = this.chamberName;//商会名称
 	                    		sessionStorage.userAccess = ['admin'];//权限
 					    		this.$router.replace({name: 'home'});
 								this.$Message.success('管理者进入成功');

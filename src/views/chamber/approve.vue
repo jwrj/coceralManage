@@ -75,9 +75,17 @@ export default {
     						name: '通过',
     						key: 'pass',
     						poptipOpen: true,
+    						button_props: {
+    							type: 'primary',
+    						},
     						poptip_props: {
     							title: '您确认通过吗？'
-    						}
+    						},
+    						callback: (params, btnParams) => {
+			        			if(params.row.status != 0){
+			        				btnParams.button_props.disabled = true;
+			        			}
+			        		}
     					},
     					{
     						name: '拒绝',
@@ -88,7 +96,12 @@ export default {
     						},
     						poptip_props: {
     							title: '您确认拒绝吗？'
-    						}
+    						},
+    						callback: (params, btnParams) => {
+			        			if(params.row.status != 0){
+			        				btnParams.button_props.disabled = true;
+			        			}
+			        		}
     					},
     				],
     			}
@@ -122,16 +135,12 @@ export default {
     			accept: accept,//是否接受：0拒绝、1接受
     		}, res => {
 				if(res.code == 0){
+					this.getApproveData();
 					if(accept === 1){
 						this.$Message.success('成功通过');
 					}else if(accept === 0){
 						this.$Message.error('成功拒绝');
 					}
-					getApproveData((res) => {
-						if(res.code == 0){
-							this.approveList = res.data;
-						}
-					});
 				}
 			});
     	},

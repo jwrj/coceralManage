@@ -4,8 +4,14 @@
 		
 		<!--页眉-->
 		<header v-if="headerShow" class="header">
-			<slot name="header" :slotEvent="slotEvent"></slot>
-			<Input v-if="seekShow" :search="true" enter-button clearable placeholder="搜索..." class="seek" />
+			<Row type="flex" align="middle" :gutter="10">
+				<Col span="16">
+					<slot name="header" :slotEvent="slotEvent"></slot>
+				</Col>
+				<Col span="8">
+					<Input v-if="seekShow" :search="true" enter-button clearable placeholder="搜索..." class="seek" />
+				</Col>
+			</Row>
 		</header>
 		
 		<!--表格-->
@@ -226,7 +232,6 @@ export default {
 		align-items: center;
 	}
 	.header{
-		.public();
 		margin-bottom: 14px;
 	}
 	.footer{
@@ -234,8 +239,7 @@ export default {
 		margin-top: 14px;
 	}
 	.seek{
-		max-width: 400px;
-		margin-left: auto;
+		width: 100%;
 	}
 </style>
 

@@ -4,16 +4,18 @@
 		
 		<Card>
 			
-			<div slot="title" class="title">
+			<div slot="title">
 				
-				<h1>给广西湖北商会的岗位配置人员</h1>
+				<h1>{{`给${coceralName}的岗位配置人员`}}</h1>
 				
-				<post-casc v-model="postId" @on-change="postChange" style="margin-left: 10px;"></post-casc>
+				<div class="cardTitle" style="margin-top: 16px;">
+					<post-casc v-model="postId" @on-change="postChange"></post-casc>
+					
+					<Select v-model="jieCiId" :label-in-value="true" @on-change="jieCiChange" @on-clear="jieCiclear" clearable placeholder="选择届次" not-found-text="当前岗位还没有届次" style="width:100px;margin-left: 10px;">
+				        <Option v-for="item in jieCiData" :value="item.value" :key="item.value">{{item.label}}</Option>
+				    </Select>
+				</div>
 				
-				<Select v-model="jieCiId" @on-change="jieCiChange" @on-clear="jieCiclear" clearable placeholder="选择届次" not-found-text="当前岗位还没有届次" style="width:100px;margin-left: 10px;">
-			        <Option v-for="item in jieCiData" :value="item.value" :key="item.value">{{item.label}}</Option>
-			    </Select>
-			    
 			</div>
 			
 			<div>
@@ -42,8 +44,9 @@
 						
 						<Col span="24">
 							<FormItem label="已选会员">
-								<div style="width: 240px;">
+								<div class="cardTitle">
 									<Button @click="memberListShow = true" type="primary" size="small">从会员列表选择</Button>
+									<Alert show-icon style="margin-left: 10px;margin-bottom: 0;">标签为绿色表示添加成功，标签为红色表示添加失败(人员已重复)</Alert>
 								</div>
 								<div>
 									<Tag v-for="item in checkedMembers" :color="item.color" :name="item.id" closable @on-close="tagClose">{{item.name}}</Tag>
@@ -62,18 +65,21 @@
 			</div>
 			
 			
-			<Divider orientation="left">
+			<Divider orientation="left" style="font-size: 16px;">
+				人员列表（根据上面选择的岗位和届次列出对应数据，默认列出全部数据）
+			</Divider>
+			
+			<div style="margin-bottom: 10px;">
 				<Tag color="geekblue">
 					<span v-for="(item, i) in postTextArr" style="display: inline-block;">
 						<Icon v-if="i != 0" type="md-arrow-forward" />
-						<span :style="{color: i == postTextArr.length-1 ? '#ed4014' : ''}">{{item}}</span>
+						<span>{{item}}</span>
 					</span>
 				</Tag>
 				<Tag color="geekblue">
-					第<span style="color: #ed4014;">{{jieCiId}}</span>届
+					<span>{{jieName}}</span>
 				</Tag>
-				<span>人员列表（根据上面选择的岗位和届次列出对应数据，默认列出全部数据）</span>
-			</Divider>
+			</div>
 			
 			<table-list
 			:headerShow="false"
@@ -96,6 +102,11 @@
         	:styleShow="false"
         	@on-select-change="memberSelect"
         	></userList>
+        	
+        	<div style="text-align: center;margin-top: 26px;">
+        		<Button type="primary" @click="memberListShow = false">返回</Button>
+        	</div>
+        	
 		</Drawer>
 		
 	</div>
@@ -128,9 +139,13 @@ export default {
         	
         	memberListShow: false,
         	
+        	coceralName: sessionStorage.chamberName || '',//商会名称
+        	
         	postId: [],//岗位id
         	
         	jieCiId: 0,//届次ID
+        	
+        	jieName: '未选择届次',//届次名称
         	
         	jieCiData: [],//届次数据
         	
@@ -291,11 +306,13 @@ export default {
 						}
 					});
 					if(!tf1 && tf2){
-						this.$Message.success('已选人员添加成功');
+						this.getPersonnelData(this.postId, this.jieCiId);
+						this.$Message.success('添加成功，已选人员添加成功');
 					}else if(tf1 && !tf2){
-						this.$Message.error('已选人员重复添加！');
+						this.$Message.error('添加失败，已选人员重复添加！');
 					}else{
-						this.$Message.info('部分人员添加成功');
+						this.getPersonnelData(this.postId, this.jieCiId);
+						this.$Message.info('部分人员添加成功，重复人员添加失败');
 					}
 				}
 			});
@@ -312,10 +329,12 @@ export default {
 			this.postTextArr = newArr;
 		},
 		
-		jieCiChange(jieId){//选择届次时触发
-			if(jieId != undefined){
-				this.getPersonnelData(this.postId, jieId);
+		jieCiChange(obj){//选择届次时触发
+			if(obj != undefined){
+				this.jieName = obj.label;
+				this.getPersonnelData(this.postId, obj.value);
 			}else{
+				this.jieName = '未选择届次';
 				this.jieCiId = 0;
 			}
 		},

@@ -4,7 +4,7 @@
 		
 		<Cascader v-if="false" v-model="selected" @on-change="cascaderChange" change-on-select filterable placeholder="选择岗位" :data="postData" style="width: 240px;"></Cascader>
 		
-		<Poptip placement="bottom-start" class="abc">
+		<Poptip placement="bottom-start">
 			
 			<Button long :style="{color: checkedText ? '' : '#c5c8ce', textAlign: 'left', padding: '5px 7px 6px', overflow: 'hidden'}">
 				{{checkedText ? checkedText : '选择岗位'}}
@@ -237,15 +237,9 @@ export default {
 		}
 	}
 }
-.abc{
-	width: 100%;
-}
+
 </style>
 
 <style lang="less">
-.abc {
-	.ivu-poptip-rel{
-		width: 100%;
-	}
-}
+
 </style>

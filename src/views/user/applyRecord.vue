@@ -70,6 +70,11 @@ export default {
     						},
 			        		button_props: {
 			        			loading: false
+			        		},
+			        		callback: (params, btnParams) => {
+			        			if(params.row.status != 0){
+			        				btnParams.button_props.disabled = true;
+			        			}
 			        		}
 			        	}
 			        ],
@@ -91,14 +96,13 @@ export default {
     	},
     	
     	tabBtnClick(val){//表格按钮点击触发
-    		console.log(val)
     		if(val.key === 'cancel'){//撤回申请
     			$ax.getAjaxData('user.Comm/applyRevoke', {
     				apply_id: Number(val.params.row.id)
     			}, res => {
     				if(res.code == 0){
-    					this.$Message.success('成功撤回申请');
     					this.getApplyRecord();
+    					this.$Message.success('成功撤回申请');
     				}
     			});
     		}

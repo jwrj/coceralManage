@@ -6,10 +6,14 @@
 			
 			<h1 slot="title">岗位配置</h1>
 			
-			<Tree :data="treeData" :render="renderContent" empty-text=""></Tree>
+			<div style="width: 75%;margin: auto;">
+				
+				<Tree :data="treeData" :render="renderContent" empty-text="还没有配置岗位"></Tree>
 		
-			<div style="margin-top: 16px;text-align: center;">
-				<Button type="primary" @click="addMaxPost">添加顶级岗位</Button>
+				<div style="margin-top: 16px;text-align: center;">
+					<Button type="primary" @click="addMaxPost">添加顶级岗位</Button>
+				</div>
+				
 			</div>
 			
 		</Card>
