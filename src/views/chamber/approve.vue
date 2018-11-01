@@ -84,6 +84,8 @@ export default {
     						callback: (params, btnParams) => {
 			        			if(params.row.status != 0){
 			        				btnParams.button_props.disabled = true;
+			        			}else{
+			        				btnParams.button_props.disabled = false;
 			        			}
 			        		}
     					},
@@ -98,8 +100,11 @@ export default {
     							title: '您确认拒绝吗？'
     						},
     						callback: (params, btnParams) => {
+    							console.log(params.row.status != 0);
 			        			if(params.row.status != 0){
 			        				btnParams.button_props.disabled = true;
+			        			}else{
+			        				btnParams.button_props.disabled = false;
 			        			}
 			        		}
     					},

@@ -74,6 +74,8 @@ export default {
 			        		callback: (params, btnParams) => {
 			        			if(params.row.status != 0){
 			        				btnParams.button_props.disabled = true;
+			        			}else{
+			        				btnParams.button_props.disabled = false;
 			        			}
 			        		}
 			        	}
@@ -101,9 +103,9 @@ export default {
     				apply_id: Number(val.params.row.id)
     			}, res => {
     				if(res.code == 0){
-    					this.getApplyRecord();
     					this.$Message.success('成功撤回申请');
     				}
+    				this.getApplyRecord();
     			});
     		}
     	},
