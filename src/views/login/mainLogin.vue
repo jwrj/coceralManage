@@ -86,7 +86,7 @@ export default {
 				});
 				
 				if(myInfo.code === 0){//用户中心已登录
-					sessionStorage.userLogin = 0;
+					sessionStorage.userLogin = 1;
 	    			sessionStorage.myCompanyList = JSON.stringify(myInfo.data.company);
 	    			next({name: 'login'});
 				}else if(myInfo.code === 2081){//用户中心未登录跳转到用户中心
