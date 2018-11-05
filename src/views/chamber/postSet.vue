@@ -117,7 +117,6 @@ export default {
 	                        props: Object.assign({}, this.buttonProps, {
 	                            icon: 'md-create',
 	                            type: 'success',
-	                            disabled: true
 	                        }),
 	                        style: {
 	                            marginRight: '8px'
@@ -153,7 +152,6 @@ export default {
 	                        props: Object.assign({}, this.buttonProps, {
 	                            icon: 'md-remove',
 	                            type: 'error',
-	                            disabled: true
 	                        }),
 	                        on: {
 	                            click: () => {
@@ -186,6 +184,17 @@ export default {
         },
         
         remove (root, node, data) {//删除岗位
+        	
+//      	$ax.getAjaxData('manage.Organize/gangweiDel', {
+//      		id: data.id
+//      	}, res => {
+//      		if(res.code == 0){
+//      			console.log('删除成功');
+//      		}
+//      	});
+        	
+        	console.log(node);
+        	
         	if(node.nodeKey === 0 && !node.parent){//删除最顶级
         		this.treeData = [];
         	}else{
