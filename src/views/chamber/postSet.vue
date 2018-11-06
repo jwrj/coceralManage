@@ -66,6 +66,10 @@ export default {
         	
         	currentData: {},
         	
+        	currentNode: {},
+        	
+        	currentRoot: [],
+        	
         	modalTitle: '',
         	
         	treeData: [],
@@ -124,8 +128,10 @@ export default {
 	                        on: {
 	                            click: () => {
 	                            	this.type = 'edit';
-	                            	this.formInline.name = data.title;
 	                            	this.modalShow = true;
+	                            	this.formInline.name = data.title;
+	                            	this.currentRoot = root;
+	                            	this.currentNode = node;
 	                                this.currentData = data;
 	                            }
 	                        }
@@ -148,17 +154,26 @@ export default {
 	                            }
 	                        }
 	                    }),
-	                    h('Button', {
-	                        props: Object.assign({}, this.buttonProps, {
-	                            icon: 'md-remove',
-	                            type: 'error',
-	                        }),
-	                        on: {
-	                            click: () => {
-	                            	this.remove(root, node, data)
-	                            }
-	                        }
-	                    })
+	                    h('Poptip', {
+	                    	props: {
+	                    		confirm: true,
+	                    		title: "您确认删除此岗位吗?",
+	                    	},
+	                    	on: {
+	                    		'on-ok': () => {
+	                    			this.remove(root, node, data);
+	                    		},
+	                    		'on-cancel': () => {
+	                    		}
+	                    	}
+	                    }, [
+	                    	h('Button', {
+	                    		props: Object.assign({}, this.buttonProps, {
+		                            icon: 'md-remove',
+		                            type: 'error',
+		                        }),
+	                    	})
+	                    ])
 	                ])
 	            ])
             ]);
@@ -169,8 +184,28 @@ export default {
     		this.modalShow = true;
     	},
         
-        edit(data, title){//编辑
-        	data.title = title;
+        edit(root, node, data, name){//编辑
+        	
+        	let fid = 0;
+        	
+        	if(node.parent === undefined){
+        		fid = 0;
+        	}else{
+        		fid = root.find(item => item.nodeKey === node.parent).node.id;
+        	}
+        	
+        	$ax.getAjaxData('manage.Organize/gangweiEdit', {
+        		id: data.id,
+        		name: name,
+        		fid: fid
+        	}, res => {
+        		if(res.code == 0){
+        			data.title = name;
+        			this.modalShow = false;
+        			this.$Message.success('编辑成功');
+        		}
+        	});
+        	
         },
         
         append (data, title, id) {//添加方法
@@ -184,26 +219,22 @@ export default {
         },
         
         remove (root, node, data) {//删除岗位
-        	
-//      	$ax.getAjaxData('manage.Organize/gangweiDel', {
-//      		id: data.id
-//      	}, res => {
-//      		if(res.code == 0){
-//      			console.log('删除成功');
-//      		}
-//      	});
-        	
-        	console.log(node);
-        	
-        	if(node.nodeKey === 0 && !node.parent){//删除最顶级
-        		this.treeData = [];
-        	}else{
-	        	const parentKey = root.find(el => el === node).parent;
-	            const parent = root.find(el => el.nodeKey === parentKey).node;
-	            const index = parent.children.indexOf(data);
-	            parent.children.splice(index, 1);
-        	}
-        	
+        	$ax.getAjaxData('manage.Organize/gangweiDel', {
+        		id: data.id
+        	}, res => {
+        		if(res.code == 0){
+        			if(node.parent === undefined){//删除顶级
+		          		let index = this.treeData.indexOf(data);
+		          		this.treeData.splice(index, 1);
+		        	}else{//删除子级
+			        	const parentKey = root.find(el => el === node).parent;
+			            const parent = root.find(el => el.nodeKey === parentKey).node;
+			            const index = parent.children.indexOf(data);
+			            parent.children.splice(index, 1);
+		        	}
+        			this.$Message.success('删除成功');
+        		}
+        	});
         },
         
         submit(name){//添加岗位
@@ -212,7 +243,7 @@ export default {
         		
         		if(valid){
         			
-		        	if(this.type === 'add'){
+		        	if(this.type === 'add'){//添加子
 		        		
 		        		$ax.getAjaxData('manage.Organize/gangweiAdd', {
 			        		name: this.formInline.name,
@@ -225,14 +256,11 @@ export default {
 			        		}
 			        	});
 			        	
-			        	//this.$emit('on-add', this.formInline.name, this.currentData.nodeKey);
-			        	
-		        	}else if(this.type === 'edit'){
+		        	}else if(this.type === 'edit'){//编辑
 		        		
-		        		this.edit(this.currentData, this.formInline.name);
-		        		this.modalShow = false;
+		        		this.edit(this.currentRoot, this.currentNode, this.currentData, this.formInline.name);
 		        		
-		        	}else if(this.type === 'addMaxPost'){
+		        	}else if(this.type === 'addMaxPost'){//添加顶级
 		        		
 		        		$ax.getAjaxData('manage.Organize/gangweiAdd', {
 			        		name: this.formInline.name,
@@ -249,8 +277,6 @@ export default {
 			        		}
 			        	});
 		        		
-			    		//this.$emit('on-add', this.formInline.name, 0);
-			    		
 		        	}
 		        	
         		}
@@ -260,7 +286,6 @@ export default {
         },
         
         getTreeData(){//获取岗位树
-    		
     		$ax.getAjaxData('manage.Organize/gangweiAll', {}, res => {
     			if(res.code == 0){
     				let recursion = (ajaxData) => {//递归
@@ -281,7 +306,6 @@ export default {
     				this.treeData = recursion(res.data);
     			}
 	    	});
-	    	
     	},
     	
     },

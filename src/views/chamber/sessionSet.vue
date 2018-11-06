@@ -11,7 +11,7 @@
 			
 			<div>
 				
-			    <Form ref="formInstance" :model="formData" :rules="formRules" :label-width="80">
+			    <Form ref="formInstance" :model="formData" :rules="formRules" :label-width="90">
 					
 					<Row>
 						
@@ -34,7 +34,7 @@
 						</Col>
 						
 						<Col span="12">
-							<FormItem prop="standard" label="会费标准">
+							<FormItem prop="standard" label="会费标准(元)">
 								<InputNumber v-model="formData.standard" :max="10000000" :min="0" style="width: 240px;"></InputNumber>
 							</FormItem>
 						</Col>
@@ -69,10 +69,41 @@
 			:headerShow="false"
 			:tableColumns="tableColumns"
 			no-data-text="当前岗位暂无数据"
+			@on-btn-click="tabBtnClick"
+			@on-poptip-ok="tabPoptipOk"
 			:tableData="JieCiDataList">
 			</table-list>
 			
 		</Card>
+		
+		<Modal v-model="editModal" width="500">
+	        <p slot="header"></p>
+	        <div>
+	        	<Form ref="formInstance2" :model="editFormData" :rules="formRules" :label-width="90">
+					
+					<FormItem prop="name" label="届次名称">
+						<Input v-model="editFormData.name" clearable placeholder="届次名称"></Input>
+					</FormItem>
+				
+					<FormItem prop="startTime" label="开始时间">
+						<DatePicker @on-change="editStartTime" :value="editFormData.startTime" placeholder="选择时间" type="date" style="width:100%;"></DatePicker>
+					</FormItem>
+				
+					<FormItem prop="endTime" label="到期时间">
+						<DatePicker @on-change="editEndTime" :value="editFormData.endTime" placeholder="选择时间" type="date" style="width: 100%;"></DatePicker>
+					</FormItem>
+				
+					<FormItem prop="standard" label="会费标准(元)">
+						<InputNumber v-model="editFormData.standard" :max="10000000" :min="0" style="width: 100%;"></InputNumber>
+					</FormItem>
+						
+				</Form>
+	        </div>
+	        <div slot="footer">
+	            <Button @click="editModal = false">取消</Button>
+	            <Button type="primary" @click="saveEdit('formInstance2')">保存</Button>
+	        </div>
+	    </Modal>
 		
 	</div>
 
@@ -99,6 +130,10 @@ export default {
 	data() { //数据
 		return {
 			
+			editModal: false,//编辑弹窗
+			
+			editId: '',//需要编辑的数据ID
+			
 			coceralName: sessionStorage.chamberName || '',//商会名称
 			
 			postId: [],//岗位ID
@@ -106,6 +141,13 @@ export default {
 			postTextArr: ['未选择岗位'],//当前岗位文本
 			
 			formData: {
+				name: '',
+				startTime: '',
+				endTime: '',
+				standard: null,
+			},
+			
+			editFormData: {
 				name: '',
 				startTime: '',
 				endTime: '',
@@ -134,7 +176,7 @@ export default {
 					key: 'id'
 				},
 				{
-					title: '届次',
+					title: '届次名称',
 					key: 'jie_name'
 				},
 				{
@@ -164,9 +206,15 @@ export default {
     				handle: [
     					{
     						name: '编辑',
+    						key: 'edit',
     					},
     					{
     						name: '删除',
+    						key: 'del',
+    						poptipOpen: true,
+    						poptip_props: {
+    							title: '您确定删除该数据吗?'
+    						}
     					},
     				],
     			}
@@ -177,12 +225,72 @@ export default {
 	},
 	methods: { //方法
 		
+		tabBtnClick(val){
+			if(val.key === 'edit'){//编辑
+				
+				console.log(val.params.row);
+				
+				this.editId = val.params.row.id;
+				
+				this.editFormData = {
+					name: val.params.row.jie_name,
+					startTime: getLocalTime(val.params.row.begin_time),
+					endTime: getLocalTime(val.params.row.end_time),
+					standard: Number(val.params.row.fee)/100,
+				}
+				
+				this.editModal = true;
+				
+			}
+		},
+		
+		tabPoptipOk(val){
+			if(val.key === 'del'){//删除届次
+				$ax.getAjaxData('manage.Organize/jieDel', {
+					id: val.params.row.id
+				}, res => {
+					if(res.code == 0){
+						this.getJieCiData(this.postId);
+						this.$Message.success('删除成功');
+					}
+				});
+			}
+		},
+		
+		saveEdit(name){//保存编辑
+			this.$refs[name].validate((valid) => {
+				if(valid){
+					$ax.getAjaxData('manage.Organize/jieEdit', {
+						id: this.editId,
+						jie_name: this.editFormData.name,
+						begin_time: this.editFormData.startTime,
+						end_time: this.editFormData.endTime,
+						fee: this.editFormData.standard*100
+					}, res => {
+						if(res.code == 0){
+							this.getJieCiData(this.postId);
+							this.editModal = false;
+							this.$Message.success('修改成功');
+						}
+					});
+				}
+			})
+		},
+		
 		startTime(date){//开始时间
 			this.formData.startTime = date;
 		},
 		
 		endTime(date){//到期时间
 			this.formData.endTime = date;
+		},
+		
+		editStartTime(date){
+			this.editFormData.startTime = date;
+		},
+		
+		editEndTime(date){
+			this.editFormData.endTime = date;
 		},
 		
 		addJieCi(name){//添加届次

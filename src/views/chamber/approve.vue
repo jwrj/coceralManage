@@ -10,8 +10,17 @@
 			
 			<table-list
 			@on-poptip-ok="poptipOk"
+			@on-btn-click="tabBtnClick"
 			:tableColumns="tableColumns"
 			:tableData="approveList">
+				<div slot="modalContent">
+					<Row>
+						<Col v-for="item in showData" span="8" offset="4" class="showForm">
+							<label>{{item.label}}：</label>
+							<span>空</span>
+						</Col>
+					</Row>
+				</div>
 			</table-list>
 			
 		</Card>
@@ -40,6 +49,155 @@ export default {
 	},
     data () {//数据
         return {
+        	
+        	detailsInfo: {},
+        	
+        	showData: [
+        		{
+        			label: '真实姓名',
+        			value: 'truest_name',
+        		},
+        		{
+        			label: '性别',
+        			value: 'sex',
+        			select: [ ['1', '男'], ['2', '女'] ],
+        		},
+        		{
+        			label: '出生年月',
+        			value: 'brithday',
+        		},
+        		{
+        			label: '证件类型',
+        			value: 'card_type',
+        			select: [
+        				{
+        					label: '身份证',
+        					value: '1'
+        				},
+        				{
+        					label: '居住证',
+        					value: '2'
+        				},
+        				{
+        					label: '单身证',
+        					value: '3'
+        				},
+        			],
+        		},
+        		{
+        			label: '证件号码',
+        			value: 'card_num',
+        		},
+        		{
+        			label: '国籍',
+        			value: 'nation',
+        			select: [
+        				{
+        					label: '中国',
+        					value: '80'
+        				},
+        				{
+        					label: '美国',
+        					value: '81'
+        				},
+        				{
+        					label: '英国',
+        					value: '82'
+        				},
+        			],
+        		},
+        		{
+        			label: '民族',
+        			value: 'mz',
+        			select: [
+        				{
+        					label: '汉族',
+        					value: '1'
+        				},
+        				{
+        					label: '壮族',
+        					value: '2'
+        				},
+        				{
+        					label: '苗族',
+        					value: '3'
+        				},
+        			],
+        		},
+        		{
+        			label: '籍贯',
+        			value: 'hometown',
+        		},
+        		{
+        			label: '工作电话',
+        			value: 'work_phone',
+        		},
+        		{
+        			label: '手机号码',
+        			value: 'touch_phone',
+        		},
+        		{
+        			label: '微信账号',
+        			value: 'wechat',
+        		},
+        		{
+        			label: 'QQ账号',
+        			value: 'qq',
+        		},
+        		{
+        			label: '现在住址',
+        			value: 'address',
+        		},
+        		{
+        			label: '学历',
+        			value: 'education',
+        			select: [
+        				{
+        					label: '本科',
+        					value: '1'
+        				},
+        				{
+        					label: '专科',
+        					value: '2'
+        				},
+        				{
+        					label: '研究生',
+        					value: '3'
+        				},
+        			],
+        		},
+        		{
+        			label: '政治面貌',
+        			value: 'politics',
+        			select: [
+        				{
+        					label: '群众',
+        					value: '1'
+        				},
+        				{
+        					label: '团员',
+        					value: '2'
+        				},
+        				{
+        					label: '党员',
+        					value: '3'
+        				},
+        			],
+        		},
+        		{
+        			label: '婚姻状况',
+        			value: 'marriage',
+        			select: [ ['1', '已婚'], ['2', '未婚'] ],
+        		},
+        		{
+        			label: '身高(cm)',
+        			value: 'height',
+        		},
+        		{
+        			label: '体重(kg)',
+        			value: 'weigh',
+        		},
+        	],
         	
         	tableColumns: [
     			{
@@ -70,6 +228,8 @@ export default {
     				handle: [
     					{
     						name: '详细资料',
+    						key: 'details',
+    						modalShow: true,
     					},
     					{
     						name: '通过',
@@ -100,7 +260,6 @@ export default {
     							title: '您确认拒绝吗？'
     						},
     						callback: (params, btnParams) => {
-    							console.log(params.row.status != 0);
 			        			if(params.row.status != 0){
 			        				btnParams.button_props.disabled = true;
 			        			}else{
@@ -124,6 +283,18 @@ export default {
     				this.approveList = res.data;
     			}
 			});
+    	},
+    	
+    	tabBtnClick(val){
+    		if(val.key === 'details'){//详情
+    			$ax.getAjaxData('manage.Member/applyInfo', {
+    				apply_id: val.params.row.id,
+    			}, res => {
+    				if(res.code == 0){
+    					this.detailsInfo = res.data;
+    				}
+    			});
+    		}
     	},
     	
     	poptipOk(val){//拒绝或通过
@@ -205,5 +376,12 @@ export default {
 </script>
 
 <style scoped lang="less">
-
+	.showForm{
+		margin-bottom: 10px;
+		label{
+			display: inline-block;
+			width: 80px;
+			text-align: right;
+		}
+	}
 </style>

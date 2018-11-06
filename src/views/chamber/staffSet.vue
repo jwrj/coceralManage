@@ -211,6 +211,7 @@ export default {
     				handle: [
     					{
     						name: '卸任',
+    						key: 'del',
     						poptipOpen: true,
     						poptip_props: {
     							title: '您确定要卸任此人？'
@@ -260,8 +261,17 @@ export default {
 			});
 		},
     	
-		poptipOk(){//卸任
-			this.$Message.success('卸任成功');
+		poptipOk(val){//卸任
+			if(val.key === 'del'){
+				$ax.getAjaxData('manage.Organize/gangweiMemberDel', {
+					id: val.params.row.id,
+				}, res => {
+					if(res.code == 0){
+						this.getPersonnelData(this.postId, this.jieCiId);
+						this.$Message.success('卸任成功');
+					}
+				});
+			}
 		},
 		
 		addPersonnel(name){//添加人员
