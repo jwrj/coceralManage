@@ -14,12 +14,25 @@
 			:tableColumns="tableColumns"
 			:tableData="approveList">
 				<div slot="modalContent">
-					<Row>
-						<Col v-for="item in showData" span="8" offset="4" class="showForm">
-							<label>{{item.label}}：</label>
-							<span>空</span>
-						</Col>
-					</Row>
+					<Form class="my-form" :label-width="80">
+						<Row>
+							<Col v-for="item in showData" :key="item.value" :xs="24" :sm="12" :md="8" :lg="6">
+								<FormItem :label="item.label+'：'">
+										<p v-if="item.value === 'brithday'">
+											{{getLocalTime(personInfo[item.value])}}
+										</p>
+										<div v-else-if="item.select">
+											<p v-for="seleItem in item.select" v-if="seleItem.value === personInfo[item.value]">
+												{{seleItem.label}}
+											</p>
+										</div>
+										<p v-else>
+											{{personInfo[item.value]}}
+										</p>
+						        </FormItem>
+					        </Col>
+						</Row>
+					</Form>
 				</div>
 			</table-list>
 			
@@ -52,6 +65,8 @@ export default {
         	
         	detailsInfo: {},
         	
+        	personInfo: {},//身份资料
+        	
         	showData: [
         		{
         			label: '真实姓名',
@@ -60,7 +75,16 @@ export default {
         		{
         			label: '性别',
         			value: 'sex',
-        			select: [ ['1', '男'], ['2', '女'] ],
+        			select: [
+        				{
+        					label: '男',
+        					value: '1'
+        				},
+        				{
+        					label: '女',
+        					value: '2'
+        				}
+        			],
         		},
         		{
         			label: '出生年月',
@@ -187,7 +211,16 @@ export default {
         		{
         			label: '婚姻状况',
         			value: 'marriage',
-        			select: [ ['1', '已婚'], ['2', '未婚'] ],
+        			select: [
+        				{
+        					label: '已婚',
+        					value: '1'
+        				},
+        				{
+        					label: '未婚',
+        					value: '2'
+        				}
+        			],
         		},
         		{
         			label: '身高(cm)',
@@ -210,7 +243,7 @@ export default {
     				key: 'person_name'
     			},
     			{
-    				title: '公司',
+    				title: '申请公司',
     				key: 'company_name'
     			},
     			{
@@ -292,6 +325,7 @@ export default {
     			}, res => {
     				if(res.code == 0){
     					this.detailsInfo = res.data;
+    					this.personInfo = res.data.person_info;
     				}
     			});
     		}
@@ -320,6 +354,10 @@ export default {
 				}
 			});
     	},
+    	
+    	getLocalTime(nS){//时间戳转字符到日期
+			return new Date(parseInt(nS) * 1000).toLocaleString().replace(/\//g, "-").replace(/[上午|下午]([\d\:]*)/g, "");
+		},
     	
     },
     computed: {//计算属性
@@ -376,12 +414,7 @@ export default {
 </script>
 
 <style scoped lang="less">
-	.showForm{
-		margin-bottom: 10px;
-		label{
-			display: inline-block;
-			width: 80px;
-			text-align: right;
-		}
+	.my-form .ivu-form-item{
+		margin-bottom: 0px !important;
 	}
 </style>

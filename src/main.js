@@ -7,8 +7,9 @@ import 'iview/dist/styles/iview.css'
 import './less/main.less'
 import './less/basics.less'
 import '../public/js/global.js'
-import iviewArea from 'iview-area';
-Vue.use(iviewArea);
+import xwArea from 'xw-area';
+
+Vue.use(xwArea);
 Vue.use(iView);
 Vue.config.productionTip = false
 

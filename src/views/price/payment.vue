@@ -1,100 +1,92 @@
 <template>
 
 	<div>
-		{{info}}
-		<Card>
-			
-			<h1 slot="title">会员信息</h1>
-			
-			<Row>
-				<Col span="8" offset="4" class="showForm">
-					<label>姓名：</label>
-					<span>{{info.memberInfo ? info.memberInfo.person_name : ''}}</span>
-				</Col>
-				<Col span="8" offset="4" class="showForm">
-					<label>岗位：</label>
-					<span>普通会员</span>
-				</Col>
-				<Col span="8" offset="4" class="showForm">
-					<label>届次：</label>
-					<span>5</span>
-				</Col>
-				<Col span="8" offset="4" class="showForm">
-					<label>届次时间：</label>
-					<span>2018-1-1</span>
-				</Col>
-				<Col span="8" offset="4" class="showForm">
-					<label>截至时间：</label>
-					<span>2018-1-1</span>
-				</Col>
-				<Col span="8" offset="4" class="showForm">
-					<label>岗位会费：</label>
-					<span>100元</span>
-				</Col>
-			</Row>
-				
-		</Card>
 		
-		<Card style="margin-top: 16px;">
+		<Divider orientation="left">会员信息</Divider>
+		
+		<Form class="my-form" :label-width="100">
+			<Row>
+				<Col :xs="24" :sm="12" :md="8" :lg="6">
+					<FormItem label="姓名：">
+						{{info.memberInfo ? info.memberInfo.person_name : ''}}
+			        </FormItem>
+		        </Col>
+				<Col :xs="24" :sm="12" :md="8" :lg="6">
+					<FormItem label="岗位：">
+						{{info.gw_info ? info.gw_info.name : ''}}
+			        </FormItem>
+		        </Col>
+				<Col :xs="24" :sm="12" :md="8" :lg="6">
+					<FormItem label="届次：">
+						{{info.jie_info ? info.jie_info.jie_name : ''}}
+			        </FormItem>
+		        </Col>
+				<Col :xs="24" :sm="12" :md="8" :lg="6">
+					<FormItem label="届次开始时间：">
+						{{info.jie_info ? getLocalTime(info.jie_info.begin_time) : ''}}
+			        </FormItem>
+		        </Col>
+				<Col :xs="24" :sm="12" :md="8" :lg="6">
+					<FormItem label="届次到期时间：">
+						{{info.jie_info ? getLocalTime(info.jie_info.end_time) : ''}}
+			        </FormItem>
+		        </Col>
+				<Col :xs="24" :sm="12" :md="8" :lg="6">
+					<FormItem label="岗位会费：">
+						{{`${info.jie_info ? Number(info.jie_info.fee)/100 : ''}元`}}
+			        </FormItem>
+		        </Col>
+			</Row>
+		</Form>
+		
+		<Divider orientation="left">缴费记录</Divider>
+		
+		<table-list :tableColumns="tableColumns" :tableData="recordData" @on-btn-click="tabBtnClick" @on-poptip-ok="tabPoptipOk">
+			<div slot="header" style="width: 100%;display: flex;align-items: center;">
+				<Select v-model="pay" placeholder="请选择缴费类别" style="width: 200px;">
+					<Option value="both">全部</Option>
+					<Option value="work">岗位会费</Option>
+					<Option value="special">特殊会费</Option>
+					<Option value="fund">基金会费</Option>
+				</Select>
+				<Button style="margin-left: 10px;" type="primary" @click="addRecordBtn">添加缴费记录</Button>
+			</div>
+		</table-list>
 			
-			<div slot="title" class="cardTitle">
-				<h1>缴费记录</h1>
-				<Button style="margin-left: 10px;" size="small" type="primary" @click="modalShow = true">添加缴费记录</Button>
+		<Modal v-model="modalShow" width="450">
+			
+			<p slot="header" v-if="showType === 'add'">添加缴费记录</p>
+			
+			<p slot="header" v-if="showType === 'edit'">编辑缴费记录</p>
+			
+			<Form :model="paying" ref="paying" :rules="ruleValidate" :label-width="90">
+
+				<FormItem label="缴费名称" prop="name">
+				    <Input v-model="paying.name"></Input>
+				</FormItem>
+				
+				<FormItem label="缴费金额(元)" prop="price">
+					<InputNumber :max="100000" :min="0" v-model="paying.price" style="width: 100%;"></InputNumber>
+				</FormItem>
+				
+				<FormItem label="缴费时间" prop="time">
+					<DatePicker type="date" @on-change="dateChange" :value="paying.time" style="width: 100%;"></DatePicker>
+				</FormItem>
+				
+				<FormItem label="缴费方式" prop="way">
+					<Input v-model="paying.way"></Input>
+				</FormItem>
+			</Form>
+				
+			<div slot="footer">
+				<Button @click="modalShow = false">取消</Button>
+				<Button type="primary" @click="addSubmit('paying')">
+					{{showType === 'add' ? '添加记录' : '保存编辑'}}
+				</Button>
 			</div>
 			
-			<table-list :tableColumns="tableColumns" :tableData="recordData">
-
-				<div slot="header" style="width: 100%;display: flex;align-items: center;">
-					<p>
-						<Select v-model="pay" placeholder="请选择缴费类别" style="width: 200px;">
-							<Option value="both">全部</Option>
-							<Option value="work">岗位会费</Option>
-							<Option value="special">特殊会费</Option>
-							<Option value="fund">基金会费</Option>
-						</Select>
-					</p>
-				</div>
-
-			</table-list>
+		</Modal>
 			
-			<Modal v-model="modalShow" :footer-hide="true" width="450" class="add-record-modal">
-				
-				<p slot="header">添加缴费记录</p>
-				
-				<!--<Button  type="error" size="small" shape="circle" icon="md-close"></Button>-->
-				
-				<Icon slot="close" size="26" color="#ed4014" type="md-close-circle" />
-				
-				<div>
-					<Form :model="paying" ref="paying" :rules="ruleValidate" :label-width="100">
-
-						<FormItem label="缴费名称:" prop="name">
-						    <Input v-model="paying.name"></Input>
-						</FormItem>
-						
-						<FormItem label="缴费金额(元)" prop="price">
-							<InputNumber :max="100000" :min="0" v-model="paying.price" style="width: 100%;"></InputNumber>
-						</FormItem>
-						
-						<FormItem label="缴费时间:" prop="time">
-							<DatePicker type="date" @on-change="dateChange" :value="paying.time" style="width: 100%;"></DatePicker>
-						</FormItem>
-						
-						<FormItem label="缴费方式:" prop="way">
-							<Input v-model="paying.way"></Input>
-						</FormItem>
-					</Form>
-					
-					<div style="text-align: center;">
-						<Button type="primary" @click="handleSubmit('paying')">添加记录</Button>
-					</div>
-					
-				</div>
-				
-			</Modal>
-			
-		</Card>
-
 	</div>
 
 </template>
@@ -135,6 +127,10 @@ export default {
 				time: '',
 			},
 			
+			editId: '',//编辑ID
+			
+			showType: 'add',//对话框显示类型
+			
 			modalShow: false,
 			
 			tableColumns: [
@@ -170,12 +166,16 @@ export default {
 					title: '操作',
 					handle: [
 						{
-							name: '修改',
-							key: 0,
+							name: '编辑',
+							key: 'edit',
 						},
 						{
 							name: '删除',
-							key: 1,
+							key: 'del',
+							poptipOpen: true,
+    						poptip_props: {
+    							title: '您确定要删除吗？'
+    						}
 						}
 					],
 				}
@@ -211,6 +211,40 @@ export default {
 	},
 	methods: { //方法
 		
+		tabPoptipOk(val){
+			if(val.key === 'del'){//删除
+				$ax.getAjaxData('manage.Fee/feeDel', {
+					id: val.params.row.id,
+				}, res => {
+					if(res.code == 0){
+						this.getRecordList();
+						this.$Message.success('删除成功');
+					}
+				});
+			}
+		},
+		
+		tabBtnClick(val){
+			if(val.key === 'edit'){
+				this.$refs['paying'].resetFields();
+				this.paying = {
+					name: val.params.row.name,
+					price: Number(val.params.row.payed)/100,
+					way: val.params.row.pay_type,
+					time: getLocalTime(val.params.row.pay_time),
+				};
+				this.editId = val.params.row.id;
+				this.showType = 'edit';
+				this.modalShow = true;
+			}
+		},
+		
+		addRecordBtn(){
+			this.$refs['paying'].resetFields();
+			this.modalShow = true;
+			this.showType = 'add';
+		},
+		
 		dateChange(date){
 			this.paying.time = date;
 		},
@@ -228,23 +262,37 @@ export default {
 				pay_type: this.paying.way,//交费方式
 			}, res => {
 				if(res.code == 0){
-					this.modalShow = false;
 					this.getRecordList();
-					this.$Message.success('添加成功!');
-					this.paying = {
-						name: '',
-						price: null,
-						way: '',
-						time: '',
-					};
+					this.$refs['paying'].resetFields();
+					this.modalShow = false;
+					this.$Message.success('添加成功');
 				}
 			});
 		},
 		
-  		handleSubmit(name) {//提交数据
+  		addSubmit(name) {//提交数据
 			this.$refs[name].validate((valid) => {
 				if (valid) {
-					this.setSubmitData();
+					if(this.showType === 'add'){
+						this.setSubmitData();
+					}else if(this.showType === 'edit'){
+						$ax.getAjaxData('manage.Fee/feeEdit', {
+							id: this.editId,
+							name: this.paying.name,//费用名
+							should_pay: 1,//应交，单位分
+							pay_time: this.paying.time,//最近交费时间
+							end_time: -1,//到期时间
+							payed: this.paying.price*100,//已交，单位分
+							pay_type: this.paying.way,//交费方式
+						}, res => {
+							if(res.code == 0){
+								this.getRecordList();
+								this.$refs['paying'].resetFields();
+								this.modalShow = false;
+								this.$Message.success('保存成功');
+							}
+						});
+					}
 				}
 			});
 		},
@@ -259,6 +307,10 @@ export default {
 					this.recordData = res.data;
 				}
 			});
+		},
+		
+		getLocalTime(nS){//时间戳转字符到日期
+			return new Date(parseInt(nS) * 1000).toLocaleString().replace(/\//g, "-").replace(/[上午|下午]([\d\:]*)/g, "");
 		},
 		
 	},
@@ -299,12 +351,13 @@ export default {
 			text-align: right;
 		}
 	}
+	.my-form{
+		.ivu-form-item{
+			margin-bottom: 0px !important;
+		}
+	}
 </style>
 
 <style lang="less">
-	.add-record-modal{
-		.ivu-modal-close{
-			top: 13px !important;
-		}
-	}
+	
 </style>

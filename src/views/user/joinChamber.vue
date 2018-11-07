@@ -11,12 +11,12 @@
 			
 			<div>
 				
-				<Alert show-icon v-if="!isModule">
-			    	温馨提示：如果您选择了公司将会以公司的名义加入商会，反之就以个人的名义加入商会。
-			    </Alert>
+			    <Tooltip max-width="200" content="如果您选择了公司将会以公司的名义加入商会，反之就以个人的名义加入商会。" :transfer="true" placement="top">
+					<Icon type="md-information-circle" size="18" color="#2db7f5" style="cursor: pointer;padding-top: 6px;" />
+			    </Tooltip>
 			    
-			    <Form ref="formInstance" :model="formData" :rules="ruleData" inline :label-width="70">
-			    
+			    <Form ref="formInstance" :model="formData" :rules="ruleData" inline :label-width="70" style="display: inline-block;">
+			    	
 				    <FormItem label="加入方式">
 					    <RadioGroup v-model="applyType">
 					        <Radio :label="1">个人</Radio>
@@ -52,7 +52,7 @@
 				        <Option :value="2">协会</Option>
 				    </Select>
 					
-				    <al-cascader v-model="res_c" placeholder="选择地区" style="width: 260px;" />
+				    <cascader-area v-model="res_c" style="width: 260px;"></cascader-area>
 		    
 				</div>
 				
@@ -60,10 +60,10 @@
 			
 		</Card>
 		
-		<Modal v-model="applyModal" width="260" class="apply-modal">
-	        <p slot="header">申请确认</p>
-	        <div style="text-align:center">
-	       		{{`您确认要申请加入${coceralName}吗`}}
+		<Modal v-model="applyModal" :closable="false" width="260" class="apply-modal" class-name="vertical-center-modal">
+	        <p slot="header" style="text-align: center;">申请确认</p>
+	        <div>
+	       		您确认要申请加入<span style="color: #2db7f5;font-weight: 600;"> {{coceralName}} </span>吗?
 	        </div>
 	        <div slot="footer">
 	        	<ButtonGroup>
@@ -191,7 +191,7 @@ export default {
 				}, res => {
 					if(res.code == 0){
 						this.applyModal = false;
-						this.$Message.success('申请成功');
+						this.$Message.success('申请成功，请等待审批！');
 					}
 				});
 			}
@@ -335,4 +335,15 @@ export default {
 			overflow: hidden;
 		}
 	}
+	.vertical-center-modal{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        .ivu-modal{
+            top: 0;
+        }
+        .ivu-modal-header{
+        	padding: 6px 16px !important;
+        }
+    }
 </style>

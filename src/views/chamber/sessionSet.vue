@@ -52,12 +52,12 @@
 			<Divider orientation="left" style="font-size: 16px;">
 				<span>届次列表</span>
 				<Tooltip max-width="200" content="根据上面选择的岗位列出对应数据" :transfer="true" placement="top" style="margin-left: 6px;">
-					<Icon type="ios-alert-outline" size="20" style="cursor: pointer;" />
+					<Icon type="md-information-circle" size="18" color="#2db7f5" style="cursor: pointer;" />
 			    </Tooltip>
 			</Divider>
 			
 			<div style="margin-bottom: 10px;">
-				<Tag color="geekblue">
+				<Tag color="cyan">
 					<span v-for="(item, i) in postTextArr" style="display: inline-block;">
 						<Icon v-if="i != 0" type="md-arrow-forward" />
 						<span>{{item}}</span>

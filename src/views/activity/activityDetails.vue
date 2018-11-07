@@ -19,7 +19,9 @@
 		
 		<Divider orientation="left" style="font-size: 16px;">附件</Divider>
 		
-		<file-manage style="margin: 26px 0 60px;" currentRouteName="activityList"></file-manage>
+		{{checkedFileData}}
+		
+		<file-manage v-model="checkedFileData" style="margin: 26px 0 60px;" currentRouteName="activityList"></file-manage>
 		
 		<Divider orientation="left" style="font-size: 16px;">已邀请人员</Divider>
 			
@@ -57,6 +59,8 @@ export default {
 	},
 	data() { //数据
 		return {
+			
+			checkedFileData: {},
 			
 			tableColumns: [
 				{

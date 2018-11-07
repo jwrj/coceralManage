@@ -33,14 +33,14 @@
 					
 					<Col :xs="24" :sm="24" :md="12" :lg="12">
 						<FormItem label="注册地" prop="domicile" >
-							<al-cascader v-model="formData.domicile" data-type="code" placeholder="选择注册地" style="max-width: 300px;" />
+							<cascader-area v-model="formData.domicile" style="max-width: 300px;" />
 						</FormItem>
 					</Col>
 						
 					<!--商会-->
 					<Col v-if="formData.nature === 1" :xs="24" :sm="24" :md="12" :lg="12">
 						<FormItem label="所属地" prop="originPlace">
-							<al-cascader v-model="formData.originPlace" data-type="code" placeholder="选择所属地" style="max-width: 300px;" />
+							<cascader-area v-model="formData.originPlace" style="max-width: 300px;" />
 						</FormItem>
 					</Col>
 					<!--商会-->
@@ -221,10 +221,10 @@ export default {
 				isshang: this.formData.nature,//商会还是协会
 				name: this.formData.name, //名称
 				nation: 86, //注册地国家
-				provice: this.formData.domicile[0], //注册地省
-				city: this.formData.domicile[1], //注册地市
-				county: this.formData.domicile[2], //注册地县
-				town: this.formData.domicile[3], //注册地镇
+				provice: this.formData.domicile[0] || 666, //注册地省
+				city: this.formData.domicile[1] || 666, //注册地市
+				county: this.formData.domicile[2] || 666, //注册地县
+				town: this.formData.domicile[3] || 666, //注册地镇
 				contact: this.formData.linkman, //联系人
 				mobile: this.formData.linkmanPhone, //电话
 				website: this.formData.website, //网址
@@ -236,15 +236,15 @@ export default {
 			}
 			
 			let coceralData = {//商会数据
-				provice2: this.formData.originPlace[0], //所属地省
-				city2: this.formData.originPlace[1], //所属地城市
-				county2: this.formData.originPlace[2], //所属地县
-				town2: this.formData.originPlace[3], //所属地镇
+				provice2: this.formData.originPlace[0] || 666, //所属地省
+				city2: this.formData.originPlace[1] || 666, //所属地城市
+				county2: this.formData.originPlace[2] || 666, //所属地县
+				town2: this.formData.originPlace[3] || 666, //所属地镇
 			}
 			
 			let associationData = {//协会数据
-				hx1: this.formData.industry[0], //协会一级行业
-				hx2: this.formData.industry[1], //协会二级行业
+				hx1: this.formData.industry[0] || 666, //协会一级行业
+				hx2: this.formData.industry[1] || 666, //协会二级行业
 				setup_time: this.formData.establishTime, //协会成立时间
 			}
 			

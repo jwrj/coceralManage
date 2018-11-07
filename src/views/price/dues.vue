@@ -7,7 +7,7 @@
 				<h1>会费情况-查看岗位的缴费情况</h1>
 			</div>
 			
-			<table-list :tableColumns="tableColumns" :seekShow="false" :tableData="personnelList" @on-btn-click="btnClick">
+			<table-list :tableColumns="tableColumns" :seekShow="false" :tableData="personnelList" @on-btn-click="btnClick" :modalTitle="modalTitle">
 				
 				<div slot="header" style="display: flex;">
 					
@@ -64,6 +64,8 @@
 		},
 		data() { //数据
 			return {
+				
+				modalTitle: '',
 				
 				payInfo: {},//详情数据信息
 				
@@ -124,7 +126,7 @@
 						handle: [
 							{
 								name: '查看详情',
-								key: 0,
+								key: 'details',
 								modalShow: true,
 							}
 						],
@@ -138,10 +140,9 @@
 		methods: { //方法
 			
 			btnClick(val){//表格按钮事件
-				this.payInfo = {
-					gw_id: Number(val.params.row.gw_id),
-					jie_id: Number(val.params.row.jie_id),
-					memberInfo: val.params.row.memberInfo
+				if(val.key === 'details'){//详情
+					this.modalTitle = '（'+ val.params.row.memberInfo.person_name +'）的会费详情';
+					this.payInfo = val.params.row;
 				}
 			},
 			

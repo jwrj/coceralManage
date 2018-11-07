@@ -1,7 +1,7 @@
 <template>
 	
 	<div>
-		{{postValue}}
+		<!--{{postValue}}
 		<Card style="margin-bottom: 16px;">
 	    	
 	    	<h1 slot="title">岗位选择器</h1>
@@ -12,7 +12,6 @@
 		    	
 	    </Card>
 		
-		<!--表格列表-->
 		<Card style="position: initial;">
 			
 			<h1 slot="title">表格列表</h1>
@@ -37,17 +36,15 @@
 			
 		</Card>
 		
-		<!--岗位配置-->
 		<Card style="margin-top: 16px;">
 			
 			<h1 slot="title">岗位配置</h1>
 			
 			<post-config></post-config>
 			
-		</Card>
+		</Card>-->
 		
-		<!--文件管理-->
-		<Card style="margin-top: 16px;height: 600px;">
+		<Card style="margin-top: 16px;">
 			
 			<h1 slot="title">文件管理</h1>
 			
@@ -55,7 +52,7 @@
 			
 		</Card>
 		
-	    <Card style="margin-top: 16px;">
+	    <!--<Card style="margin-top: 16px;">
 	    	
 	    	<h1 slot="title">富文本编辑器</h1>
 	    	
@@ -63,7 +60,7 @@
 	    	
 	    	<UEditor :configs='editor_config' @up_editor_content="upEditorContent"></UEditor>
 	    	
-	    </Card>
+	    </Card>-->
 	    
 	</div>
 	

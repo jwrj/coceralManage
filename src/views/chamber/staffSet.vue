@@ -47,7 +47,7 @@
 								<div class="cardTitle">
 									<Button @click="memberListShow = true" type="primary" size="small">从会员列表选择</Button>
 									<Tooltip max-width="200" :transfer="true" placement="top" style="margin-left: 10px;">
-										<Icon type="ios-alert-outline" size="20" style="cursor: pointer;" />
+										<Icon type="md-information-circle" size="18" color="#2db7f5" style="cursor: pointer;" />
 										<div slot="content">
 											<span>标签为</span>
 											<span style="color: #19be6b;">绿色</span>
@@ -77,18 +77,18 @@
 			<Divider orientation="left" style="font-size: 16px;">
 				<span>人员列表</span>
 				<Tooltip max-width="200" content="根据上面选择的岗位和届次列出对应数据，默认列出全部数据" :transfer="true" placement="top" style="margin-left: 6px;">
-					<Icon type="ios-alert-outline" size="20" style="cursor: pointer;" />
+					<Icon type="md-information-circle" size="18" color="#2db7f5" style="cursor: pointer;" />
 			    </Tooltip>
 			</Divider>
 			
 			<div style="margin-bottom: 10px;">
-				<Tag color="geekblue">
+				<Tag color="cyan">
 					<span v-for="(item, i) in postTextArr" style="display: inline-block;">
 						<Icon v-if="i != 0" type="md-arrow-forward" />
 						<span>{{item}}</span>
 					</span>
 				</Tag>
-				<Tag color="geekblue">
+				<Tag color="cyan">
 					<span>{{jieName}}</span>
 				</Tag>
 			</div>
