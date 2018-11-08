@@ -52,7 +52,7 @@
 				<!--内容-->
 				<Content style="position: relative;">
 					<div class="main-content-box">
-						<router-view v-if="isRouterAlive" />
+						<router-view v-if="isRouterAlive" style="width: 85%;" />
 					</div>
 				</Content>
 				

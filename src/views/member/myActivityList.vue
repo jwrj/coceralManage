@@ -2,7 +2,7 @@
 	
 	<div>
 		
-		<Card>
+		<Card dis-hover :bordered="false">
 			
 			<h1 slot="title">活动/会议列表</h1>
 			

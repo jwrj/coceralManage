@@ -2,7 +2,7 @@
 	
 	<div>
 		
-		<Card>
+		<Card dis-hover :bordered="false">
 			
 			<div slot="title" style="display: flex;align-items: center;">
 				<h1>商协会列表</h1>

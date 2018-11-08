@@ -2,7 +2,7 @@
 	
 	<div>
 		
-		<Card>
+		<Card dis-hover :bordered="false">
 			
 			<div slot="title">
 				

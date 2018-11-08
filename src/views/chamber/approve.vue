@@ -2,7 +2,7 @@
 	
 	<div>
 		
-		<Card>
+		<Card dis-hover :bordered="false">
 			
 			<div slot="title" class="title">
 				<h1>会员审批</h1>
@@ -11,6 +11,7 @@
 			<table-list
 			@on-poptip-ok="poptipOk"
 			@on-btn-click="tabBtnClick"
+			:modalTitle="modalTitle"
 			:tableColumns="tableColumns"
 			:tableData="approveList">
 				<div slot="modalContent">
@@ -63,7 +64,9 @@ export default {
     data () {//数据
         return {
         	
-        	detailsInfo: {},
+        	modalTitle: '',//对话框标题
+        	
+        	detailsInfo: {},//详细信息
         	
         	personInfo: {},//身份资料
         	
@@ -320,6 +323,7 @@ export default {
     	
     	tabBtnClick(val){
     		if(val.key === 'details'){//详情
+    			this.modalTitle = '（'+ val.params.row.person_name +'）详细资料';
     			$ax.getAjaxData('manage.Member/applyInfo', {
     				apply_id: val.params.row.id,
     			}, res => {

@@ -2,7 +2,7 @@
 
 	<div>
 		
-		<Card>
+		<Card dis-hover :bordered="false">
 			
 			<div slot="title">
 				<h1>{{`给${coceralName}配置届次`}}</h1>

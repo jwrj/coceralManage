@@ -2,13 +2,40 @@
 	
 	<div>
 		
-		<Card :dis-hover="!styleShow" :bordered="styleShow" :padding="styleShow ? 16 : 0">
+		<Card dis-hover :bordered="false" :padding="styleShow ? 16 : 0">
 			
 			<h1 v-if="titleShow" slot="title">会员列表</h1>
 			
-			<table-list :tableColumns="tableColumns" :tableData="memberList" @select-change="tabSelectChange">
+			<table-list
+			@on-btn-click="tabBtnClick"
+			:modalTitle="modalTitle"
+			:tableColumns="tableColumns"
+			:tableData="memberList"
+			@select-change="tabSelectChange"
+			>
 				<div slot="header" style="width: 100%;display: flex;align-items: center;">
 					<post-casc></post-casc>
+				</div>
+				<div slot="modalContent">
+					<Form class="my-form" :label-width="80">
+						<Row>
+							<Col v-for="item in showData" :key="item.value" :xs="24" :sm="12" :md="8" :lg="6">
+								<FormItem :label="item.label+'：'">
+										<p v-if="item.value === 'brithday'">
+											{{getLocalTime(personInfo[item.value])}}
+										</p>
+										<div v-else-if="item.select">
+											<p v-for="seleItem in item.select" v-if="seleItem.value === personInfo[item.value]">
+												{{seleItem.label}}
+											</p>
+										</div>
+										<p v-else>
+											{{personInfo[item.value]}}
+										</p>
+						        </FormItem>
+					        </Col>
+						</Row>
+					</Form>
 				</div>
 			</table-list>
 			
@@ -55,6 +82,175 @@ export default {
     data () {//数据
     	return {
     		
+    		modalTitle: '',//对话框标题
+        	
+        	personInfo: {},//身份资料
+        	
+        	showData: [
+        		{
+        			label: '真实姓名',
+        			value: 'truest_name',
+        		},
+        		{
+        			label: '性别',
+        			value: 'sex',
+        			select: [
+        				{
+        					label: '男',
+        					value: '1'
+        				},
+        				{
+        					label: '女',
+        					value: '2'
+        				}
+        			],
+        		},
+        		{
+        			label: '出生年月',
+        			value: 'brithday',
+        		},
+        		{
+        			label: '证件类型',
+        			value: 'card_type',
+        			select: [
+        				{
+        					label: '身份证',
+        					value: '1'
+        				},
+        				{
+        					label: '居住证',
+        					value: '2'
+        				},
+        				{
+        					label: '单身证',
+        					value: '3'
+        				},
+        			],
+        		},
+        		{
+        			label: '证件号码',
+        			value: 'card_num',
+        		},
+        		{
+        			label: '国籍',
+        			value: 'nation',
+        			select: [
+        				{
+        					label: '中国',
+        					value: '80'
+        				},
+        				{
+        					label: '美国',
+        					value: '81'
+        				},
+        				{
+        					label: '英国',
+        					value: '82'
+        				},
+        			],
+        		},
+        		{
+        			label: '民族',
+        			value: 'mz',
+        			select: [
+        				{
+        					label: '汉族',
+        					value: '1'
+        				},
+        				{
+        					label: '壮族',
+        					value: '2'
+        				},
+        				{
+        					label: '苗族',
+        					value: '3'
+        				},
+        			],
+        		},
+        		{
+        			label: '籍贯',
+        			value: 'hometown',
+        		},
+        		{
+        			label: '工作电话',
+        			value: 'work_phone',
+        		},
+        		{
+        			label: '手机号码',
+        			value: 'touch_phone',
+        		},
+        		{
+        			label: '微信账号',
+        			value: 'wechat',
+        		},
+        		{
+        			label: 'QQ账号',
+        			value: 'qq',
+        		},
+        		{
+        			label: '现在住址',
+        			value: 'address',
+        		},
+        		{
+        			label: '学历',
+        			value: 'education',
+        			select: [
+        				{
+        					label: '本科',
+        					value: '1'
+        				},
+        				{
+        					label: '专科',
+        					value: '2'
+        				},
+        				{
+        					label: '研究生',
+        					value: '3'
+        				},
+        			],
+        		},
+        		{
+        			label: '政治面貌',
+        			value: 'politics',
+        			select: [
+        				{
+        					label: '群众',
+        					value: '1'
+        				},
+        				{
+        					label: '团员',
+        					value: '2'
+        				},
+        				{
+        					label: '党员',
+        					value: '3'
+        				},
+        			],
+        		},
+        		{
+        			label: '婚姻状况',
+        			value: 'marriage',
+        			select: [
+        				{
+        					label: '已婚',
+        					value: '1'
+        				},
+        				{
+        					label: '未婚',
+        					value: '2'
+        				}
+        			],
+        		},
+        		{
+        			label: '身高(cm)',
+        			value: 'height',
+        		},
+        		{
+        			label: '体重(kg)',
+        			value: 'weigh',
+        		},
+        	],
+    		
     		tableColumns: [
     			{
     				width: 60,
@@ -97,6 +293,8 @@ export default {
     				handle: [
     					{
     						name: '详细资料',
+    						key: 'details',
+    						modalShow: true,
     					},
     				],
     			}
@@ -107,6 +305,19 @@ export default {
     	}
     },
     methods: {//方法
+    	
+    	tabBtnClick(val){
+    		if(val.key === 'details'){//详情
+    			this.modalTitle = '（'+ val.params.row.person_info.truest_name +'）详细资料';
+    			$ax.getAjaxData('manage.Member/memberInfo', {
+    				mid: val.params.row.id,
+    			}, res => {
+    				if(res.code == 0){
+    					this.personInfo = res.data[0].person_info;
+    				}
+    			});
+    		}
+    	},
     	
     	tabSelectChange(data){//勾选改变时
     		this.$emit('on-select-change', data);
@@ -119,6 +330,10 @@ export default {
     			}
     		});
     	},
+    	
+    	getLocalTime(nS){//时间戳转字符到日期
+			return new Date(parseInt(nS) * 1000).toLocaleString().replace(/\//g, "-").replace(/[上午|下午]([\d\:]*)/g, "");
+		},
     	
     },
     computed: {//计算属性
@@ -179,5 +394,7 @@ export default {
 </script>
 
 <style scoped lang="less">
-
+	.my-form .ivu-form-item{
+		margin-bottom: 0px !important;
+	}
 </style>

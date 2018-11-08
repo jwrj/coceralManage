@@ -2,7 +2,7 @@
 	
 	<div style="height: 100%;background: #001529;display: flex;">
 		
-		<Card style="width: 400px;margin: auto;">
+		<Card dis-hover :bordered="false" style="width: 400px;margin: auto;">
 			
 			<Form ref="formInline" :model="formInline" :rules="ruleInline" :label-width="70">
 				
@@ -47,8 +47,8 @@
 	        :footer-hide="true"
 	       	>
 	       	
-	       	<Button slot="close">关闭</Button>
-	        
+	    	<Icon slot="close" color="#ed4014" size="26" type="md-close-circle" />
+	    	
 	        <join-chamber v-if="openType === 1" :isModule="true"></join-chamber>
 	        
 			<create-chamber v-if="openType === 2" :cardStyle="false" @on-create-succeed="createSucceed"></create-chamber>

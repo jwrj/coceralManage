@@ -48,19 +48,19 @@
 			
 			<h1 slot="title">文件管理</h1>
 			
-			<file-manage currentRouteName="comPage"></file-manage>
+			<file-manage actionId="21"></file-manage>
 			
 		</Card>
 		
-	    <!--<Card style="margin-top: 16px;">
+	    <Card style="margin-top: 16px;">
 	    	
 	    	<h1 slot="title">富文本编辑器</h1>
 	    	
 	    	{{editor_content}}
 	    	
-	    	<UEditor :configs='editor_config' @up_editor_content="upEditorContent"></UEditor>
+	    	<UEditor :defaultContent="UEdefaultContent" :configs='editor_config' @up_editor_content="upEditorContent"></UEditor>
 	    	
-	    </Card>-->
+	    </Card>
 	    
 	</div>
 	
@@ -101,6 +101,8 @@ export default {
 	},
     data () {//数据
         return {
+        	
+        	UEdefaultContent: '<p style="color:silver">文明发言,如有违反，后果将由您个人自行承担。</p>',
         	
         	postValue: [],
         	

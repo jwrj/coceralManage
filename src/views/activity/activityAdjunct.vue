@@ -2,44 +2,18 @@
 	
 	<div>
 		
-		<!--<Row :gutter="16" type="flex">
-			<Col span="12">
-				<Card dis-hover :bordered="false">
-					<h1 slot="title">申请加入商协会</h1>
-					<join-chamber :isModule="true"></join-chamber>
-				</Card>
-			</Col>
-			<Col span="12">
-				<Card dis-hover :bordered="false" style="height: 100%;">
-					<h1 slot="title">我的申请记录</h1>
-					<apply-record></apply-record>
-				</Card>
-			</Col>
-		</Row>-->
-		
-		<Card dis-hover :bordered="false">
-			<h1 slot="title">申请加入商协会</h1>
-			<join-chamber :isModule="true"></join-chamber>
-		</Card>
-		
-		<Card dis-hover :bordered="false" style="margin-top: 20px;">
-			<h1 slot="title">我的申请记录</h1>
-			<apply-record></apply-record>
-		</Card>
-		
+		<file-manage :actionId="dataInfo.id"></file-manage>
 		
 	</div>
 	
 </template>
 
 <script>
-import joinChamber from '@/views/user/joinChamber.vue';
-import applyRecord from '@/views/user/applyRecord.vue';
+import fileManage from '@/components/fileManage/file-manage.vue'; //文件管理
 export default {
-	name: 'home',
+	name: 'activityAdjunct',
 	components:{//组件模板
-		joinChamber,
-		applyRecord
+		fileManage
 	},
 	props:{//组件道具（参数）
 		/* ****属性用法*****
@@ -49,6 +23,9 @@ export default {
 		 * 默认值 default: ''
 		 * 
 		 */
+		dataInfo: {
+			type: Object,
+		},
 	},
     data () {//数据
         return {
@@ -59,7 +36,7 @@ export default {
     	
     },
     computed: {//计算属性
-        
+        	
     },
     watch: {//监测数据变化
     	
@@ -83,7 +60,7 @@ export default {
 			//async、await错误处理
 			try {
 				
-				/**
+				/*
 				 * 
 				 * ------串行执行---------
 				 * console.log(await getAjaxData());
@@ -96,7 +73,7 @@ export default {
 				 * ...
 				*/
 				next(vm => {
-				
+					
 				});
 				
 			} catch(err) {
@@ -111,4 +88,5 @@ export default {
 </script>
 
 <style scoped lang="less">
+
 </style>

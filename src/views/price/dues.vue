@@ -1,7 +1,7 @@
 <template>
 
 	<div>
-		<Card>
+		<Card dis-hover :bordered="false">
 			
 			<div slot="title">
 				<h1>会费情况-查看岗位的缴费情况</h1>

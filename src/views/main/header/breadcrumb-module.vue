@@ -34,7 +34,7 @@
 			        </a>
 			        <DropdownMenu slot="list">
 			            <DropdownItem name="identity">切换身份</DropdownItem>
-			            <DropdownItem name="logOut">退出登录</DropdownItem>
+			            <!--<DropdownItem name="logOut">退出登录</DropdownItem>-->
 			        </DropdownMenu>
 			    </Dropdown>
 			</div>

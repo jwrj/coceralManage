@@ -2,11 +2,14 @@
 	
 	<div>
 		
-		<Card>
+		<Card dis-hover :bordered="false">
 			
 			<h1 slot="title">会员列表</h1>
 			
-			<table-list :tableColumns="tableColumns" :tableData="memberDataList">
+			<table-list
+			:tableColumns="tableColumns"
+			:tableData="memberDataList"
+			>
 			</table-list>
 			
 		</Card>
@@ -38,10 +41,6 @@ export default {
         	tableColumns: [
     			{
     				width: 60,
-    				type: 'selection'
-    			},
-    			{
-    				width: 60,
     				title: 'ID',
     				key: 'id'
     			},
@@ -70,16 +69,6 @@ export default {
 						return h('span', getLocalTime(params.row.addtime))
 					}
     			},
-    			{
-    				align: 'center',
-    				width: 100,
-    				title: '操作',
-    				handle: [
-    					{
-    						name: '详细资料',
-    					},
-    				],
-    			}
     		],
         	
         	memberDataList: [],

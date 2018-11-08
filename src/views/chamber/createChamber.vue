@@ -2,7 +2,7 @@
 
 	<div>
 		
-		<Card dis-hover :bordered="cardStyle" :padding="cardStyle ? 16 : 0">
+		<Card dis-hover :bordered="false" :padding="cardStyle ? 16 : 0">
 			
 			<h1 slot="title" v-if="cardStyle">创建商/协会</h1>
 			
@@ -264,20 +264,9 @@ export default {
                 	$ax.getAjaxData('user.Comm/addOrganize', Object.assign({}, publicData, Datatype()), res => {
 						if(res.code == 0){
 							this.$emit('on-create-succeed');
-							this.formData = {
-								nature: 1,//性质
-								name: '',//名称
-								superior: '',//上级
-								domicile: [],//注册地
-								originPlace: [],//所属地
-								industry: [],//行业
-								establishTime: '',//成立时间
-								linkman: '',//联系人
-								linkmanPhone: '',//联系人电话
-								website: '',//网址
-								vipcn: '',//公众号
-								introduce: ''//介绍
-							};
+							
+							this.$refs[name].resetFields();
+							
 							this.$Message.success('创建成功!');
 						}
 					});

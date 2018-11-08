@@ -195,16 +195,6 @@ export default [
 		component: Main,
 		children: [
 			{
-				path: 'activityList',
-				name: 'activityList',
-				meta: {
-					title: '活动/会议列表',
-					icon: 'md-alarm',
-					access: ['admin']
-				},
-				component: () => import('@/views/activity/activityList.vue')
-			},
-			{
 				path: 'createActivity',
 				name: 'createActivity',
 				meta: {
@@ -214,7 +204,16 @@ export default [
 				},
 				component: () => import('@/views/activity/createActivity.vue')
 			},
-
+			{
+				path: 'activityList',
+				name: 'activityList',
+				meta: {
+					title: '活动/会议列表',
+					icon: 'md-alarm',
+					access: ['admin']
+				},
+				component: () => import('@/views/activity/activityList.vue')
+			},
 		]
 	},
 	{
@@ -255,7 +254,7 @@ export default [
 				meta: {
 					title: '组件',
 					icon: 'md-alarm',
-					access: ['admin']
+					access: ['admin'],
 				},
 				component: () => import('@/views/testPages/comPage.vue')
 			},

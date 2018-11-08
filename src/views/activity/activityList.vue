@@ -2,16 +2,22 @@
 
 	<div>
 		
-		<Card>
+		<Card dis-hover :bordered="false">
 			
-			<div slot="title" class="cardTitle">
-				<h1>活动/会议列表</h1>
-				<Button style="margin-left: 10px;" type="primary" size="small" to="/activity/createActivity">创建活动/会议</Button>
-			</div>
+			<h1 slot="title">活动/会议列表</h1>
 			
-			<table-list @on-btn-click="btnClick" :tableColumns="tableColumns" :tableData="ActivityDataList" :modalTitle="modalTitle">
+			<table-list
+			@on-btn-click="btnClick"
+			:tableColumns="tableColumns"
+			:tableData="ActivityDataList"
+			:modalTitle="modalTitle">
+				<div slot="header">
+					<Button type="primary" to="/activity/createActivity">创建活动/会议</Button>
+				</div>
 				<div slot="modalContent">
-					<activity-details v-if="openType === 'details' || openType === 'edit'" :dataInfo="dataInfo"></activity-details>
+					<activity-details v-if="openType === 'details'" :dataInfo="dataInfo"></activity-details>
+					<activity-edit v-if="openType === 'edit'" :dataInfo="dataInfo"></activity-edit>
+					<activity-adjunct v-if="openType === 'adjunct'" :dataInfo="dataInfo"></activity-adjunct>
 					<invitation v-if="openType === 'invite'" :dataInfo="dataInfo"></invitation>
 				</div>
 			</table-list>
@@ -25,6 +31,8 @@
 <script>
 import tableList from '@/components/tableList/table-list.vue'
 import activityDetails from '@/views/activity/activityDetails.vue'
+import activityEdit from '@/views/activity/activityEdit.vue'
+import activityAdjunct from '@/views/activity/activityAdjunct.vue'
 import invitation from '@/views/activity/invitation.vue'
 let isCarryOutHook = false;
 export default {
@@ -32,6 +40,8 @@ export default {
 	components: { //组件模板,
 		tableList,
 		activityDetails,
+		activityEdit,
+		activityAdjunct,
 		invitation
 	},
 	props: { //组件道具（参数）
@@ -84,7 +94,7 @@ export default {
 				},
 				{
 					align: 'center',
-					width: 200,
+					width: 220,
 					title: '操作',
 					handle: [
 						{
@@ -98,7 +108,12 @@ export default {
 							modalShow: true,
 						},
 						{
-							name: '邀请人员',
+							name: '附件',
+							key: 'adjunct',
+							modalShow: true,
+						},
+						{
+							name: '人员',
 							key: 'invite',
 							modalShow: true,
 						},

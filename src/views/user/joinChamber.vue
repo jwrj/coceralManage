@@ -2,7 +2,7 @@
 	
 	<div>
 		
-		<Card :dis-hover="isModule" :bordered="!isModule" :padding="isModule ? 0 : 16">
+		<Card dis-hover :bordered="false" :padding="isModule ? 0 : 16">
 			
 			<div slot="title" class="cardTitle" v-if="!isModule">
 				<h1>申请加入商会</h1>

@@ -3,14 +3,14 @@
 	<div @click="outermostClick">
 		
 		<div>
-			<Button type="primary" size="small" icon="md-add" @click.stop="open">新建文件夹</Button>
+			<Button type="primary" size="small" icon="md-add" @click.stop="open">新建文件夹</Button>&nbsp;
+			<Button type="primary" size="small" icon="md-add" @click.stop="openWjy">添加附件</Button>
 		</div>
 		
 		<div class="file-breadcrumb">
 			<Button @click="returns" v-if="hideRetu" size="small" type="text" icon="md-return-left" style="margin-right: 10px;">
 				返回上级
 			</Button>
-			
 			<Breadcrumb>
 				<template v-for="(item,index) in breadcrumb">
 			        <BreadcrumbItem :to="index != breadcrumb.length-1 ? '?path='+item.path : ''">{{item.name}}</BreadcrumbItem>
@@ -50,10 +50,11 @@
 			<p slot="header">新建文件夹</p>
 			<Form ref="formInstance" :model="formData" :rules="ruleData" :label-width="90">
 				<FormItem label="文件夹名称" prop="folderName">
-			        <Input v-model="formData.folderName" placeholder="输入名称" />
+			        <Input v-model="formData.folderName" clearable placeholder="输入名称" />
 				</FormItem>
 			</Form>
 	        <div slot="footer">
+	            <Button @click="modal = false">取消</Button>
 	            <Button type="primary" @click="addFolder('formInstance')">确定</Button>
 	        </div>
 	    </Modal>
@@ -76,8 +77,8 @@ export default {
 		 * 默认值 default: ''
 		 * 
 		 */
-		currentRouteName: {
-			type: String,
+		actionId: {//活动ID
+			type: [Number, String],
 			required: true
 		},
 		
@@ -111,7 +112,7 @@ export default {
         	
         	currentFile: {},//当前选中的文件数据
         	
-        	pathHistory: [''],//路径记录
+        	pathHistory: ['0'],//路径记录
         	
         	breadcrumb: [//面包屑导航
         		{
@@ -124,210 +125,51 @@ export default {
         	
         	activeName: '',//选中的文件名称
         	
-        	hideRetu: true,//返回上级按钮是否显示
+        	hideRetu: false,//返回上级按钮是否显示
         	
         }
     },
     methods: {//方法
     	
-    	outermostClick(){//最外边的点击事件
-    		this.activeName = '';
-    		//this.currentFolder = {};
-    	},
-    	
-    	returns(){//返回上级
-    		this.$router.go(-1);
-    	},
-    	
-    	open(){//打开弹窗
-    		this.modal = true;
-    	},
-    	
-    	addFolder(name){//新建文件夹
-    		this.$refs[name].validate((valid) => {
-    			if(valid){
-    				let publicFn = (data) => {
-    					let children = data.children;
-		    			children.push({
-		    				name: this.formData.folderName,
-		        			type: 'folder',
-		        			children: [],
-		        			files: []
-		    			});
-		    			this.$set(data, 'children', children);
-		    			this.init(this.$route);
-    				}
-		    		if(Object.keys(this.currentFolder).length <= 0){//根目录
-		    			publicFn(this.fileData);
-		    		}else{
-		    			publicFn(this.currentFolder);
-		    		}
-    			}
-    		});
-    	},
-    	
-    	clickFolder(current,e){//单击事件
-    		if(current.children && current.files){//单击了文件夹
-    			
-    			this.getFileData(21, current.id, current);
-    			
-    			this.currentFolder = current;
-	    		this.pathHistory.push(current.name);//记录路径
-				this.$router.push({
-		    		name: this.currentRouteName,
-		    		query: {
-		    			path: this.pathHistory.join('/')
-		    		}
-		    	});
-    		}else{//单击了文件
-    			this.currentFile = current;
-    			this.activeName = current.name;//选中样式
-    		}
-    		this.$emit('input', [this.currentFolder, this.currentFile]);
-    	},
-    	
-    	dblclickFolder(current){//双击事件
-    		
-    		if(current.children && current.files){//双击了文件夹
-    			
-    		}else{//双击了文件
-    			
-    		}
-	    	
-    	},
-    	
-    	iconType(type){
-    		
-    		let obj = {};
-    		
-    		if(type === 'folder'){
-    			obj = {
-    				icon: 'md-folder',
-    				color: '#ffcd1b'
-    			}
-    		}else if(type === 'txt'){
-    			obj = {
-    				icon: 'md-document',
-    				color: '#19be6b'
-    			}
-    		}else if(type === 'jpg' || type === 'png'){
-    			obj = {
-    				icon: 'md-image',
-    				color: '#5cadff'
-    			};
-    		}
-    		
-        	return obj;
-        	
-        },
-        
-        init(_route){//初始化
-        	let newArr = [];
-    	
-	    	if(!_route.query.path || _route.query.path === '/'){//根目录
-	    		
-	    		this.hideRetu = false;
-	    		
-	      		newArr.push(...this.fileData.children,...this.fileData.files);
-	      		
-	      		this.currentFolder = {};
-	    		
-	    	}else{
-	    		
-	    		this.hideRetu = true;
-	    		
-	    		newArr = this.setShowFileData(_route.query, this.fileData);
-	    		
-	    	}
-	    	
-	    	this.newFileData = newArr;
-	    	
-	    	this.$emit('input', this.currentFolder, this.currentFile);
-        },
-        
-        routeChange(_route){//路由改变时
-        	let newArr = [];
-    		
-    		if(!_route.query.path || _route.query.path === '/'){//根目录
-    			
-    			this.hideRetu = false;
-    			
-    			newArr.push(...this.fileData.children,...this.fileData.files);
-    			
-    			this.pathHistory = [''];
-    			
-    			this.currentFolder = {};
-    			
-    		}else{
-    			
-    			this.hideRetu = true;
-    			
-    			newArr = this.setShowFileData(_route.query, this.fileData);
-    			
-	      		this.pathHistory = _route.query.path.split('/');
-	      			
-    		}
-    		
-      		this.newFileData = newArr;
-      		
-      		this.$emit('input', this.currentFolder, this.currentFile);
-        },
-        
-        setShowFileData(routeQuery, fileData){//设置要显示的文件数据
-        	
-        	let newArr = [];
-        	
-        	if(routeQuery.path && routeQuery.path != ''){
-        		
-	        	let pathArr = routeQuery.path.split('/');
-	    		
-	    		let currentOpenFolder = pathArr[pathArr.length-1];
-	    		
-	    		let isFolder1 = false;
-	    		
-	    		let isFolder2 = true;
-	    		
-	    		let recursion = (obj) => {
-	      			
-	      			if(obj.children && obj.children.length > 0){
-	      				
-	      				obj.children.forEach((item, i, oldArr) => {
-	      					
-	      					if(item.name === currentOpenFolder){
-	      						
-	      						isFolder1 = true;
-	      						
-	        					newArr.push(...item.children,...item.files);
-	        					
-	        					this.currentFolder = oldArr[i];
-	        					
-	      					}else{
-	      						
-	      						isFolder2 = false;
-	      						
-	      					}
-	      					
-	      					recursion(item);
-	      				
-	      				});
-	      				
-	      			}
-	      			
-	      		}
-	      		
-	      		recursion(fileData);
-	      		
-	      		if(!isFolder1 && !isFolder2){
-	      			console.log('文件夹不存在');
-	      		}
-        		
-        	}
-      		
+    	setShowFileData(id, fileData){//设置当前要显示的文件数据
+    		let newArr = [];
+    		let isFolder1 = false;
+    		let isFolder2 = true;
+    		let recursion = (obj) => {
+      			if(obj.children && obj.children.length > 0){
+      				obj.children.forEach((item, i, oldArr) => {
+      					if(item.id == id){
+      						isFolder1 = true;
+        					newArr.push(...item.children,...item.files);
+          					this.currentFolder = oldArr[i];
+      					}else{
+      						isFolder2 = false;
+      					}
+      					recursion(item);
+      				});
+      			}
+      		}
+	      	recursion(fileData);
+      		if(!isFolder1 && !isFolder2){
+      			console.log('文件夹不存在');
+      		}
       		return newArr;
-        	
         },
-        
-        getFileData(action_id, folder_id, current_file_data){//获取文件数据
+    	
+    	init(id){//初始化
+        	let newArr = [];
+	    	if(this.pathHistory.length <= 1){//根目录
+	    		this.hideRetu = false;
+	    		this.currentFolder = {};
+	      		newArr.push(...this.fileData.children,...this.fileData.files);
+	    	}else{
+	    		this.hideRetu = true;
+	    		newArr = this.setShowFileData(id, this.fileData);
+	    	}
+	    	this.newFileData = newArr;
+        },
+    	
+    	getFileData(action_id, folder_id, current_file_data){//获取文件数据
         	$ax.getAllAjaxData([
 	    		{
 	    			url: 'manage.Action/folderList',
@@ -344,11 +186,8 @@ export default {
 	    			}
 	    		}
 	    	], (folderData, fileData) => {
-	    		
 	    		let newChildren = [];
-	    		
 	    		let newFiles = [];
-	    		
 	    		folderData.data.forEach(item => {
 	    			newChildren.push({
 						id: item.id,
@@ -359,7 +198,6 @@ export default {
 	        			files: []
 					});
 				});
-	    		
 	    		fileData.data.forEach(item => {
 					newFiles.push({
 						id: item.id,
@@ -369,14 +207,120 @@ export default {
 	    				type: 'txt',
 					});
 				});
-				
 				current_file_data.children = newChildren;
-				
 				current_file_data.files = newFiles;
-				
-				this.init(this.$route);
-	    		
+				this.init(this.currentFolder.id);
 	    	});
+        },
+    	
+    	returns(){//返回上级
+    		if(this.pathHistory.length >= 2){
+    			let superiorId = this.pathHistory[this.pathHistory.length - 2];
+    			this.pathHistory.splice(this.pathHistory.length-1, 1);
+    			this.init(superiorId);
+    		}
+    	},
+    	
+    	clickFolder(current,e){//单击事件
+    		if(current.children && current.files){//单击了文件夹
+    			this.currentFolder = current;
+    			this.pathHistory.push(current.id);
+    			this.getFileData(this.actionId, current.id, current);
+    		}else{//单击了文件
+    			this.currentFile = current;
+    			this.activeName = current.name;//选中样式
+    		}
+    	},
+    	
+    	dblclickFolder(current){//双击事件
+    		if(current.children && current.files){//双击了文件夹
+    			
+    		}else{//双击了文件
+    			
+    		}
+    	},
+    	
+    	open(){//打开弹窗
+    		this.modal = true;
+    	},
+    	
+    	openWjy(){//打开文件云
+    		
+    	},
+    	
+    	outermostClick(){//最外边的点击事件
+    		this.activeName = '';
+    		this.currentFile = {};
+    	},
+    	
+    	setAddFolder(action_id, fid, folder_name, fileData){//设置新建文件夹提交数据
+    		$ax.getAjaxData('manage.Action/folderAdd', {
+    			action_id: action_id,
+    			fid: fid,
+    			folder_name: folder_name
+    		}, res => {
+    			if(res.code == 0){
+    				let publicFn = (data) => {
+    					let children = data.children;
+		    			children.push({
+		    				id: res.data.id,
+		    				name: this.formData.folderName,
+		        			type: 'folder',
+		        			children: [],
+		        			files: []
+		    			});
+		    			this.$set(data, 'children', children);
+		    			this.init(this.currentFolder.id);
+    				}
+    				publicFn(fileData);
+    				this.modal = false;
+    			}
+    		});
+    	},
+    	
+    	setAddFile(action_id, url, folder_id){//设置添加附件提交数据
+    		$ax.getAjaxData('manage.Action/attachmentAdd', {
+    			action_id: action_id,
+    			url: url,
+    			folder_id: folder_id
+    		}, res => {
+    			if(res.code == 0){
+    				console.log(res.data.id);
+    			}
+    		});
+    	},
+    	
+    	addFolder(name){//新建文件夹
+    		this.$refs[name].validate((valid) => {
+    			if(valid){
+		    		if(this.pathHistory.length <= 1){//根目录
+		    			this.setAddFolder(this.actionId, 0, this.formData.folderName, this.fileData);
+		    		}else{
+		    			this.setAddFolder(this.actionId, this.currentFolder.id, this.formData.folderName, this.currentFolder);
+		    		}
+    			}
+    		});
+    	},
+    	
+    	iconType(type){//显示图标类型
+    		let obj = {};
+    		if(type === 'folder'){
+    			obj = {
+    				icon: 'md-folder',
+    				color: '#ffcd1b'
+    			}
+    		}else if(type === 'txt'){
+    			obj = {
+    				icon: 'md-document',
+    				color: '#19be6b'
+    			}
+    		}else if(type === 'jpg' || type === 'png'){
+    			obj = {
+    				icon: 'md-image',
+    				color: '#5cadff'
+    			};
+    		}
+        	return obj;
         },
         
     },
@@ -385,16 +329,12 @@ export default {
     },
     watch: {//监测数据变化
     	
-    	'$route'(to){
-    		this.routeChange(to);
-    	},
-    	
 	},
     
     //===================组件钩子===========================
     
     created () {//实例被创建完毕之后执行
-    	this.getFileData(21, 0, this.fileData);
+    	this.getFileData(this.actionId, 0, this.fileData);
 	},
     mounted () {//模板被渲染完毕之后执行
     	

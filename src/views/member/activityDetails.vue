@@ -13,7 +13,7 @@
 			<Tag color="default">住宿地址：{{dataInfo.zaddress}}</Tag>
 		</div>
 		
-		<Divider orientation="left" style="font-size: 16px;">详细说明</Divider>
+		<Divider orientation="left" style="font-size: 16px;">会议说明</Divider>
 		
 		<div class="describe" ref="describe"></div>
 		

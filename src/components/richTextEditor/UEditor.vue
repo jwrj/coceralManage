@@ -7,13 +7,23 @@
 </template>
 
 <script>
-	import "../../../public/UEditor/ueditor.config.js";
-	import "../../../public/UEditor/ueditor.all.js";
-	import "../../../public/UEditor/lang/zh-cn/zh-cn.js";
-
+import "../../../public/UEditor/ueditor.config.js";
+import "../../../public/UEditor/ueditor.all.js";
+import "../../../public/UEditor/lang/zh-cn/zh-cn.js";
 export default {
 	name: "UEditor",
-	props: ["configs", "content"],
+	props: {
+		
+		configs: {//配置
+			type: Object,
+		},
+		
+		defaultContent: {//默认内容
+			type: String,
+			default: ''
+		},
+		
+	},
 	data() {
 		return {
 			editor: null //要来保存实例用的,
@@ -147,13 +157,13 @@ export default {
 
 		this.editor.addListener("ready", () => {//编辑器准备就绪后会触发该事件
 			
-			this.editor.setContent(_this.content);
-
+			this.editor.setContent(_this.defaultContent);//默认显示的内容
+			
 		});
 
-		this.editor.addListener("contentChange", () => {
+		this.editor.addListener("contentChange", () => {//编辑内容时触发
 
-			_this.$emit('up_editor_content', _this.editor.getContent()); //向上级组件提交新的数据
+			_this.$emit('up_editor_content', _this.editor.getContent());//发出监听事件
 
 		});
 		
