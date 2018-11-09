@@ -15,6 +15,9 @@
 			:tableColumns="tableColumns"
 			:tableData="approveList">
 				<div slot="modalContent">
+					
+					<Divider orientation="left" style="font-size: 16px;">个人信息</Divider>
+					
 					<Form class="my-form" :label-width="80">
 						<Row>
 							<Col v-for="item in showData" :key="item.value" :xs="24" :sm="12" :md="8" :lg="6">
@@ -23,7 +26,7 @@
 											{{getLocalTime(personInfo[item.value])}}
 										</p>
 										<div v-else-if="item.select">
-											<p v-for="seleItem in item.select" v-if="seleItem.value === personInfo[item.value]">
+											<p v-for="seleItem in item.select" v-if="seleItem.value == personInfo[item.value]">
 												{{seleItem.label}}
 											</p>
 										</div>
@@ -34,6 +37,28 @@
 					        </Col>
 						</Row>
 					</Form>
+					
+					<Divider orientation="left" style="font-size: 16px;">公司信息</Divider>
+					
+					<Form v-if="companyInfo" class="my-form" :label-width="80">
+						<Row>
+							<Col v-for="item in companyField" :key="item.value" :xs="24" :sm="12" :md="8" :lg="6">
+								<FormItem :label="item.label+'：'">
+										<div v-if="item.select">
+											<p v-for="seleItem in item.select" v-if="seleItem.value == companyInfo[item.value]">
+												{{seleItem.label}}
+											</p>
+										</div>
+										<p v-else>
+											{{companyInfo[item.value]}}
+										</p>
+						        </FormItem>
+					        </Col>
+						</Row>
+					</Form>
+					
+					<div v-else style="text-align: center;font-size: 16px;color: #c5c8ce;">暂无信息</div>
+					
 				</div>
 			</table-list>
 			
@@ -69,6 +94,8 @@ export default {
         	detailsInfo: {},//详细信息
         	
         	personInfo: {},//身份资料
+        	
+        	companyInfo: {},//公司信息
         	
         	showData: [
         		{
@@ -235,6 +262,49 @@ export default {
         		},
         	],
         	
+        	companyField: [
+        		{
+        			label: '公司名称',
+        			value: 'name'
+        		},
+        		{
+        			label: '公司行业',
+        			value: 'industry',
+        			select: ['hx1', 'hx2']
+        		},
+        		{
+        			label: '国家',
+        			value: 'nation',
+        			select: [
+        				{
+        					label: '中国',
+        					value: '80'
+        				},
+        				{
+        					label: '美国',
+        					value: '81'
+        				},
+        				{
+        					label: '英国',
+        					value: '82'
+        				},
+        			]
+        		},
+        		{
+        			label: '公司地址',
+        			value: 'address',
+        			select: ['provice', 'city', 'county']
+        		},
+        		{
+        			label: '企业官网',
+        			value: 'website'
+        		},
+        		{
+        			label: '主营业务',
+        			value: 'business'
+        		},
+        	],
+        	
         	tableColumns: [
     			{
     				width: 60,
@@ -330,6 +400,7 @@ export default {
     				if(res.code == 0){
     					this.detailsInfo = res.data;
     					this.personInfo = res.data.person_info;
+    					this.companyInfo = res.data.company_info;
     				}
     			});
     		}

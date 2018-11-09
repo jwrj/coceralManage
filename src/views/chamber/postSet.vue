@@ -2,11 +2,11 @@
 	
 	<div>
 		
-		<Card dis-hover :bordered="false" style="width: 50%;">
+		<Card dis-hover :bordered="false">
 			
 			<h1 slot="title">岗位配置</h1>
 			
-			<div style="width: 100%;">
+			<div style="width: 70%;">
 				
 				<Tree :data="treeData" :render="renderContent" empty-text="还没有配置岗位"></Tree>
 		
