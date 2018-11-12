@@ -162,7 +162,14 @@ export default {
 //				this.$refs.menuInstance.updateActiveName();
 //			});
 			
-			return openNamesArr;
+			//全部展开
+			let arr = [];
+			this.menuList.forEach(item => {
+				arr.push(item.name);
+			});
+			return arr
+			
+			//return openNamesArr;
 			
 		},
 		

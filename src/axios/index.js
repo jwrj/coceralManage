@@ -3,6 +3,7 @@
  */
 
 import Vue from 'vue'
+import { router } from '../router'
 import axios from 'axios';
 const qs = require('qs');//axios自带qs插件
 const vm = new Vue();
@@ -67,7 +68,7 @@ axios.interceptors.response.use(
 		
 		if(_res.data.code){
 			
-			if(_res.data.code != 0){
+			if(_res.data.code != 0 && _res.data.code != 2081){
 				vm.$Message.warning(_res.data.msg);
 			}
 		
@@ -80,6 +81,9 @@ axios.interceptors.response.use(
 					sessionStorage.removeItem('tagNaveList');
 					sessionStorage.removeItem('userAccess');
 					sessionStorage.removeItem('myCompanyList');
+					router.replace({
+						name: 'mainLogin'
+					});
 					break;
 				case 2083://管理员未登录
 					sessionStorage.removeItem('identityType');

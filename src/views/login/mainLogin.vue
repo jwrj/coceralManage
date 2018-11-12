@@ -102,10 +102,10 @@ export default {
 				}
 
 			}catch (err) {
+				console.log(err);
 				next(vm => {
 	    			vm.spinShow = false;
 	    		});
-	    		console.log(err);
 			}
 			
 			next();
