@@ -5,9 +5,7 @@ const mainFrame = {
 	
 	state: {//数据
 		
-		menuList: [],//菜单列表
-		
-		menuChildrenList: [],
+		isCollapsed: false,
 		
 		tagNavList: [],//tag标签列表
 		
@@ -15,14 +13,11 @@ const mainFrame = {
 		
 		breadCrumbList: [],//面包屑导航列表
 		
+		menuList: [],//菜单列表
+		
 	},
 	
 	mutations: { //事件集,mutation是同步的
-		
-		getMenuList(state){//获取菜单列表
-			let userAccess = sessionStorage.userAccess;
-			state.menuList = getMenuByRouter(routers, (userAccess ? userAccess.split(',') : false));
-		},
 		
 		setBreadCrumb (state, routeMatched) {//设置面包屑导航
 			
@@ -74,11 +69,18 @@ const mainFrame = {
 			
 		},
 		
+		getMenuList(state){//获取菜单列表
+			let userAccess = sessionStorage.userAccess;
+			state.menuList = getMenuByRouter(routers, (userAccess ? userAccess.split(',') : false));
+		},
+		
 	},
 	
 	getters: {//计算属性
 		
-		//menuList: (state, getters) => getMenuByRouter(routers, window.USE_RACCESS),//获取菜单列表
+//		menuList: (state, getters) => {//获取菜单列表
+//			return getMenuByRouter(routers, sessionStorage.userAccess.split(','));
+//		},
 		
 	},
 	

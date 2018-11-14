@@ -6,11 +6,11 @@
 		height: 100vh;
 	}
 	.layout-header-bar {
-		position: relative;
 		padding: 0 !important;
 		height: auto !important;
 		line-height: initial !important;
-		background: #001529;
+		background: #fff;
+		box-shadow: 0 1px 1px rgba(0, 0, 0, .1);
 	}
 	.main-content-box{
 		width: 100%;
@@ -22,65 +22,41 @@
 		top: 0;
 		left: 0;
 	}
-	.menu-collapsed-icon {
-		text-align: center;
-		width: 40px;
-		height: 40px;
-		line-height: 40px;
-		position: absolute;
-		right: -19px;
-		margin: auto;
-		top: 0;
-		bottom: 0;
-		border-radius: 100px;
-		background-color: rgba(0,0,0,.4);
-		cursor: pointer;
-		z-index: 99;
-	}
-	.rotate-icon {
-		transform: rotate(-180deg);
-	}
 </style>
 
 <template>
 
-	<div style="height: 100%;">
+	<div class="layout">
 
-		<Layout style="height: 100%;">
+		<Layout>
 			
-			<!--头部菜单-->
-			<Header class="layout-header-bar">
-				<header-menu :menuList="menuList" @on-header-click-btn="headerClickBtn" @on-coceral-change="coceralChange"></header-menu>
-			</Header>
-			<!--头部菜单-->
+			<!--左侧菜单-->
+			<Sider ref="siderInstance" hide-trigger collapsible :collapsed-width="64" v-model="isCollapsed" style="height: 100vh;z-index: 1000;">
+				<div style="height:50px;line-height:50px;color: #fff;padding: 0 5px;text-align: center;font-size: 24px;overflow: hidden;margin: 10px;">商会管理系统</div>
+				<menu-sider ref='sideMenu' :menuList="menuList" :isCollapsed="isCollapsed"></menu-sider>
+			</Sider>
 			
-			<!--下侧-->
-			<Layout style="overflow: hidden;height: 100%;">
+			<!--右侧-->
+			<Layout style="overflow: hidden;">
 				
-				<!--菜单-->
-				<Sider ref="siderInstance" hide-trigger collapsible :collapsed-width="64" v-model="isCollapsed" style="height: 100%;position: relative;">
-					<Icon
-					color="#fff"
-					@click.native="collapsedSider"
-					:class="{'rotate-icon': isCollapsed}"
-					class="menu-collapsed-icon"
-					type="ios-arrow-back"
-					size="28">
-					</Icon>
-					<menu-sider ref='sideMenu' :menuList="$store.state.app.menuChildrenList" :isCollapsed="isCollapsed"></menu-sider>
-				</Sider>
-				<!--菜单-->
+				<!--头部-->
+				<Header class="layout-header-bar">
+					<div style="height: 100%;">
+						<!--面包屑导航-->
+						<breadcrumb-module :breadCrumbList="breadCrumbList" :isCollapsed="isCollapsed" @clickIcon="collapsedSider" @on-coceral-change="coceralChange"></breadcrumb-module>
+						<!--tag标签导航-->
+						<tag-module :tagList="tagNavList"></tag-module>
+					</div>
+				</Header>
 				
 				<!--内容-->
 				<Content style="position: relative;">
 					<div class="main-content-box">
-						<router-view v-if="isRouterAlive" />
+						<router-view v-if="isRouterAlive" style="width: 85%;" />
 					</div>
 				</Content>
-				<!--内容-->
 				
 			</Layout>
-			<!--下侧-->
 			
 		</Layout>
 
@@ -92,7 +68,9 @@
 	
 import menuSider from './menu/menu-sider.vue'
 
-import headerMenu from './header/header-menu.vue'
+import breadcrumbModule from './header/breadcrumb-module.vue';
+
+import tagModule from './header/tag-module.vue';
 
 import { getNewTagList } from '@/toolBox';
 
@@ -102,7 +80,8 @@ export default {
 	name: 'Main',
 	components: { //组件模板
 		menuSider,
-		headerMenu,
+		breadcrumbModule,
+		tagModule,
 	},
 	props: { //组件道具（参数）
 		/* ****属性用法*****
@@ -118,7 +97,7 @@ export default {
 			
 			isCollapsed: false,
 			
-			isRouterAlive: true,
+			isRouterAlive: true
 			
 		}
 	},
@@ -135,16 +114,12 @@ export default {
 			this.$refs.siderInstance.toggleCollapse();
 		},
 		
-		headerClickBtn(){//点击头部导航按钮
-			this.$refs.sideMenu.updateMenu();
-		},
-		
 		reload(){//重载路由
 	    	this.isRouterAlive = false
 	    	this.$nextTick(() => (this.isRouterAlive = true));
 	   	},
-		
-		coceralChange(){//切换商会时触发
+	   	
+	   	coceralChange(){//切换商会时触发
 	   		this.reload();
 	   	},
 		
@@ -175,6 +150,10 @@ export default {
 			
 		},
 		
+		isCollapsed(newIo){
+			this.$store.state.app.isCollapsed = newIo;
+		},
+		
 	},
 
 	//===================组件钩子===========================
@@ -194,7 +173,6 @@ export default {
 		
 	},
 	mounted() { //模板被渲染完毕之后执行
-		
 	},
 
 }

@@ -8,8 +8,10 @@ import './less/main.less'
 import './less/basics.less'
 import '../public/js/global.js'
 import xwArea from 'xw-area';
+import xwTable from 'xw-table';
 
 Vue.use(xwArea);
+Vue.use(xwTable);
 Vue.use(iView);
 Vue.config.productionTip = false
 

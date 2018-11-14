@@ -27,7 +27,6 @@
 	<div>
 		
 		<!--展开-->
-		<!--v-show="!isCollapsed"-->
 		<Menu
 		ref="menuInstance"
 		v-show="!isCollapsed"
@@ -35,7 +34,7 @@
 		width="auto"
 		:active-name="$route.meta.highlightName || $route.name"
 		:open-names="currentOpenNames"
-		:accordion="true"
+		:accordion="false"
 		@on-select="menuItemClick"
 		>
 			<template v-for="item in menuList">
@@ -70,13 +69,13 @@
 		<div v-show="isCollapsed">
 			
 			<template v-for="item in menuList">
-				
+			
 				<menu-sider-min v-if="showChildren(item)"  @on-click="moreMenuMinClick" :mainItem="item" :hideTitle="true"></menu-sider-min>
 				
 			    <Tooltip v-else class="my-tooltip" placement="right">
 				    <Icon size="20" color="#fff" :type="item.icon || item.children[0].icon" />
 				    <div slot="content">
-				    	<a class="tooltip-a" @click="singleMenuMinClick(item)">{{item.meta.title || item.children[0].meta.title}}</a>
+				    	<a class="tooltip-a" @click="singleMenuMinClick(item.children[0])">{{item.meta.title || item.children[0].meta.title}}</a>
 				    </div>
 			    </Tooltip>
 			    
@@ -149,13 +148,6 @@ export default {
 			this.$router.push( { name: name } );
 		},
 		
-		updateMenu(){
-			this.$nextTick(() => {
-				this.$refs.menuInstance.updateOpened();
-				this.$refs.menuInstance.updateActiveName();
-			});
-		},
-		
 	},
 	computed: {//计算属性
 		
@@ -165,12 +157,19 @@ export default {
 			
 			openNamesArr.splice(openNamesArr.length-1,1);
 			
-			this.$nextTick(() => {
-				this.$refs.menuInstance.updateOpened();
-				this.$refs.menuInstance.updateActiveName();
-			});
+//			this.$nextTick(() => {
+//				this.$refs.menuInstance.updateOpened();
+//				this.$refs.menuInstance.updateActiveName();
+//			});
 			
-			return openNamesArr;
+			//全部展开
+			let arr = [];
+			this.menuList.forEach(item => {
+				arr.push(item.name);
+			});
+			return arr
+			
+			//return openNamesArr;
 			
 		},
 		

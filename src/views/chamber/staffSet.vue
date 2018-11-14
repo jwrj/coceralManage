@@ -127,6 +127,7 @@
 </template>
 
 <script>
+let isCarryOutHook = false;
 import tableList from '@/components/tableList/table-list.vue'
 import postCasc from '@/components/post/post-casc.vue';
 import userList from '@/views/user/userList.vue';
@@ -343,7 +344,6 @@ export default {
 		},
 		
 		postChange(postId, postData){//岗位选择改变时
-			this.getJieCiData(postId);
 			this.getPersonnelData(postId, 0);
 			let newArr = [];
 			postData.forEach(item => {
@@ -366,17 +366,15 @@ export default {
 			this.getPersonnelData(this.postId, 0);
 		},
 		
-		getJieCiData(postId){//获取届次数据
+		getJieCiList(){//获取届次列表
 			this.jieCiId = 0;
-			$ax.getAjaxData('manage.Organize/jieList', {
-				gw_id: postId && postId.length > 0 ? postId[postId.length-1] : '',//岗位ID
-			}, res => {
+			$ax.getAjaxData('manage.Organize/jieList', {}, res => {
 				if(res.code == 0){
 					let newArr = [];
 					res.data.forEach(item => {
 						newArr.push({
 							label: item.jie_name,
-							value: Number(item.id)
+							value: item.id
 						})
 					});
 					this.jieCiData = newArr;
@@ -406,40 +404,47 @@ export default {
     //===================组件钩子===========================
     
     created () {//实例被创建完毕之后执行
-    	
+    	if(!isCarryOutHook){
+    		this.getJieCiList();
+    	}
 	},
     mounted () {//模板被渲染完毕之后执行
     	
+	},
+	destroyed(){//Vue 实例销毁后调用
+		isCarryOutHook = false;
 	},
 	
 	//=================组件路由勾子==============================
 	
 	beforeRouteEnter (to, from, next) {//在组件创建之前调用（放置页面加载时请求的Ajax）
 		
+		isCarryOutHook = true;
+		
 		(async() => {//执行异步函数
 			
-			//async、await错误处理
 			try {
+
+				let getJieCiList = await $ax.getAsyncAjaxData('manage.Organize/jieList', {});//获取届次列表
 				
-				/*
-				 * 
-				 * ------串行执行---------
-				 * console.log(await getAjaxData());
-				 * ...
-				 * 
-				 * ---------并行：将多个promise直接发起请求（先执行async所在函数），然后再进行await操作。（执行效率高、快）----------
-				 * let abc = getAjaxData();//先执行promise函数
-				 * ...
-				 * console.log(await abc);
-				 * ...
-				*/
 				next(vm => {
-					
+					if(getJieCiList.code == 0){
+						let newArr = [];
+						getJieCiList.data.forEach(item => {
+							newArr.push({
+								label: item.jie_name,
+								value: item.id
+							})
+						});
+						vm.jieCiData = newArr;
+					}
 				});
-				
-			} catch(err) {
+
+			} catch (err) {
 				console.log(err);
 			}
+			
+			next();
 			
 		})();
 		
