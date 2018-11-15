@@ -25,8 +25,8 @@
 		    	></user-list>
 	        </div>
 	        <div slot="footer">
+	        	<Button type="primary" @click="submitInvite">发送邀请</Button>
 	            <Button @click="modal = false">取消</Button>
-	            <Button type="primary" @click="submitInvite">发送邀请</Button>
 	        </div>
 	    </Modal>
 		

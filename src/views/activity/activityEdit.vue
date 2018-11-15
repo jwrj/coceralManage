@@ -7,7 +7,7 @@
 			<Row>
 				
 				<Col span="24">
-					<FormItem label="活动/会议标题" prop="name">
+					<FormItem label="会议活动标题" prop="name">
 						<Input v-model="activity.name"></Input>
 					</FormItem>
 				</Col>
@@ -171,12 +171,14 @@ export default {
 				text: this.editor_content,//会议说明
 			}, res => {
 				if(res.code == 0){
+					this.$emit('on-edit-succeed');//编辑成功回调事件
+					this.$parent.$parent.modalShow = false
 					this.$Message.success('保存成功');
 				}
 			});
 		},
 		
-		handleSubmit(name) {//提交创建
+		handleSubmit(name) {//提交修改
 			this.$refs[name].validate((valid) => {
 				if (valid) {
 					this.setSubmit();

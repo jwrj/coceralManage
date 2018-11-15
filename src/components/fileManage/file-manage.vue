@@ -54,8 +54,8 @@
 				</FormItem>
 			</Form>
 	        <div slot="footer">
+	        	<Button type="primary" @click="addFolder('formInstance')">确定</Button>
 	            <Button @click="modal = false">取消</Button>
-	            <Button type="primary" @click="addFolder('formInstance')">确定</Button>
 	        </div>
 	    </Modal>
 	    

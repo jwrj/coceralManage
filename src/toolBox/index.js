@@ -66,7 +66,7 @@ export const getMenuByRouter = (routerList, userAccess) => {
 			if(((item.children && item.children.length > 0) || (item.meta && item.meta.showAlways)) && accessDecide(item.meta.access, userAccess)){
 				obj.children = getMenuByRouter(item.children, userAccess);
 			}
-			//if(item.meta && item.meta.href) obj.href = item.meta.href
+			if(item.meta && item.meta.href) obj.href = item.meta.href
 			if(accessDecide(item.meta.access, userAccess)) res.push(obj)
 		}
 	})

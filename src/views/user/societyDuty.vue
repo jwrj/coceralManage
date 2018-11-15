@@ -2,35 +2,38 @@
 	
 	<div>
 		
-		
 		<xw-table
 		:tableColumns="tableColumns"
 		:tableData="societyDutyList"
 		:headerShow="false"
 		:footerShow="false"
 		>
-			
 		</xw-table>
 		
-		<Form ref="formInstance" :model="formData" :rules="ruleData" :label-width="80">
-	        <FormItem label="机构名称" prop="organName">
-	            <Input v-model="formData.organName"></Input>
-	        </FormItem>
-	        <FormItem label="职务名称" prop="duty">
-	            <Input v-model="formData.duty"></Input>
-	        </FormItem>
-	        <FormItem label="职务级别" prop="rank">
-	            <Input v-model="formData.rank"></Input>
-	        </FormItem>
-	        <FormItem label="届次名称" prop="jie">
-	            <Input v-model="formData.jie"></Input>
-	        </FormItem>
-	        <FormItem label="备注" prop="remark">
-	            <Input v-model="formData.remark"></Input>
-	        </FormItem>
-	    </Form>
-	    
-	    <Button type="primary" @click="addSocietyDuty('formInstance')">添加社会职务</Button>
+		<Modal v-model="modalShow" width="450">
+	        <p slot="header">添加社会职务</p>
+	        <Form ref="formInstance" :model="formData" :rules="ruleData" :label-width="80">
+		        <FormItem label="机构名称" prop="organName">
+		            <Input v-model="formData.organName"></Input>
+		        </FormItem>
+		        <FormItem label="职务名称" prop="duty">
+		            <Input v-model="formData.duty"></Input>
+		        </FormItem>
+		        <FormItem label="职务级别" prop="rank">
+		            <Input v-model="formData.rank"></Input>
+		        </FormItem>
+		        <FormItem label="届次名称" prop="jie">
+		            <Input v-model="formData.jie"></Input>
+		        </FormItem>
+		        <FormItem label="备注" prop="remark">
+		            <Input v-model="formData.remark"></Input>
+		        </FormItem>
+		    </Form>
+	        <div slot="footer" style="text-align: center;">
+	            <Button type="primary" @click="addSocietyDuty('formInstance')">添加</Button>
+	            <Button @click="modalShow = false">取消</Button>
+	        </div>
+	    </Modal>
 		
 	</div>
 	
@@ -53,6 +56,8 @@ export default {
 	},
     data () {//数据
         return {
+        	
+        	modalShow: false,
         	
         	formData: {
         		organName: '',//机构名称
@@ -123,6 +128,8 @@ export default {
     		}, res => {
     			if(res.code == 0){
     				this.$refs['formInstance'].resetFields();
+    				this.getSocietyDutyList();
+    				this.modalShow = false;
     				this.$Message.success('添加成功');
     			}
     		});

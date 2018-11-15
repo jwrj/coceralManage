@@ -5,7 +5,7 @@
 		<Card dis-hover :bordered="false">
 			
 			<div slot="title">
-				<h1>创建活动/会议</h1>
+				<h1>创建会议活动</h1>
 			</div>
 			
 			<Form ref="activity" :model="activity" :rules="ruleValidate" :label-width="130">
@@ -13,7 +13,7 @@
 				<Row>
 					
 					<Col span="24">
-						<FormItem label="活动/会议标题" prop="name">
+						<FormItem label="会议活动标题" prop="name">
 							<Input v-model="activity.name"></Input>
 						</FormItem>
 					</Col>

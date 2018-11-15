@@ -85,11 +85,12 @@ export default {
 					});
 				});
 				
-				if(myInfo.code === 0){//用户中心已登录
+				if(myInfo.code == 0){//用户中心已登录
 					sessionStorage.userLogin = 1;
+					sessionStorage.userName = myInfo.data.user.name;
 	    			sessionStorage.myCompanyList = JSON.stringify(myInfo.data.company);
 	    			next({name: 'login'});
-				}else if(myInfo.code === 2081){//用户中心未登录跳转到用户中心
+				}else if(myInfo.code == 2081){//用户中心未登录跳转到用户中心
 					$ax.getAjaxData('Oauth/getLoginUrl', {}, res => {
 						if(res.code == 0){
 							window.location.href = res.data.url;

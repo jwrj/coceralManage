@@ -4,7 +4,7 @@
 		
 		<Card dis-hover :bordered="false" :padding="cardStyle ? 16 : 0">
 			
-			<h1 slot="title" v-if="cardStyle">创建商/协会</h1>
+			<h1 slot="title" v-if="cardStyle">创建商会</h1>
 			
 			<Form ref="formInstance" :model="formData" :rules="ruleData" :label-width="100">
 				

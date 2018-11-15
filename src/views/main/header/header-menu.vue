@@ -74,20 +74,25 @@ export default {
     		
     		this.activeName = current.name;
     		
-    		this.$store.state.app.menuChildrenList = [];
-    		
-    		if(current.children && current.children.length <= 1){
-    			this.$router.push({
-    				name: current.children[0].name
-    			});
+    		if(current.href){
+    			window.open(current.href);
     		}else{
     			
-    			this.menuList.forEach(item => {
-					if(item.name == current.name){
-						this.$store.state.app.menuChildrenList = item.children;
-					}
-				});
+    			this.$store.state.app.menuChildrenList = [];
     			
+	    		if(current.children && current.children.length <= 1){
+	    			this.$router.push({
+	    				name: current.children[0].name
+	    			});
+	    		}else{
+	    			
+	    			this.menuList.forEach(item => {
+						if(item.name == current.name){
+							this.$store.state.app.menuChildrenList = item.children;
+						}
+					});
+	    			
+	    		}
     		}
     		
     		this.$emit('on-header-click-btn');

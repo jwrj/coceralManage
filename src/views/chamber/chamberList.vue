@@ -4,22 +4,23 @@
 		
 		<Card dis-hover :bordered="false">
 			
-			<div slot="title" style="display: flex;align-items: center;">
-				<h1>商协会列表</h1>
-				<Button style="margin-left: 10px;" type="primary" size="small" @click="establish">创建商会</Button>
-			</div>
+			<h1 slot="title">商会列表</h1>
 			
-			<table-list :tableColumns="tableColumns" :tableData="tableData" :modalTitle="modalTitle" @on-btn-click="onBtnClick">
+			<xw-table
+			:tableColumns="tableColumns"
+			:tableData="tableData"
+			:modalTitle="modalTitle"
+			@on-btn-click="onBtnClick">
 				
 				<div slot="header" style="margin-right: 10px;display: flex;align-items: center;">
 					
-					<div style="border: 1px solid #dcdee2;margin-right: 10px;padding: 5px 7px;border-radius: 4px;">
+					<!--<div style="border: 1px solid #dcdee2;margin-right: 10px;padding: 5px 7px;border-radius: 4px;">
 						<RadioGroup>
 					        <Radio label="1">全部</Radio>
 					        <Radio label="2">商会</Radio>
 					        <Radio label="3">协会</Radio>
 					    </RadioGroup>
-					</div>
+					</div>-->
 				    
 				    <div style="border: 1px solid #dcdee2;padding: 5px 7px;border-radius: 4px;">
 						<RadioGroup>
@@ -32,54 +33,20 @@
 				
 				<div slot="modalContent">
 					
-					<post-config v-if="btnKey === 'config'" style="width: 50%;"></post-config>
-					
-					<create-chamber v-if="btnKey === 'details'"></create-chamber>
-					
-					<create-chamber v-if="btnKey === 'edit'"></create-chamber>
-					
-					<approve v-if="btnKey === 'approval'"></approve>
-					
-					<user-list v-if="btnKey === 'member'"></user-list>
-					
 				</div>
 				
-			</table-list>
+			</xw-table>
 			
 		</Card>
-		
-		<Modal v-model="modal2" width="80%" :footer-hide="true">
-	        <p slot="header">创建商/协会</p>
-	        <create-chamber></create-chamber>
-	        <!--<div slot="footer">
-	        	
-	        </div>-->
-	    </Modal>
 		
 	</div>
 	
 </template>
 
 <script>
-
-import tableList from '@/components/tableList/table-list.vue';
-
-import postConfig from '@/components/postConfig/post-config.vue';//岗位配置
-
-import createChamber from '@/views/chamber/createChamber.vue';
-
-import approve from '@/views/chamber/approve.vue';
-
-import userList from '@/views/user/userList.vue';
-
 export default {
 	name: 'chamberList',
 	components:{//组件模板
-		tableList,
-		postConfig,
-		createChamber,
-		approve,
-		userList
 	},
 	props:{//组件道具（参数）
 		/* ****属性用法*****
@@ -124,7 +91,7 @@ export default {
     			},
     			{
     				align: 'center',
-    				width: 300,
+    				width: 200,
     				title: '操作',
     				handle: [
     					{
@@ -133,23 +100,13 @@ export default {
     						modalShow: true,
     					},
     					{
-    						name: '编辑',
+    						name: '切换登录',
     						key: 'edit',
     						modalShow: true,
     					},
     					{
-    						name: '审批',
+    						name: '管理',
     						key: 'approval',
-    						modalShow: true,
-    					},
-    					{
-    						name: '岗配',
-    						key: 'config',
-    						modalShow: true,
-    					},
-    					{
-    						name: '会员',
-    						key: 'member',
     						modalShow: true,
     					},
     				],

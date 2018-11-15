@@ -73,6 +73,16 @@ export default [
 				component: () => import('@/views/chamber/createChamber.vue')
 			},
 			{
+				path: 'chamberList',
+				name: 'chamberList',
+				meta: {
+					title: '商会列表',
+					icon: 'md-alarm',
+					access: ['admin']
+				},
+				component: () => import('@/views/chamber/chamberList.vue')
+			},
+			{
 				path: 'postSet',
 				name: 'postSet',
 				meta: {
@@ -216,7 +226,8 @@ export default [
 		meta: {
 			title: '资源信息',
 			icon: 'md-alarm',
-			access: ['admin']
+			access: ['admin'],
+			href: 'http://192.168.2.236:8080'
 		},
 		component: Main,
 		children: [
@@ -279,7 +290,8 @@ export default [
 		meta: {
 			title: '文件管理',
 			icon: 'md-alarm',
-			access: ['admin']
+			access: ['admin'],
+			href: 'http://192.168.2.200:8080'
 		},
 		component: Main,
 		children: [
@@ -360,26 +372,27 @@ export default [
 	
 	
 	
-//	{
-//		path: '/user',
-//		name: 'user',
-//		meta: {
-//			title: '申请加入商会',
-//			icon: 'md-alarm',
-//		},
-//		component: Main,
-//		children: [
-//			{
-//				path: 'joinChamber',
-//				name: 'joinChamber',
-//				meta: {
-//					title: '申请加入商会',
-//					icon: 'md-alarm',
-//				},
-//				component: () => import('@/views/user/joinChamber.vue')
-//			},
-//		]
-//	},
+	{
+		path: '/user',
+		name: 'user',
+		meta: {
+			title: '申请加入商会',
+			icon: 'md-alarm',
+		},
+		component: Main,
+		children: [
+			{
+				path: 'joinChamber',
+				name: 'joinChamber',
+				meta: {
+					title: '申请加入商会',
+					icon: 'md-alarm',
+				},
+				component: () => import('@/views/user/joinChamber.vue')
+			},
+		]
+	},
+	
 //	{
 //		path: '/member1',
 //		name: 'member1',
@@ -526,6 +539,7 @@ export default [
 //			},
 //		]
 //	},
+
 	{
 		path: '/price',
 		name: 'price',

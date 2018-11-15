@@ -67,6 +67,9 @@
 					type="ios-arrow-back"
 					size="28">
 					</Icon>
+					<div style="color: #fff;text-align: center;padding: 8px 0;margin-bottom: 10px;background: #133F66;">
+						<div style="font-size: 16px;">账号 {{userName}}</div>
+					</div>
 					<menu-sider ref='sideMenu' :menuList="$store.state.app.menuChildrenList" :isCollapsed="isCollapsed"></menu-sider>
 				</Sider>
 				<!--菜单-->
@@ -115,6 +118,8 @@ export default {
 	},
 	data() { //数据
 		return {
+			
+			userName: sessionStorage.userName,
 			
 			isCollapsed: false,
 			

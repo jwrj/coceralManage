@@ -93,13 +93,13 @@
 				</Tag>
 			</div>
 			
-			<table-list
+			<xw-table
 			:headerShow="false"
 			:tableColumns="tableColumns"
 			:tableData="personnelList"
 			no-data-text="当前岗位或届次暂无数据"
 			@on-poptip-ok="poptipOk">
-			</table-list>
+			</xw-table>
 			
 		</Card>
 		
@@ -344,7 +344,7 @@ export default {
 		},
 		
 		postChange(postId, postData){//岗位选择改变时
-			this.getPersonnelData(postId, 0);
+			this.getPersonnelData(postId, this.jieCiId);
 			let newArr = [];
 			postData.forEach(item => {
 				newArr.push(item.label);

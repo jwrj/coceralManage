@@ -6,7 +6,9 @@
 			
 			<h1 v-if="titleShow" slot="title">会员列表</h1>
 			
-			<table-list
+			<xw-table
+			:okBtnHide="true"
+			modalCancelBtnName="关闭"
 			@on-btn-click="tabBtnClick"
 			:modalTitle="modalTitle"
 			:tableColumns="tableColumns"
@@ -62,7 +64,7 @@
 					<div v-else style="text-align: center;font-size: 16px;color: #c5c8ce;">暂无信息</div>
 					
 				</div>
-			</table-list>
+			</xw-table>
 			
 		</Card>
 		

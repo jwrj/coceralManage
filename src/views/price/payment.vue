@@ -41,7 +41,11 @@
 		
 		<Divider orientation="left">缴费记录</Divider>
 		
-		<table-list :tableColumns="tableColumns" :tableData="recordData" @on-btn-click="tabBtnClick" @on-poptip-ok="tabPoptipOk">
+		<xw-table
+		:tableColumns="tableColumns"
+		:tableData="recordData"
+		@on-btn-click="tabBtnClick"
+		@on-poptip-ok="tabPoptipOk">
 			<div slot="header" style="width: 100%;display: flex;align-items: center;">
 				<Select v-model="pay" placeholder="请选择缴费类别" style="width: 200px;">
 					<Option value="both">全部</Option>
@@ -51,7 +55,7 @@
 				</Select>
 				<Button style="margin-left: 10px;" type="primary" @click="addRecordBtn">添加缴费记录</Button>
 			</div>
-		</table-list>
+		</xw-table>
 			
 		<Modal v-model="modalShow" width="450">
 			
@@ -65,7 +69,11 @@
 				    <Input v-model="paying.name"></Input>
 				</FormItem>
 				
-				<FormItem label="缴费金额(元)" prop="price">
+				<FormItem label="应缴金额(元)" prop="should_pay">
+					<InputNumber :max="100000" :min="0" v-model="paying.should_pay" style="width: 100%;"></InputNumber>
+				</FormItem>
+				
+				<FormItem label="实缴金额(元)" prop="price">
 					<InputNumber :max="100000" :min="0" v-model="paying.price" style="width: 100%;"></InputNumber>
 				</FormItem>
 				
@@ -78,11 +86,11 @@
 				</FormItem>
 			</Form>
 				
-			<div slot="footer">
-				<Button @click="modalShow = false">取消</Button>
+			<div slot="footer" style="text-align: center;">
 				<Button type="primary" @click="addSubmit('paying')">
 					{{showType === 'add' ? '添加记录' : '保存编辑'}}
 				</Button>
+				<Button @click="modalShow = false">取消</Button>
 			</div>
 			
 		</Modal>
@@ -123,6 +131,7 @@ export default {
 			paying: {
 				name: '',
 				price: null,
+				should_pay: null,
 				way: '',
 				time: '',
 			},
@@ -143,6 +152,14 @@ export default {
 					key: 'name'
 				},
 				{
+					title: '应缴金额(元)',
+					render: (h, params) => {//这里要除回100才是正确的数
+						let shouldPayNum = Number(params.row.should_pay);
+						let newShouldPayNum = shouldPayNum/100;
+						return h('span', newShouldPayNum)
+					}
+				},
+				{
 					title: '实缴金额(元)',
 					render: (h, params) => {//这里要除回100才是正确的数
 						let payedNum = Number(params.row.payed);
@@ -155,7 +172,7 @@ export default {
 					key: 'pay_type'
 				},
 				{
-					title: '时间',
+					title: '缴费时间',
 					render: (h, params) => {
 						return h('span', getLocalTime(params.row.pay_time))
 					}
@@ -192,7 +209,13 @@ export default {
 				price: [{
 					type: 'number',
 					required: true,
-					message: '请填写缴费金额',
+					message: '请填写已缴金额',
+					trigger: 'change'
+				}],
+				should_pay: [{
+					type: 'number',
+					required: true,
+					message: '请填写应缴金额',
 					trigger: 'change'
 				}],
 				name: [{
@@ -225,11 +248,12 @@ export default {
 		},
 		
 		tabBtnClick(val){
-			if(val.key === 'edit'){
+			if(val.key === 'edit'){//编辑
 				this.$refs['paying'].resetFields();
 				this.paying = {
 					name: val.params.row.name,
 					price: Number(val.params.row.payed)/100,
+					should_pay: Number(val.params.row.should_pay)/100,
 					way: val.params.row.pay_type,
 					time: getLocalTime(val.params.row.pay_time),
 				};
@@ -239,7 +263,7 @@ export default {
 			}
 		},
 		
-		addRecordBtn(){
+		addRecordBtn(){//打开添加缴费记录对话框
 			this.$refs['paying'].resetFields();
 			this.modalShow = true;
 			this.showType = 'add';
@@ -255,7 +279,7 @@ export default {
 				mid: this.info.memberInfo.id,//会员ID
 				jie_id: this.info.jie_id,//届ID
 				name: this.paying.name,//费用名
-				should_pay: 1,//应交，单位分
+				should_pay: this.paying.should_pay*100,//应交，单位分
 				pay_time: this.paying.time,//最近交费时间
 				end_time: -1,//到期时间
 				payed: this.paying.price*100,//已交，单位分
@@ -279,7 +303,7 @@ export default {
 						$ax.getAjaxData('manage.Fee/feeEdit', {
 							id: this.editId,
 							name: this.paying.name,//费用名
-							should_pay: 1,//应交，单位分
+							should_pay: this.paying.should_pay*100,//应交，单位分
 							pay_time: this.paying.time,//最近交费时间
 							end_time: -1,//到期时间
 							payed: this.paying.price*100,//已交，单位分

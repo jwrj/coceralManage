@@ -8,10 +8,12 @@
 				<h1>会员审批</h1>
 			</div>
 			
-			<table-list
+			<xw-table
 			@on-poptip-ok="poptipOk"
 			@on-btn-click="tabBtnClick"
 			:modalTitle="modalTitle"
+			:okBtnHide="true"
+			modalCancelBtnName="关闭"
 			:tableColumns="tableColumns"
 			:tableData="approveList">
 				<div slot="modalContent">
@@ -60,7 +62,7 @@
 					<div v-else style="text-align: center;font-size: 16px;color: #c5c8ce;">暂无信息</div>
 					
 				</div>
-			</table-list>
+			</xw-table>
 			
 		</Card>
 		

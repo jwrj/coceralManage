@@ -79,9 +79,9 @@
 				
 				</Form>
 	        </div>
-	        <div slot="footer">
+	        <div slot="footer" style="text-align: center;">
+	        	<Button type="primary" @click="saveEdit('formInstance2')">保存编辑</Button>
 	            <Button @click="editModal = false">取消</Button>
-	            <Button type="primary" @click="saveEdit('formInstance2')">保存</Button>
 	        </div>
 	    </Modal>
 		

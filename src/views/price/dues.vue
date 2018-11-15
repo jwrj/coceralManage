@@ -7,7 +7,14 @@
 				<h1>会费情况-查看岗位的缴费情况</h1>
 			</div>
 			
-			<table-list :tableColumns="tableColumns" :seekShow="false" :tableData="personnelList" @on-btn-click="btnClick" :modalTitle="modalTitle">
+			<xw-table
+			:okBtnHide="true"
+			modalCancelBtnName="关闭"
+			:tableColumns="tableColumns"
+			:seekShow="false"
+			:tableData="personnelList"
+			@on-btn-click="btnClick"
+			:modalTitle="modalTitle">
 				
 				<div slot="header" style="display: flex;">
 					
@@ -34,7 +41,7 @@
 				
   				<pay-ment slot="modalContent" :info="payInfo"></pay-ment>
   				
-			</table-list>
+			</xw-table>
 			
 		</Card>
 
@@ -94,11 +101,15 @@ export default {
     			},
 				{
 					title: '手机号',
-					key: 'mobilePhone'
+					render: (h, params) => {
+    					return h('span', params.row.memberInfo.person_info.touch_phone)
+    				}
 				},
 				{
 					title: '会内职务',
-					key: 'duty'
+					render: (h, params) => {
+    					return h('span', params.row.gw_info.name)
+    				}
 				},
 				{
 					title: '会费状态',
@@ -109,7 +120,7 @@ export default {
 					key: 'PayWay'
 				},
 				{
-					title: '应缴金额-本届',
+					title: '应缴金额',
 					key: 'payableMoney'
 				},
 				{
@@ -118,7 +129,9 @@ export default {
 				},
 				{
 					title: '本届到期时间',
-					key: 'expirationTime'
+					render: (h, params) => {
+    					return h('span', getLocalTime(params.row.jie_info.end_time))
+    				}
 				},
 				{
 					align: 'center',
@@ -148,7 +161,7 @@ export default {
 		},
 		
 		postChange(postId, postData){//岗位选择改变时
-			this.getPersonnelData(postId, 0);
+			this.getPersonnelData(postId, this.jieCiId);
 			let newArr = [];
 			postData.forEach(item => {
 				newArr.push(item.label);

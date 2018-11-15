@@ -18,10 +18,32 @@
 		    </Col>
 	    </Row>
 		
-		<p>本届会费：200</p>
-		<p>应缴：200</p>
-		<p>实缴：100</p>
-		<p>欠缴：100</p>
+		<Card dis-hover :bordered="false" style="margin-top: 16px;">
+			<div slot="title" class="cardTitle">
+				<h1>本届会费统计</h1>
+				
+				<Select v-model="jieCiId" size="small" @on-change="jieCiChange" placeholder="选择届次" style="width:100px;margin-left: 20px;">
+			        <Option v-for="item in jieCiData" :value="item.value" :key="item.value">{{item.label}}</Option>
+			    </Select>
+				
+			</div>
+			
+			<div style="display: flex;margin-left: -16px;">
+				
+				<div v-for="item in membershipDues" style="display: flex;border-radius: 4px;margin-left: 16px;overflow: hidden;">
+					<div :style="{background: item.bgColor}" style="display: flex;padding: 0 10px;border-right: 1px solid #fff;color: #fff;">
+						<span style="width: 14px;margin: auto;font-size: 14px;">{{item.title}}</span>
+					</div>
+					<div style="padding: 0 10px;background: #f8f8f9;">
+						<span style="font-size: 40px;">{{item.money}}</span>
+						<sub>元</sub>
+					</div>
+				</div>
+				
+			</div>
+			
+		</Card>
+		
 		
 		<!--<Card dis-hover :bordered="false">
 			<h1 slot="title">申请加入商协会</h1>
@@ -33,11 +55,14 @@
 			<apply-record></apply-record>
 		</Card>-->
 		
-		<Card>
+		<Card dis-hover :bordered="false" style="margin-top: 16px;">
 			
-			<h1 slot="title">社会职务列表</h1>
+			<div slot="title" class="cardTitle">
+				<h1>社会职务列表</h1>
+				<Button style="margin-left: 20px;" type="primary" size="small" @click="addSocietyDuty">添加社会职务</Button>
+			</div>
 			
-			<society-duty></society-duty>
+			<society-duty ref="societyDuty"></society-duty>
 			
 		</Card>
 		
@@ -51,6 +76,14 @@
 import joinChamber from '@/views/user/joinChamber.vue';
 import applyRecord from '@/views/user/applyRecord.vue';
 import societyDuty from '@/views/user/societyDuty.vue';
+let abs = (val) => {
+	//金额转换 分->元 保留2位小数 并每隔3位用逗号分开 1,234.56
+	let str = (Number(val)/100).toFixed(2) + '';
+	let intSum = str.substring(0,str.indexOf(".")).replace( /\B(?=(?:\d{3})+$)/g, ',' );//取到整数部分
+	let dot = str.substring(str.length,str.indexOf("."))//取到小数部分搜索
+	let ret = intSum + dot;
+	return ret;
+}
 export default {
 	name: 'home',
 	components:{//组件模板
@@ -69,6 +102,10 @@ export default {
 	},
     data () {//数据
         return {
+        	
+        	jieCiData: [],
+        	
+        	jieCiId: '',
         	
         	infoData: [
         		{
@@ -91,9 +128,62 @@ export default {
         		},
         	],
         	
+        	membershipDues: [
+        		{
+        			title: '应缴',
+        			money: '0.00',
+        			bgColor: '#2d8cf0',
+        		},
+        		{
+        			title: '实缴',
+        			money: '0.00',
+        			bgColor: '#19be6b',
+        		},
+        		{
+        			title: '欠缴',
+        			money: '0.00',
+        			bgColor: '#ed4014',
+        		},
+        	],
+        	
         }
     },
     methods: {//方法
+    	
+    	jieCiChange(jieId){//选择届次时触发
+    		this.getMDStatistics(jieId);
+    	},
+    	
+    	getJieCiList(){//获取届次列表
+			$ax.getAjaxData('manage.Organize/jieList', {}, res => {
+				if(res.code == 0){
+					let newArr = [];
+					res.data.forEach(item => {
+						newArr.push({
+							label: item.jie_name,
+							value: item.id
+						})
+					});
+					this.jieCiData = newArr;
+				}
+			});
+		},
+    	
+    	getMDStatistics(jieId){//获取会费统计
+    		$ax.getAjaxData('manage.Count/feeCount', {
+    			jie_id: jieId,
+    		}, res => {
+    			if(res.code == 0){
+    				this.membershipDues[0].money = abs(res.data.should_pay);
+    				this.membershipDues[1].money = abs(res.data.payed);
+    				this.membershipDues[2].money = abs(res.data.unpay);
+    			}
+    		});
+    	},
+    	
+    	addSocietyDuty(){//添加社会职务
+    		this.$refs.societyDuty.modalShow = true;
+    	},
     	
     },
     computed: {//计算属性
@@ -118,28 +208,40 @@ export default {
 		
 		(async() => {//执行异步函数
 			
-			//async、await错误处理
 			try {
+
+				let getJieCiList = await $ax.getAsyncAjaxData('manage.Organize/jieList', {});//获取届次列表
 				
-				/**
-				 * 
-				 * ------串行执行---------
-				 * console.log(await getAjaxData());
-				 * ...
-				 * 
-				 * ---------并行：将多个promise直接发起请求（先执行async所在函数），然后再进行await操作。（执行效率高、快）----------
-				 * let abc = getAjaxData();//先执行promise函数
-				 * ...
-				 * console.log(await abc);
-				 * ...
-				*/
 				next(vm => {
-				
+					if(getJieCiList.code == 0){
+						let newArr = [];
+						getJieCiList.data.forEach(item => {
+							newArr.push({
+								label: item.jie_name,
+								value: item.id
+							})
+						});
+						vm.jieCiData = newArr;
+						if(vm.jieCiData.length > 0){
+							vm.jieCiId = vm.jieCiData[0].value;
+							$ax.getAjaxData('manage.Count/feeCount', {
+								jie_id: vm.jieCiId
+							}, res => {
+								if(res.code == 0){
+									vm.membershipDues[0].money = abs(res.data.should_pay);
+				    				vm.membershipDues[1].money = abs(res.data.payed);
+				    				vm.membershipDues[2].money = abs(res.data.unpay);
+								}
+							});
+						}
+					}
 				});
-				
-			} catch(err) {
+
+			} catch (err) {
 				console.log(err);
 			}
+			
+			next();
 			
 		})();
 		

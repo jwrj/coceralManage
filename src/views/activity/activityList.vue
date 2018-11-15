@@ -4,23 +4,26 @@
 		
 		<Card dis-hover :bordered="false">
 			
-			<h1 slot="title">活动/会议列表</h1>
+			<h1 slot="title">会议活动列表</h1>
 			
-			<table-list
+			<xw-table
+			ref="xwTable"
+			:okBtnHide="true"
+			modalCancelBtnName="关闭"
 			@on-btn-click="btnClick"
 			:tableColumns="tableColumns"
 			:tableData="ActivityDataList"
 			:modalTitle="modalTitle">
 				<div slot="header">
-					<Button type="primary" to="/activity/createActivity">创建活动/会议</Button>
+					<Button type="primary" to="/meeting/createActivity">创建会议活动</Button>
 				</div>
 				<div slot="modalContent">
 					<activity-details v-if="openType === 'details'" :dataInfo="dataInfo"></activity-details>
-					<activity-edit v-if="openType === 'edit'" :dataInfo="dataInfo"></activity-edit>
+					<activity-edit v-if="openType === 'edit'" :dataInfo="dataInfo" @on-edit-succeed="editSucceed"></activity-edit>
 					<activity-adjunct v-if="openType === 'adjunct'" :dataInfo="dataInfo"></activity-adjunct>
 					<invitation v-if="openType === 'invite'" :dataInfo="dataInfo"></invitation>
 				</div>
-			</table-list>
+			</xw-table>
 			
 		</Card>
 		
@@ -139,6 +142,10 @@ export default {
 					this.ActivityDataList = res.data;
 				}
 			});
+		},
+		
+		editSucceed(){//编辑成功触发
+			this.getActivityData();
 		},
 		
 	},
