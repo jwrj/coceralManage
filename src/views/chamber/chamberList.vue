@@ -8,7 +8,7 @@
 			
 			<xw-table
 			:tableColumns="tableColumns"
-			:tableData="tableData"
+			:tableData="coceralList"
 			:modalTitle="modalTitle"
 			@on-btn-click="onBtnClick">
 				
@@ -23,9 +23,9 @@
 					</div>-->
 				    
 				    <div style="border: 1px solid #dcdee2;padding: 5px 7px;border-radius: 4px;">
-						<RadioGroup>
-					        <Radio label="1">我创建的商会</Radio>
-					        <Radio label="2">我加入的商会</Radio>
+						<RadioGroup v-model="coceralType" @on-change="coceralChange">
+					        <Radio :label="1">我创建的商会</Radio>
+					        <Radio :label="2">我加入的商会</Radio>
 					    </RadioGroup>
 					</div>
 					
@@ -60,99 +60,119 @@ export default {
     data () {//数据
         return {
         	
-        	modal2: false,
-        	
-        	type: '0',
-        	
-        	btnKey: '',
+        	coceralType: 1,
         	
         	modalTitle: '',
         	
         	tableColumns: [
-    			{
-    				title: 'ID',
-    				key: 'id'
-    			},
-    			{
-    				title: '名称',
-    				key: 'name'
-    			},
-    			{
-    				title: '会长',
-    				key: 'president'
-    			},
-    			{
-			        title: '秘书长',
-			        key: 'secretary'
-			    },
-    			{
-    				title: '创建日期',
-    				key: 'date'
-    			},
-    			{
-    				align: 'center',
-    				width: 200,
-    				title: '操作',
-    				handle: [
-    					{
-    						name: '详情',
-    						key: 'details',
-    						modalShow: true,
-    					},
-    					{
-    						name: '切换登录',
-    						key: 'edit',
-    						modalShow: true,
-    					},
-    					{
-    						name: '管理',
-    						key: 'approval',
-    						modalShow: true,
-    					},
-    				],
-    			}
-    		],
+        		{
+					align: 'center',
+					width: 200,
+					title: '操作',
+					handle: [
+						{
+							name: '详情',
+							key: 'details',
+							modalShow: true,
+						},
+						{
+							name: '切换登录',
+							key: 'handoverLogin',
+						},
+						{
+							name: '管理',
+							key: 'manage',
+							modalShow: true,
+							callback(params, btnParams){
+								if(params.row.org_name){
+									btnParams.hideBtn = true;
+								}else{
+									btnParams.hideBtn = false;
+								}
+							}
+						},
+					],
+				}
+        	],
     		
-    		tableData: [
-    			{
-    				id: 1,
-    				name: '广西湖北商会1',
-    				president: '张三',
-    				secretary: '李四',
-    				date: '2018-10-08'
-    			},
-    			{
-    				id: 2,
-    				name: '广西湖北商会2',
-    				president: '张三',
-    				secretary: '李四',
-    				date: '2018-10-08'
-    			},
-    			{
-    				id: 3,
-    				name: '广西湖北商会3',
-    				president: '张三',
-    				secretary: '李四',
-    				date: '2018-10-08'
-    			},
-    		]
+    		coceralList: [],
         	
         }
     },
     methods: {//方法
     	
-    	onBtnClick(val){
-    		
-    		console.log(val);
-    		this.btnKey = val.key;
-    		this.modalTitle = val.params.row.name + '（' + val.name + '）';
-    		
+    	initTableColumns(){
+    		let createData = [
+	    		{
+					title: 'ID',
+					key: 'id'
+				},
+				{
+					title: '名称',
+					key: 'name'
+				},
+				{
+					title: '会长',
+					key: 'contact'
+				},
+	    	];
+	    	
+	    	let joinData = [
+				{
+					title: '名称',
+					key: 'org_name'
+				},
+				{
+					title: '会长',
+					key: 'contact'
+				},
+				{
+					title: '加入公司',
+					key: 'company_name'
+				},
+	    	];
+	    	this.tableColumns.splice(0, this.tableColumns.length-1);
+	    	if(this.coceralType == 1){//我创建的
+	    		this.tableColumns.unshift(...createData);
+			}else if(this.coceralType == 2){//我加入的
+				this.tableColumns.unshift(...joinData);
+			}else{}
     	},
     	
-    	establish(){
-    		
-    		this.modal2 = true;
-    		
+    	onBtnClick(val){
+    		if(this.coceralType == 1){
+    			this.modalTitle = val.params.row.name + '（' + val.name + '）';
+    		}else if(this.coceralType == 2){
+    			this.modalTitle = val.params.row.org_name + '（' + val.name + '）';
+    		}
+    		console.log(val.key);
+    	},
+    	
+    	getCreateCoceralList(){//获取我创建的商会列表
+    		$ax.getAjaxData('user.Comm/myCreateOrganize', {}, res => {
+				if(res.code == 0){
+					this.coceralList = res.data;
+				}
+			});
+    	},
+    	
+    	getJoinCoceralList(){//获取我加入的商会列表
+    		$ax.getAjaxData('user.Comm/myJoinOrganize', {
+				company_id: -1
+			}, res => {
+				if(res.code == 0){
+					this.coceralList = res.data;
+				}
+			});
+    	},
+    	
+    	coceralChange(){//切换加入和创建选项
+    		this.initTableColumns();
+    		if(this.coceralType == 1){//我创建的
+    			this.getCreateCoceralList();
+    		}else if(this.coceralType == 2){//我加入的
+    			this.getJoinCoceralList();
+    		}else{}
     	},
     	
     },
@@ -166,7 +186,7 @@ export default {
     //===================组件钩子===========================
     
     created () {//实例被创建完毕之后执行
-    	
+    	this.initTableColumns();
 	},
     mounted () {//模板被渲染完毕之后执行
     	
@@ -178,28 +198,22 @@ export default {
 		
 		(async() => {//执行异步函数
 			
-			//async、await错误处理
 			try {
 				
-				/*
-				 * 
-				 * ------串行执行---------
-				 * console.log(await getAjaxData());
-				 * ...
-				 * 
-				 * ---------并行：将多个promise直接发起请求（先执行async所在函数），然后再进行await操作。（执行效率高、快）----------
-				 * let abc = getAjaxData();//先执行promise函数
-				 * ...
-				 * console.log(await abc);
-				 * ...
-				*/
+				let getCreateCoceralList = await $ax.getAsyncAjaxData('user.Comm/myCreateOrganize', {});//获取我创建的商会列表
+				
 				next(vm => {
-					
+					if(getCreateCoceralList.code == 0){
+						vm.coceralList = getCreateCoceralList.data;
+					}
 				});
 				
 			} catch(err) {
 				console.log(err);
+				next();
 			}
+			
+			next();
 			
 		})();
 		

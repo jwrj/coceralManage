@@ -45,15 +45,15 @@ export default {
 			        key: 'oid'
 			    },
 			    {
-			        title: '申请加入的商协会',
+			        title: '申请加入的商会',
 			        key: 'org_name'
 			    },
 			    {
-			        title: '姓名',
+			        title: '申请人姓名',
 			        key: 'person_name'
 			    },
 			    {
-			        title: '公司加入',
+			        title: '申请公司名称',
 			        key: 'company_name'
 			    },
 			    {

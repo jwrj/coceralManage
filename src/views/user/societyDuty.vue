@@ -110,6 +110,21 @@ export default {
     				title: '备注',
     				key: 'remark'
     			},
+    			{
+			    	align: 'center',
+			    	width: 130,
+			        title: '操作',
+			        handle: [
+			        	{
+			        		name: '编辑',
+			        		key: 'edit',
+			        	},
+			        	{
+			        		name: '删除',
+			        		key: 'del',
+			        	},
+			        ],
+			    }
            ],
            
            societyDutyList: [],

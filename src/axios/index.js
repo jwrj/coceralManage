@@ -81,9 +81,8 @@ axios.interceptors.response.use(
 					sessionStorage.removeItem('tagNaveList');
 					sessionStorage.removeItem('userAccess');
 					sessionStorage.removeItem('myCompanyList');
-					router.replace({
-						name: 'mainLogin'
-					});
+					sessionStorage.removeItem('userName');
+					router.replace({ name: 'mainLogin' });
 					break;
 				case 2083://管理员未登录
 					sessionStorage.removeItem('identityType');
@@ -91,6 +90,7 @@ axios.interceptors.response.use(
 					sessionStorage.removeItem('chamberName');
 					sessionStorage.removeItem('userAccess');
 					sessionStorage.removeItem('tagNaveList');
+					router.replace({ name: 'login' });
 					break;
 				default:
 					break;

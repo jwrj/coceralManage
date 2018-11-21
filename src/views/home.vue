@@ -73,6 +73,7 @@
 </template>
 
 <script>
+let isCarryOutHook = false;
 import joinChamber from '@/views/user/joinChamber.vue';
 import applyRecord from '@/views/user/applyRecord.vue';
 import societyDuty from '@/views/user/societyDuty.vue';
@@ -110,19 +111,19 @@ export default {
         	infoData: [
         		{
         			title: '企业',
-        			num: 800,
+        			num: 0,
         			icon: 'md-podium',
         			bgColor: '#19be6b',
         		},
         		{
         			title: '人员',
-        			num: 400,
+        			num: 0,
         			icon: 'md-people',
         			bgColor: '#2d8cf0',
         		},
         		{
         			title: '新增',
-        			num: 200,
+        			num: 0,
         			icon: 'md-person-add',
         			bgColor: '#ff9900',
         		},
@@ -154,20 +155,17 @@ export default {
     		this.getMDStatistics(jieId);
     	},
     	
-    	getJieCiList(){//获取届次列表
-			$ax.getAjaxData('manage.Organize/jieList', {}, res => {
-				if(res.code == 0){
-					let newArr = [];
-					res.data.forEach(item => {
-						newArr.push({
-							label: item.jie_name,
-							value: item.id
-						})
-					});
-					this.jieCiData = newArr;
-				}
-			});
-		},
+    	getMemberStatis(){//获取会员统计
+    		$ax.getAjaxData('manage.Count/memberCount', {
+    			year: '2018'
+    		}, res => {
+    			if(res.code == 0){
+    				this.infoData[0].num = res.data.company_num;
+					this.infoData[1].num = res.data.person_num;
+					this.infoData[2].num = res.data.total;
+    			}
+    		});
+    	},
     	
     	getMDStatistics(jieId){//获取会费统计
     		$ax.getAjaxData('manage.Count/feeCount', {
@@ -180,6 +178,25 @@ export default {
     			}
     		});
     	},
+    	
+    	getJieCiList(){//获取届次列表
+			$ax.getAjaxData('manage.Organize/jieList', {}, res => {
+				if(res.code == 0){
+					let newArr = [];
+					res.data.forEach(item => {
+						newArr.push({
+							label: item.jie_name,
+							value: item.id
+						})
+					});
+					this.jieCiData = newArr;
+					if(this.jieCiData.length > 0){
+						this.jieCiId = this.jieCiData[0].value;
+						this.getMDStatistics(this.jieCiId);
+					}
+				}
+			});
+		},
     	
     	addSocietyDuty(){//添加社会职务
     		this.$refs.societyDuty.modalShow = true;
@@ -196,21 +213,34 @@ export default {
     //===================组件钩子===========================
     
     created () {//实例被创建完毕之后执行
-    	
+    	if(!isCarryOutHook){
+    		this.getMemberStatis();
+    		this.getJieCiList();
+    	}
 	},
     mounted () {//模板被渲染完毕之后执行
     	
+	},
+	destroyed(){//Vue 实例销毁后调用
+		isCarryOutHook = false;
 	},
 	
 	//=================组件路由勾子==============================
 	
 	beforeRouteEnter (to, from, next) {//在组件创建之前调用（放置页面加载时请求的Ajax）
 		
+		isCarryOutHook = true;
+		
 		(async() => {//执行异步函数
 			
 			try {
 
 				let getJieCiList = await $ax.getAsyncAjaxData('manage.Organize/jieList', {});//获取届次列表
+				
+				//获取会员统计
+				let getMemberStatis = await $ax.getAsyncAjaxData('manage.Count/memberCount', {
+					year: '2018',
+				});
 				
 				next(vm => {
 					if(getJieCiList.code == 0){
@@ -234,6 +264,11 @@ export default {
 								}
 							});
 						}
+					}
+					if(getMemberStatis.code == 0){
+						vm.infoData[0].num = getMemberStatis.data.company_num;
+						vm.infoData[1].num = getMemberStatis.data.person_num;
+						vm.infoData[2].num = getMemberStatis.data.total;
 					}
 				});
 

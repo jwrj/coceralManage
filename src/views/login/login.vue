@@ -258,25 +258,37 @@ export default {
 	
 	beforeRouteEnter (to, from, next) {//在组件创建之前调用（放置页面加载时请求的Ajax）
 		
-		let newArr = [];
-		
-		$ax.getAjaxData('user.Comm/myJoinOrganize', {//我加入的商会数据列表
-			company_id: -1
-		}, (res)=> {
-			res.data.forEach(item => {
-				newArr.push({
-					label: item.org_name,
-					value: Number(item.mid),
+		(async() => {//执行异步函数
+			
+			try {
+				
+				let getJoinCoceralList = await $ax.getAsyncAjaxData('user.Comm/myJoinOrganize', {company_id: -1});//获取我加入的商会数据列表
+				
+				next(vm => {
+					if(getJoinCoceralList.code == 0){
+						let newArr = [];
+						getJoinCoceralList.data.forEach(item => {
+							newArr.push({
+								label: item.org_name,
+								value: Number(item.mid),
+							});
+						});
+						vm.chamberList = newArr;
+						if(vm.chamberList.length > 0){
+							vm.formInline.chamberId = vm.chamberList[0].value;
+							vm.chamberName = vm.chamberList[0].label;
+						}
+					}
 				});
-			});
-			next(vm => {
-				vm.chamberList = newArr;
-				if(vm.chamberList.length > 0){
-					vm.formInline.chamberId = vm.chamberList[0].value;
-					vm.chamberName = vm.chamberList[0].label;
-				}
-			});
-		});
+				
+			} catch(err) {
+				console.log(err);
+				next();
+			}
+			
+			next();
+			
+		})();
 		
 	},
 	

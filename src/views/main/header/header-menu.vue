@@ -25,7 +25,21 @@
 	                <Option v-for="item in chamberData" :value="item.value" :key="item.value">{{ item.label }}</Option>
 	            </Select>
 			</div>
-			<a href="javascript:void(0)" @click="logout" style="margin-left: 10px;">退出登录</a>
+			<div style="margin-left: 16px;flex-shrink: 0;">
+				<Dropdown :transfer="true" trigger="click" @on-click="dropdownClick" placement="bottom-end">
+			        <a style="display: inline-block;">
+		           		<Avatar icon="ios-person" />
+		           		<Icon size="20" type="md-arrow-dropdown" />
+			        </a>
+			        <DropdownMenu slot="list">
+			            <DropdownItem name="handover">切换登录</DropdownItem>
+			            <DropdownItem name="logOut">退出登录</DropdownItem>
+			        </DropdownMenu>
+			    </Dropdown>
+	        </div>
+			<!--<a href="javascript:void(0)" @click="logout" style="margin-left: 10px;">
+				切换登录
+			</a>-->
 		</div>
 		
 	</div>
@@ -165,7 +179,7 @@ export default {
 			this.chamberData = newArr;
 		},
     	
-    	logout(){//退出登录
+    	handoverLogin(){//切换登录
     		if(this.identityType === 1){//退出会员登录
 				$ax.getAjaxData('user.Comm/logoutMember', {}, res => {
 					if(res.code == 0){
@@ -192,6 +206,31 @@ export default {
 				});
 			}
     	},
+    	
+    	logOut(){
+    		$ax.getAjaxData('Oauth/logout', {}, res => {
+    			if(res.code == 0){
+    				sessionStorage.removeItem('userLogin');
+					sessionStorage.removeItem('identityType');
+					sessionStorage.removeItem('chamberId');
+					sessionStorage.removeItem('chamberName');
+					sessionStorage.removeItem('tagNaveList');
+					sessionStorage.removeItem('userAccess');
+					sessionStorage.removeItem('myCompanyList');
+					sessionStorage.removeItem('userName');
+					this.$router.replace({name: 'mainLogin'});
+    				this.$Message.success('退出用户中心登录成功');
+    			}
+    		});
+    	},
+    	
+    	dropdownClick(name){//功能菜单下拉
+			if(name === 'handover'){//切换登录
+				this.handoverLogin();
+			}else if(name === 'logOut'){//退出登录
+				this.logOut();
+			}
+		},
     	
     },
     computed: {//计算属性
