@@ -81,7 +81,7 @@
 				<!--内容-->
 				<Content style="position: relative;">
 					<div class="main-content-box">
-						<router-view style="width: 70%;" v-if="isRouterAlive" />
+						<router-view :style="{width: isHome == 'home' ? '' : '70%'}" v-if="isRouterAlive" />
 					</div>
 				</Content>
 				<!--内容-->
@@ -127,6 +127,8 @@ export default {
 			
 			isRouterAlive: true,
 			
+			isHome: '',
+			
 		}
 	},
 	methods: { //方法
@@ -162,8 +164,8 @@ export default {
 	},
 	watch: { //监测数据变化
 		
-		'$route'(newRoute){
-			
+		'$route'(to){
+			this.isHome = to.name;
 		},
 		
 	},
@@ -173,6 +175,8 @@ export default {
 	created() { //实例被创建完毕之后执行
 		
 		this.getMenuList();//获取菜单列表
+		
+		this.isHome = this.$route.name;
 		
 	},
 	mounted() { //模板被渲染完毕之后执行
