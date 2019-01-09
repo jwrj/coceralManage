@@ -4,16 +4,13 @@
 		
 		<Card dis-hover :bordered="false">
 			
-			<h1 slot="title">岗位配置</h1>
+			<div class="cardTitle" slot="title">
+				<h1>岗位配置</h1>
+				<Button style="margin-left: 16px;" type="primary" size="small" @click="addMaxPost">添加顶级岗位</Button>
+			</div>
 			
-			<div style="width: 70%;">
-				
+			<div>
 				<Tree :data="treeData" :render="renderContent" empty-text="还没有配置岗位"></Tree>
-		
-				<div style="margin-top: 16px;text-align: center;">
-					<Button type="primary" @click="addMaxPost">添加顶级岗位</Button>
-				</div>
-				
 			</div>
 			
 		</Card>

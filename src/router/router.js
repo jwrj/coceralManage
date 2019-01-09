@@ -49,8 +49,6 @@ export default [
 		    }
 		]
 	},
-	
-	
 	//管理员身份
 	{
 		path: '/coceralManage',
@@ -150,7 +148,7 @@ export default [
 		path: '/financeManage',
 		name: 'financeManage',
 		meta: {
-			title: '财务管理',
+			title: '财务报表',
 			icon: 'md-alarm',
 			access: ['admin']
 		},
@@ -306,27 +304,6 @@ export default [
 			},
 		]
 	},
-	{
-		path: '/systemSet',
-		name: 'systemSet',
-		meta: {
-			title: '系统设置',
-			icon: 'md-alarm',
-			access: ['admin']
-		},
-		component: Main,
-		children: [
-			{
-				path: 'a10',
-				name: 'a10',
-				meta: {
-					title: '测试页10',
-					icon: 'md-alarm',
-				},
-				component: () => import('@/views/test.vue')
-			},
-		]
-	},
 	
 	//会员身份
 	{
@@ -369,9 +346,26 @@ export default [
 			},
 		]
 	},
-	
-	
-	
+	{
+		path: '/member3',
+		name: 'member3',
+		meta: {
+			access: ['member']
+		},
+		component: Main,
+		children: [
+			{
+				path: 'myPaymentRecords',
+				name: 'myPaymentRecords',
+				meta: {
+					title: '我的缴费记录',
+					icon: 'md-alarm',
+					access: ['member']
+				},
+				component: () => import('@/views/member/myPaymentRecords.vue')
+			},
+		]
+	},
 	{
 		path: '/user',
 		name: 'user',
@@ -392,154 +386,6 @@ export default [
 			},
 		]
 	},
-	
-//	{
-//		path: '/member1',
-//		name: 'member1',
-//		meta: {
-//			access: ['member']
-//		},
-//		component: Main,
-//		children: [
-//			{
-//				path: 'memberList',
-//				name: 'memberList',
-//				meta: {
-//					title: '会员列表',
-//					icon: 'md-alarm',
-//					access: ['member']
-//				},
-//				component: () => import('@/views/member/memberList.vue')
-//			},
-//		]
-//	},
-//	{
-//		path: '/member2',
-//		name: 'member2',
-//		meta: {
-//			access: ['member']
-//		},
-//		component: Main,
-//		children: [
-//			{
-//				path: 'myActivityList',
-//				name: 'myActivityList',
-//				meta: {
-//					title: '我的活动列表',
-//					icon: 'md-alarm',
-//					access: ['member']
-//				},
-//				component: () => import('@/views/member/myActivityList.vue')
-//			},
-//		]
-//	},
-//	{
-//		path: '/chamber',
-//		name: 'chamber',
-//		meta: {
-//			title: '商会管理',
-//			icon: 'md-alarm',
-//			showAlways: true,
-//			access: ['admin']
-//		},
-//		component: Main,
-//		children: [
-//			{
-//				path: 'createChamber',
-//				name: 'createChamber',
-//				meta: {
-//					title: '创建商会',
-//					icon: 'md-alarm',
-//					access: ['admin']
-//				},
-//				component: () => import('@/views/chamber/createChamber.vue')
-//			},
-//			{
-//				path: 'postSet',
-//				name: 'postSet',
-//				meta: {
-//					title: '岗位配置',
-//					icon: 'md-alarm',
-//					access: ['admin']
-//				},
-//				component: () => import('@/views/chamber/postSet.vue')
-//			},
-//			{
-//				path: 'sessionSet',
-//				name: 'sessionSet',
-//				meta: {
-//					title: '届次配置',
-//					icon: 'md-alarm',
-//					access: ['admin']
-//				},
-//				component: () => import('@/views/chamber/sessionSet.vue')
-//			},
-//			{
-//				path: 'staffSet',
-//				name: 'staffSet',
-//				meta: {
-//					title: '人员配置',
-//					icon: 'md-alarm',
-//					access: ['admin']
-//				},
-//				component: () => import('@/views/chamber/staffSet.vue')
-//		  	},
-//			{
-//				path: 'approve',
-//				name: 'approve',
-//				meta: {
-//					title: '会员审批',
-//					icon: 'md-alarm',
-//					access: ['admin']
-//				},
-//				component: () => import('@/views/chamber/approve.vue')
-//			},
-//			{
-//				path: 'userList',
-//				name: 'userList',
-//				meta: {
-//					title: '会员列表',
-//					icon: 'md-alarm',
-//					access: ['admin']
-//				},
-//				component: () => import('@/views/user/userList.vue')
-//			}
-//		]
-//	},
-//	{
-//		path: '/activity',
-//		name: 'activity',
-//		meta: {
-//			title: '会议活动',
-//			icon: 'md-alarm',
-//			showAlways: true,
-//			access: ['admin']
-//		},
-//		component: Main,
-//		children: [
-//			{
-//				path: 'createActivity',
-//				name: 'createActivity',
-//				meta: {
-//					title: '创建会议活动',
-//					icon: 'md-alarm',
-//					access: ['admin']
-//				},
-//				component: () => import('@/views/activity/createActivity.vue')
-//			},
-//			{
-//				path: 'activityList',
-//				name: 'activityList',
-//				meta: {
-//					title: '会议活动列表',
-//					icon: 'md-alarm',
-//					access: ['admin']
-//				},
-//				component: () => import('@/views/activity/activityList.vue')
-//			},
-//		]
-//	},
-
 	{
 		path: '/price',
 		name: 'price',
@@ -562,7 +408,27 @@ export default [
 			}
 		]
 	},
-
+	{
+		path: '/systemSet',
+		name: 'systemSet',
+		meta: {
+			title: '系统设置',
+			icon: 'md-alarm',
+			access: ['admin']
+		},
+		component: Main,
+		children: [
+			{
+				path: 'a10',
+				name: 'a10',
+				meta: {
+					title: '测试页10',
+					icon: 'md-alarm',
+				},
+				component: () => import('@/views/test.vue')
+			},
+		]
+	},
 	{
 		path: '/testPages',
 		name: 'testPages',
@@ -577,7 +443,7 @@ export default [
 				path: 'comPage',
 				name: 'comPage',
 				meta: {
-					title: '组件',
+					title: '测试组件',
 					icon: 'md-alarm',
 					access: ['admin'],
 				},
@@ -585,7 +451,6 @@ export default [
 			},
 		]
 	},
-	
 	{
 	    path: '/401',
 	    name: 'error-401',

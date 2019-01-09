@@ -71,13 +71,11 @@
 </template>
 
 <script>
-import tableList from '@/components/tableList/table-list.vue';
 let isCarryOutHook = false;
 
 export default {
 	name: 'approve',
 	components:{//组件模板,
-	tableList
 	},
 	props:{//组件道具（参数）
 		/* ****属性用法*****
@@ -350,7 +348,9 @@ export default {
     							title: '您确认通过吗？'
     						},
     						callback: (params, btnParams) => {
+    							
 			        			if(params.row.status != 0){
+			        				console.log(params.row);
 			        				btnParams.button_props.disabled = true;
 			        			}else{
 			        				btnParams.button_props.disabled = false;

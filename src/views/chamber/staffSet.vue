@@ -58,7 +58,7 @@
 								    </Tooltip>
 								</div>
 								<div>
-									<Tag v-for="item in checkedMembers" :color="item.color" :name="item.id" closable @on-close="tagClose">{{item.name}}</Tag>
+									<Tag v-for="(item, i) in checkedMembers" :key="i" :color="item.color" :name="item.id" closable @on-close="tagClose">{{item.name}}</Tag>
 								</div>
 							</FormItem>
 						</Col>
@@ -83,7 +83,7 @@
 			
 			<div style="margin-bottom: 10px;">
 				<Tag color="cyan">
-					<span v-for="(item, i) in postTextArr" style="display: inline-block;">
+					<span v-for="(item, i) in postTextArr" :key="i" style="display: inline-block;">
 						<Icon v-if="i != 0" type="md-arrow-forward" />
 						<span>{{item}}</span>
 					</span>
@@ -128,14 +128,12 @@
 
 <script>
 let isCarryOutHook = false;
-import tableList from '@/components/tableList/table-list.vue'
 import postCasc from '@/components/post/post-casc.vue';
 import userList from '@/views/user/userList.vue';
 
 export default {
 	name: 'staffSet',
 	components:{//组件模板,
-		tableList,
 		postCasc,
 		userList
 	},

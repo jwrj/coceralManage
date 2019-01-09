@@ -2,24 +2,22 @@
 	
 	<div>
 		
-		<table-list
+		<xw-table
 		:tableColumns="tableColumns"
 		:tableData="applyRecordList"
 		:headerShow="false"
 		:footerShow="false"
 		@on-poptip-ok="tabBtnClick">
-		</table-list>
+		</xw-table>
 		
 	</div>
 	
 </template>
 
 <script>
-import tableList from '@/components/tableList/table-list.vue'
 export default {
 	name: 'applyRecord',
 	components:{//组件模板
-		tableList
 	},
 	props:{//组件道具（参数）
 		/* ****属性用法*****

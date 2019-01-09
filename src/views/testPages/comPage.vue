@@ -1,48 +1,6 @@
 <template>
 	
 	<div>
-		<!--{{postValue}}
-		<Card style="margin-bottom: 16px;">
-	    	
-	    	<h1 slot="title">岗位选择器</h1>
-	    	
-    		<post-casc v-model="postValue" type="cascader"></post-casc>
-    		
-    		<post-casc v-model="postValue"></post-casc>
-		    	
-	    </Card>
-		
-		<Card style="position: initial;">
-			
-			<h1 slot="title">表格列表</h1>
-			
-			<table-list :tableColumns="tableColumns" :tableData="tableData" @select-change="selectChange" @on-btn-click="onBtnClick">
-		
-				<div slot="header" slot-scope="{ slotEvent }" style="width: 100%;display: flex;align-items: center;margin-right: 10px;">
-					
-					<Button @click="slotEvent('我是传入的参数abc')">点击执行插槽传出的事件</Button>
-					
-				    <industry-casc v-model="industryData" @on-change style="margin-right: 10px;"></industry-casc>
-				    
-				    <al-cascader v-model="res_c" style="width: 240px;"/>
-		    
-				</div>
-				
-				<div slot="modalContent">
-					弹窗内容
-				</div>
-		
-			</table-list>
-			
-		</Card>
-		
-		<Card style="margin-top: 16px;">
-			
-			<h1 slot="title">岗位配置</h1>
-			
-			<post-config></post-config>
-			
-		</Card>-->
 		
 		<Card style="margin-top: 16px;">
 			
@@ -68,8 +26,6 @@
 
 <script>
 
-import tableList from '@/components/tableList/table-list.vue';//表格列表组件
-
 import industryCasc from '@/components/industry/industry-casc.vue';//行业级联
 
 import postCasc from '@/components/post/post-casc.vue';//岗位级联
@@ -83,7 +39,6 @@ import UEditor from '@/components/richTextEditor/UEditor.vue';//富文本编辑�
 export default {
 	name: 'comPage',
 	components:{//组件模板
-		tableList,
 		industryCasc,
 		postCasc,
 		postConfig,

@@ -6,7 +6,9 @@
 			
 			<h1 slot="title">会员列表</h1>
 			
-			<table-list
+			<xw-table
+			:okBtnHide="true"
+			modalCancelBtnName="关闭"
 			@on-btn-click="tabBtnClick"
 			:modalTitle="modalTitle"
 			:tableColumns="tableColumns"
@@ -57,8 +59,12 @@
 					
 					<div v-else style="text-align: center;font-size: 16px;color: #c5c8ce;">暂无信息</div>
 					
+					<Divider orientation="left" style="font-size: 16px;">社会职务</Divider>
+					
+					<Table stripe :columns="societyDutyColumns" :data="societyDutyList"></Table>
+					
 				</div>
-			</table-list>
+			</xw-table>
 			
 		</Card>
 		
@@ -67,12 +73,10 @@
 </template>
 
 <script>
-import tableList from '@/components/tableList/table-list.vue';
 let isCarryOutHook = false;
 export default {
 	name: 'memberList',
 	components:{//组件模板
-		tableList
 	},
 	props:{//组件道具（参数）
 		/* ****属性用法*****
@@ -247,6 +251,35 @@ export default {
         	
         	memberDataList: [],
         	
+        	societyDutyColumns: [
+    			{
+    				title: 'ID',
+    				key: 'id'
+    			},
+    			{
+    				title: '机构名称',
+    				key: 'org'
+    			},
+    			{
+    				title: '职务',
+    				key: 'dudy'
+    			},
+    			{
+    				title: '职务级别',
+    				key: 'lev'
+    			},
+    			{
+    				title: '届次',
+    				key: 'jie'
+    			},
+    			{
+    				title: '备注',
+    				key: 'remark'
+    			}
+    		],
+    		
+    		societyDutyList: [],
+        	
         }
     },
     methods: {//方法
@@ -260,6 +293,7 @@ export default {
     				if(res.code == 0){
     					this.personInfo = res.data.person_info;
     					this.companyInfo = res.data.company_info;
+    					this.societyDutyList = res.data.duty_list;
     				}
     			});
     		}

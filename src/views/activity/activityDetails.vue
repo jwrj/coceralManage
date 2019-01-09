@@ -1,3 +1,8 @@
+<style>
+	.describe img{
+		max-width: 100%;
+	}
+</style>
 <template>
 
 	<div style="padding-bottom: 200px;">

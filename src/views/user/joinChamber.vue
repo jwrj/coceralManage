@@ -6,7 +6,8 @@
 			
 			<div slot="title" class="cardTitle" v-if="!isModule">
 				<h1>申请加入商会</h1>
-				<Button disabled style="margin-left: 10px;">查看个人资料（这里会跳到用户中心）</Button>
+				<Button @click="record = true" type="primary" size="small" style="margin-left: 10px;">查看我的申请记录</Button>
+				<Button size="small" disabled style="margin-left: 10px;">查看个人资料（这里会跳到用户中心）</Button>
 			</div>
 			
 			<div>
@@ -26,7 +27,7 @@
 			    	
 			    	<FormItem prop="companyId" label="选择公司" v-if="applyType === 2">
 						<Select v-model="formData.companyId" filterable placeholder="选择公司" style="width:300px;">
-					        <Option v-for="item in myCompanyList" :value="item.value">{{item.label}}</Option>
+					        <Option v-for="item in myCompanyList" :value="item.value" :key="item.value">{{item.label}}</Option>
 					    </Select>
 				    </FormItem>
 			    
@@ -36,7 +37,7 @@
 		    
 			<Divider v-if="!isModule" orientation="left"><span style="font-size: 16px;">商会列表</span></Divider>
 			
-			<table-list
+			<xw-table
 			:tableColumns="tableColumns"
 			:tableData="coceralList"
 			:pagingData="pagingData"
@@ -56,7 +57,7 @@
 		    
 				</div>
 				
-			</table-list>
+			</xw-table>
 			
 		</Card>
 		
@@ -67,10 +68,19 @@
 	        </div>
 	        <div slot="footer">
 	        	<ButtonGroup>
+	        		<Button type="primary" @click="submitApply">确认</Button>
 			        <Button type="default" @click="applyModal = false">取消</Button>
-			        <Button type="primary" @click="submitApply">确认</Button>
 			    </ButtonGroup>
 	        </div>
+	    </Modal>
+	    
+	    <Modal
+	        v-model="record"
+	        title="申请记录列表"
+	        width="60%"
+	        :footer-hide="true"
+	       	>
+	       	<apply-record v-if="record"></apply-record>
 	    </Modal>
 		
 	</div>
@@ -79,14 +89,14 @@
 
 <script>
 
-import tableList from '@/components/tableList/table-list.vue';
+import applyRecord from '@/views/user/applyRecord.vue';
 
 let isCarryOutHook = false;
 
 export default {
 	name: 'joinChamber',
 	components:{//组件模板
-		tableList,
+		applyRecord
 	},
 	props:{//组件道具（参数）
 		/* ****属性用法*****
@@ -103,6 +113,8 @@ export default {
 	},
     data () {//数据
         return {
+        	
+        	record: false,
         	
         	applyModal: false,//申请确认弹窗
         	
@@ -146,6 +158,16 @@ export default {
 			        	{
 			        		name: '申请加入',
 			        		key: 'apply',
+			        		button_props: {
+			        			
+			        		},
+			        		callback: (params, btnParams) => {
+			        			if(params.row.status != 0){
+			        				btnParams.button_props.disabled = true;
+			        			}else{
+			        				btnParams.button_props.disabled = false;
+			        			}
+			        		}
 			        	}
 			        ],
 			    }
@@ -191,7 +213,19 @@ export default {
 				}, res => {
 					if(res.code == 0){
 						this.applyModal = false;
+						this.coceralList.forEach(item => {
+							if(item.id == this.coceralId){
+								item.status = -1;
+							}
+						});
 						this.$Message.success('申请成功，请等待审批！');
+					}else if(res.code == 1042 || res.code == 1041){
+						this.applyModal = false;
+						this.coceralList.forEach(item => {
+							if(item.id == this.coceralId){
+								item.status = -1;
+							}
+						});
 					}
 				});
 			}
@@ -324,12 +358,12 @@ export default {
 	.apply-modal{
 		.ivu-modal-footer{
 			border-top: none !important;
-			padding: 0 !important;
-			.ivu-btn-group{
+			padding: 4px !important;
+			/*.ivu-btn-group{
 				.ivu-btn{
 					border-radius: initial !important;
 				}
-			}
+			}*/
 		}
 		.ivu-modal-content{
 			overflow: hidden;

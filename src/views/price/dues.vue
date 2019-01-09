@@ -52,13 +52,11 @@
 <script>
 let isCarryOutHook = false;
 import postCasc from '@/components/post/post-casc.vue'; //岗位级联
-import tableList from '@/components/tableList/table-list.vue'; //表格列表组件
 import payMent from '@/views/price/payment.vue'
 export default {
 	name: 'dues',
 	components: { //组件模板,
 		postCasc,
-		tableList,
 		payMent
 	},
 	props: { //组件道具（参数）

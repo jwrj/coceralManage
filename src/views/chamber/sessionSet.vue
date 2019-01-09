@@ -42,21 +42,16 @@
 				
 			</div>
 			
-			<Divider orientation="left" style="font-size: 16px;">
-				<span>届次列表</span>
-				<Tooltip max-width="200" content="根据上面选择的岗位列出对应数据" :transfer="true" placement="top" style="margin-left: 6px;">
-					<Icon type="md-information-circle" size="18" color="#2db7f5" style="cursor: pointer;" />
-			    </Tooltip>
-			</Divider>
+			<Divider orientation="left" style="font-size: 16px;">届次列表</Divider>
 			
-			<table-list
+			<xw-table
 			:headerShow="false"
 			:tableColumns="tableColumns"
 			no-data-text="当前岗位暂无数据"
 			@on-btn-click="tabBtnClick"
 			@on-poptip-ok="tabPoptipOk"
 			:tableData="JieCiDataList">
-			</table-list>
+			</xw-table>
 			
 		</Card>
 		
@@ -92,12 +87,10 @@
 <script>
 let isCarryOutHook = false;
 import postCasc from '@/components/post/post-casc.vue'; //岗位级联
-import tableList from '@/components/tableList/table-list.vue';//表格列表组件
 export default {
 	name: 'sessionSet',
 	components: { //组件模板,
 		postCasc,
-		tableList
 	},
 	props: { //组件道具（参数）
 		/* ****属性用法*****

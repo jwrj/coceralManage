@@ -7,11 +7,13 @@
 		:tableData="societyDutyList"
 		:headerShow="false"
 		:footerShow="false"
+		@on-btn-click="tabBtnClick"
+		@on-poptip-ok="tabPoptipOk"
 		>
 		</xw-table>
 		
 		<Modal v-model="modalShow" width="450">
-	        <p slot="header">添加社会职务</p>
+	        <p slot="header">{{type == 'add' ? '添加社会职务' : '修改社会职务'}}</p>
 	        <Form ref="formInstance" :model="formData" :rules="ruleData" :label-width="80">
 		        <FormItem label="机构名称" prop="organName">
 		            <Input v-model="formData.organName"></Input>
@@ -30,7 +32,8 @@
 		        </FormItem>
 		    </Form>
 	        <div slot="footer" style="text-align: center;">
-	            <Button type="primary" @click="addSocietyDuty('formInstance')">添加</Button>
+	            <Button v-if="type == 'add'" type="primary" @click="addSocietyDuty('formInstance')">添加</Button>
+	            <Button v-if="type == 'edit'" type="primary" @click="saveEdit">保存</Button>
 	            <Button @click="modalShow = false">取消</Button>
 	        </div>
 	    </Modal>
@@ -58,6 +61,10 @@ export default {
         return {
         	
         	modalShow: false,
+        	
+        	type: 'add',
+        	
+        	listId: null,
         	
         	formData: {
         		organName: '',//机构名称
@@ -122,6 +129,11 @@ export default {
 			        	{
 			        		name: '删除',
 			        		key: 'del',
+			        		poptipOpen: true,
+							poptip_props: {
+								title: '您确认删除这条内容吗？',
+								placement: 'top-end'
+							}
 			        	},
 			        ],
 			    }
@@ -132,6 +144,52 @@ export default {
         }
     },
     methods: {//方法
+    	
+    	tabBtnClick(val){//编辑
+    		if(val.key == 'edit'){
+    			
+    			this.$refs['formInstance'].resetFields();
+    			
+    			this.type = 'edit';
+    			
+    			this.listId = val.params.row.id;
+    			
+    			this.formData.organName = val.params.row.org;
+    			this.formData.duty = val.params.row.dudy;
+    			this.formData.rank = val.params.row.lev;
+    			this.formData.jie = val.params.row.jie;
+    			this.formData.remark = val.params.row.remark;
+    			
+    			this.modalShow = true;
+    			
+    		}
+    	},
+    	
+    	saveEdit(){//保存编辑
+    		$ax.getAjaxData('user.Comm/dutyEdit', {
+				id: this.listId,
+				org: this.formData.organName,
+    			dudy: this.formData.duty,
+    			lev: this.formData.rank,
+    			jie: this.formData.jie,
+    			remark: this.formData.remark
+			}, res => {
+				if(res.code == 0){
+					this.modalShow = false;
+    				this.getSocietyDutyList();
+    			}
+			});
+    	},
+    	
+    	tabPoptipOk(val){//删除
+    		$ax.getAjaxData('user.Comm/dutyDel', {
+    			id: val.params.row.id
+    		}, res => {
+    			if(res.code == 0){
+    				this.getSocietyDutyList();
+    			}
+    		});
+    	},
     	
     	setSubmitData(){
     		$ax.getAjaxData('user.Comm/dutyAdd', {
@@ -165,6 +223,12 @@ export default {
     			}
     		});
     	},
+    	
+    	openAddModal(){
+    		this.$refs['formInstance'].resetFields();
+    		this.type = 'add';
+    		this.modalShow = true;
+    	}
     	
     },
     computed: {//计算属性

@@ -82,12 +82,10 @@
 </template>
 
 <script>
-import tableList from '@/components/tableList/table-list.vue'
 import UEditor from '@/components/richTextEditor/UEditor.vue';//富文本编辑器
 export default {
 	name: 'createActivity',
 	components: { //组件模板,
-		tableList,
 		UEditor
 	},
 	props: { //组件道具（参数）
@@ -185,6 +183,8 @@ export default {
 			this.$refs[name].validate((valid) => {
 				if (valid) {
 					this.setSubmit();
+				}else{
+					this.$Message.error('请填写完整表单！');
 				}
 			});
 		},

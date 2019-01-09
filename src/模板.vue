@@ -74,7 +74,10 @@ export default {
 				
 			} catch(err) {
 				console.log(err);
+				next();
 			}
+			
+			next();
 			
 		})();
 		

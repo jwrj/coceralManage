@@ -100,14 +100,12 @@
 </template>
 
 <script>
-import tableList from '@/components/tableList/table-list.vue'; //表格列表组件
 const getLocalTime = (nS) => {
 	return new Date(parseInt(nS) * 1000).toLocaleString().replace(/\//g, "-").replace(/上午([\d\:]*)/g, "");
 }
 export default {
 	name: 'payMent',
 	components: { //组件模板,
-		tableList
 	},
 	props: { //组件道具（参数）
 		/* ****属性用法*****

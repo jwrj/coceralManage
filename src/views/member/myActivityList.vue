@@ -6,9 +6,15 @@
 			
 			<h1 slot="title">活动/会议列表</h1>
 			
-			<table-list :tableColumns="tableColumns" :tableData="ActivityDataList" @on-btn-click="btnClick" :modalTitle="modalTitle">
+			<xw-table
+			:okBtnHide="true"
+			modalCancelBtnName="关闭"
+			:tableColumns="tableColumns"
+			:tableData="ActivityDataList"
+			@on-btn-click="btnClick"
+			:modalTitle="modalTitle">
 				<activity-details slot="modalContent" :dataInfo="dataInfo"></activity-details>
-			</table-list>
+			</xw-table>
 			
 		</Card>
 		
@@ -17,13 +23,11 @@
 </template>
 
 <script>
-import tableList from '@/components/tableList/table-list.vue';
 import activityDetails from '@/views/member/activityDetails.vue'
 let isCarryOutHook = false;
 export default {
 	name: 'myActivityList',
 	components:{//组件模板
-		tableList,
 		activityDetails
 	},
 	props:{//组件道具（参数）

@@ -2,8 +2,8 @@
 	
 	<div>
 		
-		<Row :gutter="20">
-		    <Col v-for="item in infoData" :xs="12" :sm="8" :md="6" :lg="4" class="info-box">
+		<Row v-if="identityType == 2" :gutter="20" style="margin-bottom: 16px;">
+		    <Col v-for="(item, i) in infoData" :key="i" :xs="12" :sm="8" :md="6" :lg="4" class="info-box">
 		    	<Card class="info-card" :shadow="true" :padding="0">
 	    			<Row class="info-row" type="flex">
 	    				<Col class="info-left" span="8" :style="{background: item.bgColor}">
@@ -18,7 +18,7 @@
 		    </Col>
 	    </Row>
 		
-		<Card dis-hover :bordered="false" style="margin-top: 16px;">
+		<Card v-if="identityType == 2" dis-hover :bordered="false" style="margin-bottom: 16px;">
 			<div slot="title" class="cardTitle">
 				<h1>本届会费统计</h1>
 				
@@ -44,21 +44,10 @@
 			
 		</Card>
 		
-		
-		<!--<Card dis-hover :bordered="false">
-			<h1 slot="title">申请加入商协会</h1>
-			<join-chamber :isModule="true"></join-chamber>
-		</Card>-->
-		
-		<!--<Card dis-hover :bordered="false" style="margin-top: 20px;">
-			<h1 slot="title">我的申请记录</h1>
-			<apply-record></apply-record>
-		</Card>-->
-		
-		<Card dis-hover :bordered="false" style="margin-top: 16px;">
+		<Card dis-hover :bordered="false">
 			
 			<div slot="title" class="cardTitle">
-				<h1>社会职务列表</h1>
+				<h1>设置社会职务</h1>
 				<Button style="margin-left: 20px;" type="primary" size="small" @click="addSocietyDuty">添加社会职务</Button>
 			</div>
 			
@@ -66,16 +55,12 @@
 			
 		</Card>
 		
-		
-		
 	</div>
 	
 </template>
 
 <script>
 let isCarryOutHook = false;
-import joinChamber from '@/views/user/joinChamber.vue';
-import applyRecord from '@/views/user/applyRecord.vue';
 import societyDuty from '@/views/user/societyDuty.vue';
 let abs = (val) => {
 	//金额转换 分->元 保留2位小数 并每隔3位用逗号分开 1,234.56
@@ -88,8 +73,6 @@ let abs = (val) => {
 export default {
 	name: 'home',
 	components:{//组件模板
-		joinChamber,
-		applyRecord,
 		societyDuty
 	},
 	props:{//组件道具（参数）
@@ -103,6 +86,8 @@ export default {
 	},
     data () {//数据
         return {
+        	
+        	identityType: sessionStorage.identityType,
         	
         	jieCiData: [],
         	
@@ -199,7 +184,7 @@ export default {
 		},
     	
     	addSocietyDuty(){//添加社会职务
-    		this.$refs.societyDuty.modalShow = true;
+    		this.$refs.societyDuty.openAddModal();
     	},
     	
     },
@@ -213,7 +198,7 @@ export default {
     //===================组件钩子===========================
     
     created () {//实例被创建完毕之后执行
-    	if(!isCarryOutHook){
+    	if(!isCarryOutHook && sessionStorage.identityType != 1){
     		this.getMemberStatis();
     		this.getJieCiList();
     	}
@@ -233,12 +218,15 @@ export default {
 		
 		(async() => {//执行异步函数
 			
+			if(sessionStorage.identityType == 1){
+				return next();
+			}
+			
 			try {
-
+				
 				let getJieCiList = await $ax.getAsyncAjaxData('manage.Organize/jieList', {});//获取届次列表
 				
-				//获取会员统计
-				let getMemberStatis = await $ax.getAsyncAjaxData('manage.Count/memberCount', {
+				let getMemberStatis = await $ax.getAsyncAjaxData('manage.Count/memberCount', {//获取会员统计
 					year: '2018',
 				});
 				

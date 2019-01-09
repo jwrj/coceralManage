@@ -43,7 +43,7 @@
 		<Modal
 	        v-model="openChamberList"
 	        :title="titleTxt"
-	        width="80%"
+	        width="60%"
 	        :footer-hide="true"
 	       	>
 	       	

@@ -32,7 +32,6 @@
 </template>
 
 <script>
-import tableList from '@/components/tableList/table-list.vue'
 import activityDetails from '@/views/activity/activityDetails.vue'
 import activityEdit from '@/views/activity/activityEdit.vue'
 import activityAdjunct from '@/views/activity/activityAdjunct.vue'
@@ -41,7 +40,6 @@ let isCarryOutHook = false;
 export default {
 	name: 'activityList',
 	components: { //组件模板,
-		tableList,
 		activityDetails,
 		activityEdit,
 		activityAdjunct,
@@ -110,11 +108,11 @@ export default {
 							key: 'edit',
 							modalShow: true,
 						},
-						{
-							name: '附件',
-							key: 'adjunct',
-							modalShow: true,
-						},
+//						{
+//							name: '附件',
+//							key: 'adjunct',
+//							modalShow: true,
+//						},
 						{
 							name: '人员',
 							key: 'invite',

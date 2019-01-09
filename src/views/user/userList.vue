@@ -63,6 +63,10 @@
 					
 					<div v-else style="text-align: center;font-size: 16px;color: #c5c8ce;">暂无信息</div>
 					
+					<Divider orientation="left" style="font-size: 16px;">社会职务</Divider>
+					
+					<Table stripe :columns="societyDutyColumns" :data="societyDutyList"></Table>
+					
 				</div>
 			</xw-table>
 			
@@ -74,13 +78,11 @@
 
 <script>
 import postCasc from '@/components/post/post-casc.vue';
-import tableList from '@/components/tableList/table-list.vue';
 let isCarryOutHook = false;
 export default {
 	name: 'userList',
 	components:{//组件模板,
 		postCasc,
-		tableList
 	},
 	props:{//组件道具（参数）
 		/* ****属性用法*****
@@ -374,6 +376,35 @@ export default {
     		
     		memberList: [],
     		
+    		societyDutyColumns: [
+    			{
+    				title: 'ID',
+    				key: 'id'
+    			},
+    			{
+    				title: '机构名称',
+    				key: 'org'
+    			},
+    			{
+    				title: '职务',
+    				key: 'dudy'
+    			},
+    			{
+    				title: '职务级别',
+    				key: 'lev'
+    			},
+    			{
+    				title: '届次',
+    				key: 'jie'
+    			},
+    			{
+    				title: '备注',
+    				key: 'remark'
+    			}
+    		],
+    		
+    		societyDutyList: [],
+    		
     	}
     },
     methods: {//方法
@@ -387,6 +418,7 @@ export default {
     				if(res.code == 0){
     					this.personInfo = res.data[0].person_info;
     					this.companyInfo = res.data[0].company_info;
+    					this.societyDutyList = res.data[0].duty_list;
     				}
     			});
     		}

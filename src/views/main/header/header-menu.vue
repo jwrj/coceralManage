@@ -3,7 +3,7 @@
 	<div class="header-menu-box">
 		
 		<div class="left-box">
-			<p style="font-size: 14px;">{{coceralName}}</p>
+			<p class="nowrap-ellipsis" style="font-size: 14px;">{{coceralName}}</p>
 			<p style="margin-top: 4px;font-size: 18px;">信息管理平台</p>
 		</div>
 		
@@ -32,14 +32,11 @@
 		           		<Icon size="20" type="md-arrow-dropdown" />
 			        </a>
 			        <DropdownMenu slot="list">
-			            <DropdownItem name="handover">切换登录</DropdownItem>
-			            <DropdownItem name="logOut">退出登录</DropdownItem>
+			            <DropdownItem name="handover">切换用户类型</DropdownItem>
+			            <DropdownItem name="logOut">退出用户中心</DropdownItem>
 			        </DropdownMenu>
 			    </Dropdown>
 	        </div>
-			<!--<a href="javascript:void(0)" @click="logout" style="margin-left: 10px;">
-				切换登录
-			</a>-->
 		</div>
 		
 	</div>
@@ -293,8 +290,9 @@ export default {
 		display: flex;
 		align-items: center;
 		.left-box{
+			width: 200px;
+			padding: 0 8px;
 			text-align: center;
-			min-width: 200px;
 			color: #fff;
 			flex-shrink: 0;
 			p{

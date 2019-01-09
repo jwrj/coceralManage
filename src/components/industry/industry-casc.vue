@@ -9,7 +9,7 @@
 </template>
 
 <script>
-
+import { hangye } from './hangye.js'
 export default {
 	name: 'industryCasc',
 	components:{//组件模板
@@ -58,27 +58,24 @@ export default {
     
     created () {//实例被创建完毕之后执行
     	
-    	//获取行业数据
-    	$ax.getAjaxData('cdn/hangye.js', {}, res => {
-    		let newArr = [];
-    		if(res){
-	    		res.forEach(item => {
-	    			let newChildren = [];
-					item.children.forEach(item => {
-						newChildren.push({
-							label: item.name,
-	    					value: item.code,
-						})
-					})
-					newArr.push({
-	    				label: item.name,
-	        			value: item.code,
-	        			children: newChildren
-	    			});
-	    		});
-    		}
-    		this.industryData = newArr;
-    	}, {baseURL: 'http://192.168.2.200:802/'});
+    	let newArr = [];
+    	
+    	hangye.forEach(item => {
+			let newChildren = [];
+			item.children.forEach(item => {
+				newChildren.push({
+					label: item.name,
+					value: item.code,
+				})
+			})
+			newArr.push({
+				label: item.name,
+    			value: item.code,
+    			children: newChildren
+			});
+		});
+    	
+    	this.industryData = newArr;
     	
 	},
     mounted () {//模板被渲染完毕之后执行

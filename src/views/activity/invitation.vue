@@ -2,20 +2,20 @@
 	
 	<div>
 		
-		<table-list
+		<xw-table
 		@on-btn-click="btnClick"
 		@on-poptip-ok="poptipOk"
 		:tableColumns="tableColumns"
 		:tableData="inviteList">
 			<div slot="header">
-				<Button type="primary" @click="modal = true">邀请人员</Button>
+				<Button type="primary" @click="modal = true">添加邀请人员</Button>
 			</div>
-		</table-list>
+		</xw-table>
 		
 		
 		<Modal v-model="modal" width="80%">
 	        <p slot="header">会员列表</p>
-	        <div>
+	        <div v-if="modal">
 	        	<user-list
 		    	ref="userListInstance"
 		    	:titleShow="false"
@@ -35,13 +35,11 @@
 </template>
 
 <script>
-import tableList from '@/components/tableList/table-list.vue';
 import userList from '@/views/user/userList.vue';
 export default {
 	name: 'invitation',
 	components:{//组件模板
 		userList,
-		tableList
 	},
 	props:{//组件道具（参数）
 		/* ****属性用法*****
@@ -88,13 +86,18 @@ export default {
 				{
 					title: '手机号',
 					render: (h, params) => {
-						return h('span', 13800138000)
+						return h('span', params.row.member_info.person_info.touch_phone)
 					}
 				},
 				{
 					title: '身份证号码',
 					render: (h, params) => {
-						return h('span', '450803********123')
+						
+						let cardNum = params.row.member_info.person_info.card_num;
+						
+						let strCardNum = cardNum.substr(0, 3) + '********' + cardNum.substr(cardNum.length - 4);
+						
+						return h('span', strCardNum)
 					}
 				},
 				{
@@ -128,8 +131,15 @@ export default {
 			this.$Message.success('通知成功');
 		},
 		
-		poptipOk(){
-			this.$Message.success('删除成功');
+		poptipOk(val){
+			$ax.getAjaxData('manage.Action/actionMemberDel', {
+				id: val.params.row.id
+			}, res => {
+				if(res.code == 0){
+					this.getInviteData();
+					this.$Message.success('删除成功');
+				}
+			});
 		},
     	
     	memberSelect(data){//选择会员时触发
@@ -158,6 +168,7 @@ export default {
     			}, res => {
     				if(res.code == 0){
     					this.modal = false;
+    					this.getInviteData();
     					this.$Message.success('邀请成功');
     				}
     			});

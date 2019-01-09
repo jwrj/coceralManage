@@ -15,7 +15,7 @@
 	.main-content-box{
 		width: 100%;
 		height: 100%;
-		padding: 30px 16px 300px;
+		padding: 30px 20px 300px;
 		box-sizing: border-box;
 		overflow: auto;
 		position: absolute;
@@ -71,13 +71,17 @@
 						<div style="font-size: 16px;">账号 {{userName}}</div>
 					</div>
 					<menu-sider ref='sideMenu' :menuList="$store.state.app.menuChildrenList" :isCollapsed="isCollapsed"></menu-sider>
+					<div v-if="!isCollapsed" style="position:absolute;bottom: 20px;width: 100%;padding: 10px;">
+						<p>客服电话：400-800-000</p>
+						<p style="margin-top: 6px;">Copyright © 广西南宁八阵图科技有限公司</p>
+					</div>
 				</Sider>
 				<!--菜单-->
 				
 				<!--内容-->
 				<Content style="position: relative;">
 					<div class="main-content-box">
-						<router-view v-if="isRouterAlive" />
+						<router-view style="width: 70%;" v-if="isRouterAlive" />
 					</div>
 				</Content>
 				<!--内容-->
@@ -96,8 +100,6 @@
 import menuSider from './menu/menu-sider.vue'
 
 import headerMenu from './header/header-menu.vue'
-
-import { getNewTagList } from '@/toolBox';
 
 import { mapMutations } from 'vuex';
 
@@ -130,9 +132,6 @@ export default {
 	methods: { //方法
 		
 		...mapMutations([
-			'setBreadCrumb',
-	      	'setTagNavList',
-	      	'addTag',
 	      	'getMenuList'
 		]),
 		
@@ -157,26 +156,13 @@ export default {
 	computed: { //计算属性
 		
 		menuList(){//菜单列表
-			//return this.$store.getters.menuList;
 			return this.$store.state.app.menuList;
 		},
-		
-		breadCrumbList(){//面包屑列表
-	    	return this.$store.state.app.breadCrumbList;
-	    },
-	    
-		tagNavList(){//tag列表
-	    	return this.$store.state.app.tagNavList;
-	    },
 		
 	},
 	watch: { //监测数据变化
 		
 		'$route'(newRoute){
-			
-			this.setBreadCrumb(newRoute.matched);
-			
-        	this.setTagNavList(getNewTagList(this.tagNavList, newRoute));
 			
 		},
 		
@@ -187,15 +173,6 @@ export default {
 	created() { //实例被创建完毕之后执行
 		
 		this.getMenuList();//获取菜单列表
-		
-		/**
-	     * @description 初始化设置面包屑导航和标签导航
-	     */
-	    this.setTagNavList();
-	    
-	    this.addTag({route: this.$store.state.app.homeRoute});
-	    
-	    this.setBreadCrumb(this.$route.matched);
 		
 	},
 	mounted() { //模板被渲染完毕之后执行

@@ -74,12 +74,10 @@
 </template>
 
 <script>
-import tableList from '@/components/tableList/table-list.vue'
 import UEditor from '@/components/richTextEditor/UEditor.vue';//富文本编辑器
 export default {
 	name: 'activityEdit',
 	components: { //组件模板,
-		tableList,
 		UEditor
 	},
 	props: { //组件道具（参数）
