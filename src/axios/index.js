@@ -19,9 +19,9 @@ axios.defaults.withCredentials = true; //允许携带cookie,实现跨域登录
 //-----------------在发送数据之前进行数据转换 , get不会转换,因为get走的是 parmas属性----------------------
 
 axios.defaults.transformRequest = _data => { //第一个参数_data是接收过来的数据
-
+	
 	let formData = new FormData(); //使用formData方式发送表单 否则程序接收不到表单变量（formData可以实现文件的异步上传）
-
+	
 	for(let item in _data) { //for in 遍历数据进行转换
 
 		formData.append(item, _data[item]);
